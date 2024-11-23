@@ -29,9 +29,9 @@ int main() {
         if (!gravityApplied) {
             float elapsed = clock.getElapsedTime().asSeconds();
             std::cout << "Elapsed time: " << elapsed << " seconds" << std::endl;
-            if (elapsed > 5.0f) {
+            if (elapsed > 3.0f) {
                 std::cout << "Applying gravity..." << std::endl;
-                physicsManager.applyGravity(b2Vec2(0.0f, -9.8f)); // Apply gravity downward
+                physicsManager.applyGravity(b2Vec2(0.0f, -0.05f)); // Apply gravity downward
                 gravityApplied = true;
             }
         }

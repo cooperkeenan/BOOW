@@ -1,42 +1,78 @@
 
 
 // Contents of src/PhysicsManager.cpp:
+// PhysicsManager.cpp
 #include "PhysicsManager.h"
 #include "Constants.h"
 
-// Constants for scaling and window dimensions
-const float SCALE = 30.0f;
-const float WINDOW_HEIGHT = 600.0f;
-
 // Constructor
 PhysicsManager::PhysicsManager()
-    : world(b2Vec2(0.0f, 0.0f)), // No gravity initially
+    : world(b2Vec2(0.0f, 0.0f)),
       timeStep(1.0f / 60.0f),
       velocityIterations(8),
-      positionIterations(3) {
+      positionIterations(3),
+      groundBody(nullptr)
+{
     // Set the contact listener for collision detection
     world.SetContactListener(&contactListener);
 
     // Define the ground body
     b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0.0f, 10.0f); // Position in Box2D world coordinates
-    b2Body* groundBody = world.CreateBody(&groundBodyDef);
+
+    // Position the ground at the middle of the screen
+    float groundScreenY = WINDOW_HEIGHT / 2.0f;
+    float groundBox2DY = (WINDOW_HEIGHT - groundScreenY) / SCALE;
+    groundBodyDef.position.Set(0.0f, groundBox2DY);
+    groundBody = world.CreateBody(&groundBodyDef);
 
     // Define the ground shape (a horizontal line)
     b2PolygonShape groundBox;
-    groundBox.SetAsBox(20.0f, 1.0f); // Width: 40 units, Height: 2 units
+    groundBox.SetAsBox(20.0f, 1.0f); // Half-width and half-height in Box2D units
 
     // Attach the shape to the body
-    groundBody->CreateFixture(&groundBox, 0.0f); // Density 0 for static bodies
+    groundBody->CreateFixture(&groundBox, 0.0f);
 }
 
-void PhysicsManager::renderGround(sf::RenderWindow& window) {
-    sf::RectangleShape ground(sf::Vector2f(600.0f, 15.0f));
-    ground.setFillColor(sf::Color::Green);
-    ground.setOrigin(300.0f, 7.5f);
-    // Invert y-coordinate
-    ground.setPosition(400.0f, WINDOW_HEIGHT - 300.0f);
+// Define the applyGravity function
+void PhysicsManager::applyGravity(const b2Vec2& gravity) {
+    world.SetGravity(gravity);
 
+    // Wake up all bodies in the world
+    for (b2Body* body = world.GetBodyList(); body; body = body->GetNext()) {
+        body->SetAwake(true);
+    }
+}
+
+
+// Define the getWorld function
+b2World& PhysicsManager::getWorld() {
+    return world;
+}
+
+// Define the step function
+void PhysicsManager::step() {
+    world.Step(timeStep, velocityIterations, positionIterations);
+}
+
+
+// PhysicsManager.cpp
+void PhysicsManager::renderGround(sf::RenderWindow& window) {
+    float groundWidthBox2D = 40.0f;  // Total width in Box2D units
+    float groundHeightBox2D = 2.0f;  // Total height in Box2D units
+
+    float groundWidth = groundWidthBox2D * SCALE;
+    float groundHeight = groundHeightBox2D * SCALE;
+
+    sf::RectangleShape ground(sf::Vector2f(groundWidth, groundHeight));
+    ground.setFillColor(sf::Color::Green);
+    ground.setOrigin(groundWidth / 2.0f, groundHeight / 2.0f);
+
+    // Get the ground body's position
+    b2Vec2 position = groundBody->GetPosition();
+    float x = position.x * SCALE + WINDOW_WIDTH / 2.0f;
+    float y = WINDOW_HEIGHT - (position.y * SCALE);
+
+    ground.setPosition(x, y);
     window.draw(ground);
 }
 
@@ -47,37 +83,30 @@ void PhysicsManager::renderGround(sf::RenderWindow& window) {
 #include <iostream>
 
 Boat::Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size) {
-    // Setup Box2D body
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    // Invert y-coordinate
-    bodyDef.position.Set(position.x / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
+    bodyDef.position.Set((position.x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
     boatBody = world.CreateBody(&bodyDef);
 
-    // Define the Box2D shape
     b2PolygonShape boatShape;
-    boatShape.SetAsBox((size.x / 2) / SCALE, (size.y / 2) / SCALE);
+    boatShape.SetAsBox((size.x / 2.0f) / SCALE, (size.y / 2.0f) / SCALE);
 
-    // Attach the shape to the body
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &boatShape;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.3f;
     boatBody->CreateFixture(&fixtureDef);
 
-    // Setup SFML sprite
     boatSprite.setSize(size);
-    boatSprite.setOrigin(size.x / 2, size.y / 2);
+    boatSprite.setOrigin(size.x / 2.0f, size.y / 2.0f);
     boatSprite.setFillColor(sf::Color::Blue);
 }
 
 void Boat::update() {
-    // Sync SFML sprite with Box2D body
     b2Vec2 position = boatBody->GetPosition();
     float angle = boatBody->GetAngle();
 
-    // Invert y-coordinate and adjust rotation
-    boatSprite.setPosition(position.x * SCALE, WINDOW_HEIGHT - (position.y * SCALE));
+    boatSprite.setPosition(position.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT - (position.y * SCALE));
     boatSprite.setRotation(-angle * 180.0f / b2_pi);
 }
 
@@ -101,7 +130,7 @@ int main() {
     PhysicsManager physicsManager;
 
     // Create boat
-    Boat boat(physicsManager.getWorld(), sf::Vector2f(400.0f, 250.0f), sf::Vector2f(40.0f, 20.0f));
+    Boat boat(physicsManager.getWorld(), sf::Vector2f(WINDOW_WIDTH / 2.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
     // Timer to track elapsed time
     sf::Clock clock;
@@ -164,6 +193,7 @@ private:
 
 
 // Contents of include/PhysicsManager.h:
+// PhysicsManager.h
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
@@ -193,16 +223,21 @@ private:
     int32 velocityIterations;               // Velocity solver iterations
     int32 positionIterations;               // Position solver iterations
     ContactListener contactListener;        // Contact listener for collision detection
+
+    b2Body* groundBody;
 };
 
 #endif // PHYSICSMANAGER_H
 
 
 // Contents of include/Constants.h:
+// Constants.h
+
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
 constexpr float SCALE = 30.0f;
 constexpr float WINDOW_HEIGHT = 600.0f;
+constexpr float WINDOW_WIDTH = 800.0f;
 
 #endif // CONSTANTS_H

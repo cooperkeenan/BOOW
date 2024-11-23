@@ -30,6 +30,7 @@ private:
     ContactListener contactListener;        // Contact listener for collision detection
 
     b2Body* groundBody;
+    float groundThickness; 
 };
 
 #endif // PHYSICSMANAGER_H

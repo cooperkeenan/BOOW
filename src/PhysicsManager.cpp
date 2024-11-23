@@ -8,7 +8,8 @@ PhysicsManager::PhysicsManager()
       timeStep(1.0f / 60.0f),
       velocityIterations(8),
       positionIterations(3),
-      groundBody(nullptr)
+      groundBody(nullptr),
+      groundThickness(0.1f)
 {
     // Set the contact listener for collision detection
     world.SetContactListener(&contactListener);
@@ -24,7 +25,7 @@ PhysicsManager::PhysicsManager()
 
     // Define the ground shape (a horizontal line)
     b2PolygonShape groundBox;
-    groundBox.SetAsBox(20.0f, 1.0f); // Half-width and half-height in Box2D units
+    groundBox.SetAsBox(20.0f, groundThickness); // Half-width and half-height in Box2D units
 
     // Attach the shape to the body
     groundBody->CreateFixture(&groundBox, 0.0f);
@@ -55,7 +56,7 @@ void PhysicsManager::step() {
 // PhysicsManager.cpp
 void PhysicsManager::renderGround(sf::RenderWindow& window) {
     float groundWidthBox2D = 40.0f;  // Total width in Box2D units
-    float groundHeightBox2D = 2.0f;  // Total height in Box2D units
+    float groundHeightBox2D = groundThickness * 2.0f;   // Total height in Box2D units
 
     float groundWidth = groundWidthBox2D * SCALE;
     float groundHeight = groundHeightBox2D * SCALE;
