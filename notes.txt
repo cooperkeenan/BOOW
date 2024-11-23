@@ -1,0 +1,6 @@
+
+
+Naming Conventions:
+Classes: PascalCase (e.g., Boat, PhysicsManager).
+Variables: camelCase (e.g., currentSpeed, playerScore).
+Constants: UPPER_SNAKE_CASE (e.g., MAX_SPEED).

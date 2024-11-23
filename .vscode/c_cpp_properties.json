@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/include", // Your project's headers
+                "/opt/homebrew/include",     // Homebrew includes
+                "/opt/homebrew/Cellar/sfml/2.6.2/include", // SFML (adjust if needed)
+                "/opt/homebrew/Cellar/box2d/2.4.2/include" // Box2D (adjust if needed)
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang", // Ensure correct compiler path
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ],
+    "version": 4
+}
