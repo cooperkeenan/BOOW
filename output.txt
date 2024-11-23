@@ -1,0 +1,208 @@
+
+
+// Contents of src/PhysicsManager.cpp:
+#include "PhysicsManager.h"
+#include "Constants.h"
+
+// Constants for scaling and window dimensions
+const float SCALE = 30.0f;
+const float WINDOW_HEIGHT = 600.0f;
+
+// Constructor
+PhysicsManager::PhysicsManager()
+    : world(b2Vec2(0.0f, 0.0f)), // No gravity initially
+      timeStep(1.0f / 60.0f),
+      velocityIterations(8),
+      positionIterations(3) {
+    // Set the contact listener for collision detection
+    world.SetContactListener(&contactListener);
+
+    // Define the ground body
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(0.0f, 10.0f); // Position in Box2D world coordinates
+    b2Body* groundBody = world.CreateBody(&groundBodyDef);
+
+    // Define the ground shape (a horizontal line)
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(20.0f, 1.0f); // Width: 40 units, Height: 2 units
+
+    // Attach the shape to the body
+    groundBody->CreateFixture(&groundBox, 0.0f); // Density 0 for static bodies
+}
+
+void PhysicsManager::renderGround(sf::RenderWindow& window) {
+    sf::RectangleShape ground(sf::Vector2f(600.0f, 15.0f));
+    ground.setFillColor(sf::Color::Green);
+    ground.setOrigin(300.0f, 7.5f);
+    // Invert y-coordinate
+    ground.setPosition(400.0f, WINDOW_HEIGHT - 300.0f);
+
+    window.draw(ground);
+}
+
+
+// Contents of src/Boat.cpp:
+#include "Boat.h"
+#include "Constants.h"
+#include <iostream>
+
+Boat::Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size) {
+    // Setup Box2D body
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    // Invert y-coordinate
+    bodyDef.position.Set(position.x / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
+    boatBody = world.CreateBody(&bodyDef);
+
+    // Define the Box2D shape
+    b2PolygonShape boatShape;
+    boatShape.SetAsBox((size.x / 2) / SCALE, (size.y / 2) / SCALE);
+
+    // Attach the shape to the body
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &boatShape;
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 0.3f;
+    boatBody->CreateFixture(&fixtureDef);
+
+    // Setup SFML sprite
+    boatSprite.setSize(size);
+    boatSprite.setOrigin(size.x / 2, size.y / 2);
+    boatSprite.setFillColor(sf::Color::Blue);
+}
+
+void Boat::update() {
+    // Sync SFML sprite with Box2D body
+    b2Vec2 position = boatBody->GetPosition();
+    float angle = boatBody->GetAngle();
+
+    // Invert y-coordinate and adjust rotation
+    boatSprite.setPosition(position.x * SCALE, WINDOW_HEIGHT - (position.y * SCALE));
+    boatSprite.setRotation(-angle * 180.0f / b2_pi);
+}
+
+void Boat::render(sf::RenderWindow& window) {
+    window.draw(boatSprite);
+}
+
+
+// Contents of src/main.cpp:
+#include <SFML/Graphics.hpp>
+#include "Boat.h"
+#include "PhysicsManager.h"
+#include "Constants.h"
+#include <SFML/System/Clock.hpp>
+#include <iostream>
+
+int main() {
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Boat Out of Water");
+
+    // Initialize physics manager
+    PhysicsManager physicsManager;
+
+    // Create boat
+    Boat boat(physicsManager.getWorld(), sf::Vector2f(400.0f, 250.0f), sf::Vector2f(40.0f, 20.0f));
+
+    // Timer to track elapsed time
+    sf::Clock clock;
+    bool gravityApplied = false;
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        // Check elapsed time and apply gravity after 5 seconds
+        if (!gravityApplied) {
+            float elapsed = clock.getElapsedTime().asSeconds();
+            std::cout << "Elapsed time: " << elapsed << " seconds" << std::endl;
+            if (elapsed > 5.0f) {
+                std::cout << "Applying gravity..." << std::endl;
+                physicsManager.applyGravity(b2Vec2(0.0f, -9.8f)); // Apply gravity downward
+                gravityApplied = true;
+            }
+        }
+
+        // Update physics
+        physicsManager.step();
+
+        // Update boat
+        boat.update();
+
+        // Render
+        window.clear();
+        physicsManager.renderGround(window); // Draw the ground
+        boat.render(window);                // Draw the boat
+        window.display();
+    }
+
+    return 0;
+}
+
+
+// Contents of include/Boat.h:
+#ifndef BOAT_H
+#define BOAT_H
+
+#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
+
+class Boat {
+public:
+    Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size);
+    void update();
+    void render(sf::RenderWindow& window);
+
+private:
+    sf::RectangleShape boatSprite;
+    b2Body* boatBody;
+};
+
+#endif // BOAT_H
+
+
+// Contents of include/PhysicsManager.h:
+#ifndef PHYSICSMANAGER_H
+#define PHYSICSMANAGER_H
+
+#include <Box2D/Box2D.h>
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
+// Contact Listener for Collision Detection
+class ContactListener : public b2ContactListener {
+public:
+    void BeginContact(b2Contact* contact) override {
+        std::cout << "Collision detected!" << std::endl;
+    }
+};
+
+class PhysicsManager {
+public:
+    PhysicsManager();
+    b2World& getWorld();                     // Get reference to the Box2D world
+    void step();                             // Update the Box2D simulation
+    void renderGround(sf::RenderWindow& window); // Render the ground
+    void applyGravity(const b2Vec2& gravity);
+
+private:
+    b2World world;                           // Box2D physics world
+    float timeStep;                          // Time step for physics simulation
+    int32 velocityIterations;               // Velocity solver iterations
+    int32 positionIterations;               // Position solver iterations
+    ContactListener contactListener;        // Contact listener for collision detection
+};
+
+#endif // PHYSICSMANAGER_H
+
+
+// Contents of include/Constants.h:
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+constexpr float SCALE = 30.0f;
+constexpr float WINDOW_HEIGHT = 600.0f;
+
+#endif // CONSTANTS_H
