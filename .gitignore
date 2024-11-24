@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Ignore specific files
+copy.py
+build_and_run.sh
