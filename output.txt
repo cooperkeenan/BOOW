@@ -1,9 +1,9 @@
 
 
 // Contents of src/PhysicsManager.cpp:
-// PhysicsManager.cpp
 #include "PhysicsManager.h"
 #include "Constants.h"
+#include <iostream>
 
 // Constructor
 PhysicsManager::PhysicsManager()
@@ -11,70 +11,86 @@ PhysicsManager::PhysicsManager()
       timeStep(1.0f / 60.0f),
       velocityIterations(8),
       positionIterations(3),
-      groundBody(nullptr),
-      groundThickness(0.1f)
+      groundBody(nullptr)
 {
-    // Set the contact listener for collision detection
-    world.SetContactListener(&contactListener);
-
     // Define the ground body
     b2BodyDef groundBodyDef;
-
-    // Position the ground at the middle of the screen
-    float groundScreenY = WINDOW_HEIGHT / 2.0f;
-    float groundBox2DY = (WINDOW_HEIGHT - groundScreenY) / SCALE;
-    groundBodyDef.position.Set(0.0f, groundBox2DY);
+    groundBodyDef.position.Set(0.0f, 0.0f);
     groundBody = world.CreateBody(&groundBodyDef);
 
-    // Define the ground shape (a horizontal line)
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(20.0f, groundThickness); // Half-width and half-height in Box2D units
+    // Generate curve vertices
+    generateCurveVertices(100, -20.0f, 20.0f);
 
-    // Attach the shape to the body
-    groundBody->CreateFixture(&groundBox, 0.0f);
+    // Use b2EdgeShape for the physics boundary
+    for (size_t i = 0; i < curveVertices.size() - 1; ++i) {
+        b2EdgeShape edge;
+        edge.SetTwoSided(curveVertices[i], curveVertices[i + 1]); // Connect consecutive vertices
+
+        b2FixtureDef edgeFixtureDef;
+        edgeFixtureDef.shape = &edge;
+        edgeFixtureDef.density = 0.0f;
+        edgeFixtureDef.friction = 0.3f;
+        edgeFixtureDef.restitution = 0.3f;
+        groundBody->CreateFixture(&edgeFixtureDef);
+    }
 }
 
-// Define the applyGravity function
+// Generate curve vertices
+void PhysicsManager::generateCurveVertices(int numVertices, float startX, float endX) {
+    curveVertices.resize(numVertices);
+    float step = (endX - startX) / (numVertices - 1);
+
+    for (int i = 0; i < numVertices; ++i) {
+        float x = startX + i * step;
+        float t = (float)i / (numVertices - 1); // Normalized [0, 1]
+        float y = (WINDOW_HEIGHT / SCALE / 2.0f) + 5.0f * sinf(t * 2.0f * b2_pi) * cosf(t * b2_pi);
+        curveVertices[i] = b2Vec2(x, y); // Save the vertex
+    }
+}
+
+// Apply gravity
 void PhysicsManager::applyGravity(const b2Vec2& gravity) {
     world.SetGravity(gravity);
-
-    // Wake up all bodies in the world
     for (b2Body* body = world.GetBodyList(); body; body = body->GetNext()) {
         body->SetAwake(true);
     }
 }
 
-
-// Define the getWorld function
-b2World& PhysicsManager::getWorld() {
-    return world;
+// Conditionally apply gravity
+void PhysicsManager::applyGravityIfNeeded(bool& gravityApplied, float elapsedTime, float triggerTime) {
+    if (!gravityApplied && elapsedTime > triggerTime) {
+        applyGravity(b2Vec2(0.0f, -0.05f));
+        gravityApplied = true;
+    }
 }
 
-// Define the step function
+// Step the simulation
 void PhysicsManager::step() {
     world.Step(timeStep, velocityIterations, positionIterations);
 }
 
-
-// PhysicsManager.cpp
+// Render the ground
 void PhysicsManager::renderGround(sf::RenderWindow& window) {
-    float groundWidthBox2D = 40.0f;  // Total width in Box2D units
-    float groundHeightBox2D = groundThickness * 2.0f;   // Total height in Box2D units
+    const int numVertices = curveVertices.size();
+    sf::VertexArray groundShape(sf::LineStrip, numVertices);
 
-    float groundWidth = groundWidthBox2D * SCALE;
-    float groundHeight = groundHeightBox2D * SCALE;
+    float offsetX = WINDOW_WIDTH / 2.0f; // Center X in pixels
+    float offsetY = WINDOW_HEIGHT;      // Bottom Y in pixels
 
-    sf::RectangleShape ground(sf::Vector2f(groundWidth, groundHeight));
-    ground.setFillColor(sf::Color::Green);
-    ground.setOrigin(groundWidth / 2.0f, groundHeight / 2.0f);
+    for (int i = 0; i < numVertices; ++i) {
+        groundShape[i].position = sf::Vector2f(
+            curveVertices[i].x * SCALE + offsetX,
+            offsetY - (curveVertices[i].y * SCALE)
+        );
+        groundShape[i].color = sf::Color::Green;
+    }
 
-    // Get the ground body's position
-    b2Vec2 position = groundBody->GetPosition();
-    float x = position.x * SCALE + WINDOW_WIDTH / 2.0f;
-    float y = WINDOW_HEIGHT - (position.y * SCALE);
+    window.draw(groundShape);
+}
 
-    ground.setPosition(x, y);
-    window.draw(ground);
+// Get the Box2D world
+b2World& PhysicsManager::getWorld() {
+    return world;
 }
 
 
@@ -83,10 +99,15 @@ void PhysicsManager::renderGround(sf::RenderWindow& window) {
 #include "Constants.h"
 #include <iostream>
 
+// Helper function to convert SFML to Box2D coordinates
+b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
+    return b2Vec2((position.x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
+}
+
 Boat::Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size) {
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set((position.x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
+    bodyDef.position = sfmlToBox2D(position);
     boatBody = world.CreateBody(&bodyDef);
 
     b2PolygonShape boatShape;
@@ -95,7 +116,8 @@ Boat::Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& siz
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &boatShape;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.3f;
+    fixtureDef.friction = 0.007f;
+    fixtureDef.restitution = 0.5f;
     boatBody->CreateFixture(&fixtureDef);
 
     boatSprite.setSize(size);
@@ -113,6 +135,15 @@ void Boat::update() {
 
 void Boat::render(sf::RenderWindow& window) {
     window.draw(boatSprite);
+}
+
+void Boat::move(const b2Vec2& force) {
+    boatBody->ApplyForceToCenter(force, true);
+}
+
+void Boat::move(float directionX, float directionY, float magnitude) {
+    b2Vec2 force(directionX * magnitude, directionY * magnitude);
+    boatBody->ApplyForceToCenter(force, true);
 }
 
 
@@ -133,7 +164,6 @@ int main() {
     // Create boat
     Boat boat(physicsManager.getWorld(), sf::Vector2f(WINDOW_WIDTH / 2.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
-    // Timer to track elapsed time
     sf::Clock clock;
     bool gravityApplied = false;
 
@@ -144,27 +174,24 @@ int main() {
                 window.close();
         }
 
-        // Check elapsed time and apply gravity after 5 seconds
-        if (!gravityApplied) {
-            float elapsed = clock.getElapsedTime().asSeconds();
-            std::cout << "Elapsed time: " << elapsed << " seconds" << std::endl;
-            if (elapsed > 3.0f) {
-                std::cout << "Applying gravity..." << std::endl;
-                physicsManager.applyGravity(b2Vec2(0.0f, -0.05f)); // Apply gravity downward
-                gravityApplied = true;
-            }
-        }
+        // Controls
+        float directionX = 0.0f, directionY = 0.0f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 1.0f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.8f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.8f;
 
-        // Update physics
+        boat.move(directionX, directionY, 1.0f);
+
+        // Apply gravity after 2 seconds
+        physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
+
+        // Update physics and render
         physicsManager.step();
-
-        // Update boat
         boat.update();
 
-        // Render
         window.clear();
-        physicsManager.renderGround(window); // Draw the ground
-        boat.render(window);                // Draw the boat
+        physicsManager.renderGround(window);
+        boat.render(window);
         window.display();
     }
 
@@ -184,6 +211,8 @@ public:
     Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size);
     void update();
     void render(sf::RenderWindow& window);
+    void move(const b2Vec2& force);
+    void move(float directionX, float directionY, float magnitude);
 
 private:
     sf::RectangleShape boatSprite;
@@ -194,39 +223,31 @@ private:
 
 
 // Contents of include/PhysicsManager.h:
-// PhysicsManager.h
 #ifndef PHYSICSMANAGER_H
 #define PHYSICSMANAGER_H
 
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
-#include <iostream>
-
-// Contact Listener for Collision Detection
-class ContactListener : public b2ContactListener {
-public:
-    void BeginContact(b2Contact* contact) override {
-        std::cout << "Collision detected!" << std::endl;
-    }
-};
+#include <vector>
 
 class PhysicsManager {
 public:
     PhysicsManager();
-    b2World& getWorld();                     // Get reference to the Box2D world
-    void step();                             // Update the Box2D simulation
-    void renderGround(sf::RenderWindow& window); // Render the ground
+    b2World& getWorld();
+    void step();
     void applyGravity(const b2Vec2& gravity);
+    void applyGravityIfNeeded(bool& gravityApplied, float elapsedTime, float triggerTime);
+    void renderGround(sf::RenderWindow& window);
 
 private:
-    b2World world;                           // Box2D physics world
-    float timeStep;                          // Time step for physics simulation
-    int32 velocityIterations;               // Velocity solver iterations
-    int32 positionIterations;               // Position solver iterations
-    ContactListener contactListener;        // Contact listener for collision detection
+    void generateCurveVertices(int numVertices, float startX, float endX);
 
-    b2Body* groundBody;
-    float groundThickness; 
+    b2World world;                        
+    float timeStep;                       
+    int32 velocityIterations;             
+    int32 positionIterations;             
+    b2Body* groundBody;                   
+    std::vector<b2Vec2> curveVertices;    
 };
 
 #endif // PHYSICSMANAGER_H

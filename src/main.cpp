@@ -14,7 +14,6 @@ int main() {
     // Create boat
     Boat boat(physicsManager.getWorld(), sf::Vector2f(WINDOW_WIDTH / 2.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
-    // Timer to track elapsed time
     sf::Clock clock;
     bool gravityApplied = false;
 
@@ -25,40 +24,24 @@ int main() {
                 window.close();
         }
 
-        // Handle keyboard input for boat movement
-        b2Vec2 force(0.0f, 0.0f); // Initialize a force vector
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            force.y = 1.0f; // Apply upward force
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            force.x = -0.5f; // Apply leftward force
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            force.x = 0.5f; // Apply rightward force
-        }
-        boat.move(force);
+        // Controls
+        float directionX = 0.0f, directionY = 0.0f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 1.0f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.8f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.8f;
 
-        // Check elapsed time and apply gravity after 5 seconds
-        if (!gravityApplied) {
-            float elapsed = clock.getElapsedTime().asSeconds();
-            std::cout << "Elapsed time: " << elapsed << " seconds" << std::endl;
-            if (elapsed > 3.0f) {
-                std::cout << "Applying gravity..." << std::endl;
-                physicsManager.applyGravity(b2Vec2(0.0f, -0.05f)); // Apply gravity downward
-                gravityApplied = true;
-            }
-        }
+        boat.move(directionX, directionY, 1.0f);
 
-        // Update physics
+        // Apply gravity after 2 seconds
+        physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
+
+        // Update physics and render
         physicsManager.step();
-
-        // Update boat
         boat.update();
 
-        // Render
         window.clear();
-        physicsManager.renderGround(window); // Draw the ground
-        boat.render(window);                // Draw the boat
+        physicsManager.renderGround(window);
+        boat.render(window);
         window.display();
     }
 
