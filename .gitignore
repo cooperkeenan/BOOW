@@ -32,5 +32,5 @@
 *.app
 
 # Ignore specific files
-copy.py
+copyme.py
 build_and_run.sh
