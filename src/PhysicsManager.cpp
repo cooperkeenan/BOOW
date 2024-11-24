@@ -1,5 +1,6 @@
 #include "PhysicsManager.h"
 #include "Constants.h"
+#include <iostream> // For debugging
 
 // Constructor
 PhysicsManager::PhysicsManager()
@@ -7,8 +8,7 @@ PhysicsManager::PhysicsManager()
       timeStep(1.0f / 60.0f),
       velocityIterations(8),
       positionIterations(3),
-      groundBody(nullptr),
-      groundThickness(0.2f) // Increased thickness for the polygon
+      groundBody(nullptr)
 {
     // Set the contact listener for collision detection
     world.SetContactListener(&contactListener);
@@ -17,60 +17,41 @@ PhysicsManager::PhysicsManager()
     b2BodyDef groundBodyDef;
 
     // Position the ground at the middle of the screen
-    float groundScreenY = WINDOW_HEIGHT / 2.0f;
-    float groundBox2DY = (WINDOW_HEIGHT - groundScreenY) / SCALE; // Y-position in Box2D coordinates
+    float groundScreenY = WINDOW_HEIGHT / 2.0f; // Screen midpoint
+    float groundBox2DY = (WINDOW_HEIGHT - groundScreenY) / SCALE; // Convert to Box2D coordinates
     groundBodyDef.position.Set(0.0f, 0.0f); // Ground position at origin
     groundBody = world.CreateBody(&groundBodyDef);
 
-    // Define a polygonal slope for the curved ground
-    b2Vec2 vertices[] = {
-        b2Vec2(-20.0f, groundBox2DY),               // Start point (left-bottom)
-        b2Vec2(-10.0f, groundBox2DY + 2.0f),        // Curve upward
-        b2Vec2(0.0f, groundBox2DY + 5.0f),          // Peak of the curve
-        b2Vec2(10.0f, groundBox2DY + 2.0f),         // Curve downward
-        b2Vec2(20.0f, groundBox2DY),                // End point (right-bottom)
-        b2Vec2(20.0f, groundBox2DY - groundThickness), // Right-bottom (thickness)
-        b2Vec2(0.0f, groundBox2DY - groundThickness), // Middle-bottom (thickness)
-        b2Vec2(-20.0f, groundBox2DY - groundThickness) // Left-bottom (thickness)
-    };
+    // Define a smoother curve with more vertices
+    const int numVertices = 20; // Increase for smoother curve
+    b2Vec2 vertices[numVertices];
 
-    b2PolygonShape groundPolygon;
-    groundPolygon.Set(vertices, 8); // Set the polygon with 8 vertices
+    float startX = -20.0f; // Start of the curve
+    float endX = 20.0f;    // End of the curve
+    float step = (endX - startX) / (numVertices - 1);
 
-    // Attach the polygon shape to the body
-    b2FixtureDef groundFixtureDef;
-    groundFixtureDef.shape = &groundPolygon;
-    groundFixtureDef.density = 0.0f;
-    groundFixtureDef.friction = 0.3f;
-    groundFixtureDef.restitution = 0.0f; // No bounce
-    groundBody->CreateFixture(&groundFixtureDef);
+    // Create the curve
+    for (int i = 0; i < numVertices; ++i) {
+        float x = startX + i * step;
+        float y = groundBox2DY + 2.0f * sinf((i / (float)(numVertices - 1)) * b2_pi); // Scaled sine wave
+        vertices[i] = b2Vec2(x, y);
 
-    // Add invisible world boundaries (left, right, and top edges)
-    b2BodyDef boundaryBodyDef;
-    b2Body* boundaryBody = world.CreateBody(&boundaryBodyDef);
+        // Debugging log
+        std::cout << "Physics Vertex[" << i << "]: (" << vertices[i].x << ", " << vertices[i].y << ")\n";
+    }
 
-    b2EdgeShape boundaryEdge;
+    // Use b2EdgeShape to create two-sided collision
+    for (int i = 0; i < numVertices - 1; ++i) {
+        b2EdgeShape edge;
+        edge.SetTwoSided(vertices[i], vertices[i + 1]); // Connect consecutive vertices
 
-    // Left boundary
-    boundaryEdge.SetTwoSided(
-        b2Vec2(-WINDOW_WIDTH / 2.0f / SCALE, 0.0f),
-        b2Vec2(-WINDOW_WIDTH / 2.0f / SCALE, WINDOW_HEIGHT / SCALE)
-    );
-    boundaryBody->CreateFixture(&boundaryEdge, 0.0f);
-
-    // Right boundary
-    boundaryEdge.SetTwoSided(
-        b2Vec2(WINDOW_WIDTH / 2.0f / SCALE, 0.0f),
-        b2Vec2(WINDOW_WIDTH / 2.0f / SCALE, WINDOW_HEIGHT / SCALE)
-    );
-    boundaryBody->CreateFixture(&boundaryEdge, 0.0f);
-
-    // Top boundary
-    boundaryEdge.SetTwoSided(
-        b2Vec2(-WINDOW_WIDTH / 2.0f / SCALE, WINDOW_HEIGHT / SCALE),
-        b2Vec2(WINDOW_WIDTH / 2.0f / SCALE, WINDOW_HEIGHT / SCALE)
-    );
-    boundaryBody->CreateFixture(&boundaryEdge, 0.0f);
+        b2FixtureDef edgeFixtureDef;
+        edgeFixtureDef.shape = &edge;
+        edgeFixtureDef.density = 0.0f;
+        edgeFixtureDef.friction = 0.3f;
+        edgeFixtureDef.restitution = 0.0f; // No bounce
+        groundBody->CreateFixture(&edgeFixtureDef);
+    }
 }
 
 // Define the applyGravity function
@@ -95,29 +76,30 @@ void PhysicsManager::step() {
 
 // Render the ground (curved slope)
 void PhysicsManager::renderGround(sf::RenderWindow& window) {
-    sf::VertexArray groundShape(sf::LineStrip, 5); // Use line strip for a connected curve
+    sf::VertexArray groundShape(sf::LineStrip, 20); // Use line strip for a connected curve
 
-    float offsetX = WINDOW_WIDTH / 2.0f;
-    float offsetY = WINDOW_HEIGHT;
+    float offsetX = WINDOW_WIDTH / 2.0f; // Center X
+    float offsetY = WINDOW_HEIGHT;      // Bottom Y
 
-    // Define the same points used in the polygon shape
-    float groundScreenY = WINDOW_HEIGHT / 2.0f;
-    float groundBox2DY = (WINDOW_HEIGHT - groundScreenY) / SCALE; // Y-position in Box2D coordinates
+    const int numVertices = 20;
+    float startX = -20.0f; // Start of the curve
+    float endX = 20.0f;    // End of the curve
+    float step = (endX - startX) / (numVertices - 1);
 
-    b2Vec2 vertices[] = {
-        b2Vec2(-20.0f, groundBox2DY),
-        b2Vec2(-10.0f, groundBox2DY + 2.0f),
-        b2Vec2(0.0f, groundBox2DY + 5.0f),
-        b2Vec2(10.0f, groundBox2DY + 2.0f),
-        b2Vec2(20.0f, groundBox2DY)
-    };
+    for (int i = 0; i < numVertices; ++i) {
+        float x = startX + i * step;
+        float y = (WINDOW_HEIGHT / 2.0f) + 20.0f * sinf((i / (float)(numVertices - 1)) * b2_pi); // Same sine wave logic
 
-    for (int i = 0; i < 5; ++i) {
         groundShape[i].position = sf::Vector2f(
-            vertices[i].x * SCALE + offsetX,
-            offsetY - vertices[i].y * SCALE
+            x * SCALE + offsetX,
+            offsetY - y
         );
         groundShape[i].color = sf::Color::Green;
+
+        // Debugging log for render
+        std::cout << "Render Vertex[" << i << "]: (" 
+                  << groundShape[i].position.x << ", " 
+                  << groundShape[i].position.y << ")\n";
     }
 
     window.draw(groundShape);
