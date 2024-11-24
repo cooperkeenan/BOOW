@@ -25,6 +25,19 @@ int main() {
                 window.close();
         }
 
+        // Handle keyboard input for boat movement
+        b2Vec2 force(0.0f, 0.0f); // Initialize a force vector
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            force.y = 1.0f; // Apply upward force
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            force.x = -0.5f; // Apply leftward force
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            force.x = 0.5f; // Apply rightward force
+        }
+        boat.move(force);
+
         // Check elapsed time and apply gravity after 5 seconds
         if (!gravityApplied) {
             float elapsed = clock.getElapsedTime().asSeconds();

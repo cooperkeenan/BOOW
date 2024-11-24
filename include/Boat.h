@@ -9,6 +9,8 @@ public:
     Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size);
     void update();
     void render(sf::RenderWindow& window);
+    void move(const b2Vec2& force);
+
 
 private:
     sf::RectangleShape boatSprite;

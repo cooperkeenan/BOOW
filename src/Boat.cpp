@@ -33,3 +33,7 @@ void Boat::update() {
 void Boat::render(sf::RenderWindow& window) {
     window.draw(boatSprite);
 }
+
+void Boat::move(const b2Vec2& force) {
+    boatBody->ApplyForceToCenter(force, true); // Apply force to the center of the boat
+}
