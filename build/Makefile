@@ -153,6 +153,30 @@ src/Boat.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/Boat.cpp.s
 .PHONY : src/Boat.cpp.s
 
+src/ObstacleManager.o: src/ObstacleManager.cpp.o
+.PHONY : src/ObstacleManager.o
+
+# target to build an object file
+src/ObstacleManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o
+.PHONY : src/ObstacleManager.cpp.o
+
+src/ObstacleManager.i: src/ObstacleManager.cpp.i
+.PHONY : src/ObstacleManager.i
+
+# target to preprocess a source file
+src/ObstacleManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.i
+.PHONY : src/ObstacleManager.cpp.i
+
+src/ObstacleManager.s: src/ObstacleManager.cpp.s
+.PHONY : src/ObstacleManager.s
+
+# target to generate assembly for a file
+src/ObstacleManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.s
+.PHONY : src/ObstacleManager.cpp.s
+
 src/PhysicsManager.o: src/PhysicsManager.cpp.o
 .PHONY : src/PhysicsManager.o
 
@@ -213,6 +237,9 @@ help:
 	@echo "... src/Boat.o"
 	@echo "... src/Boat.i"
 	@echo "... src/Boat.s"
+	@echo "... src/ObstacleManager.o"
+	@echo "... src/ObstacleManager.i"
+	@echo "... src/ObstacleManager.s"
 	@echo "... src/PhysicsManager.o"
 	@echo "... src/PhysicsManager.i"
 	@echo "... src/PhysicsManager.s"

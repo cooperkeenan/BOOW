@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "BoatOutOfWater.pdb"
   "CMakeFiles/BoatOutOfWater.dir/src/Boat.cpp.o"
   "CMakeFiles/BoatOutOfWater.dir/src/Boat.cpp.o.d"
+  "CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o"
+  "CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o.d"
   "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o"
   "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o.d"
   "CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o"

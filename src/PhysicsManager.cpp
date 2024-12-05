@@ -1,6 +1,7 @@
 #include "PhysicsManager.h"
 #include "Constants.h"
-#include <iostream>
+#include"ObstacleManager.h"
+#include <iostream> // For debugging
 
 // Constructor
 PhysicsManager::PhysicsManager()
@@ -15,13 +16,16 @@ PhysicsManager::PhysicsManager()
     groundBodyDef.position.Set(0.0f, 0.0f);
     groundBody = world.CreateBody(&groundBodyDef);
 
-    // Generate curve vertices
-    generateCurveVertices(100, -20.0f, 20.0f);
+    // Initialize predefined obstacles
+    initializeObstacles();
 
-    // Use b2EdgeShape for the physics boundary
-    for (size_t i = 0; i < curveVertices.size() - 1; ++i) {
+    // Generate the track
+    generateTrack();
+
+    // Create Box2D physics boundaries from track vertices
+    for (size_t i = 0; i < trackVertices.size() - 1; ++i) {
         b2EdgeShape edge;
-        edge.SetTwoSided(curveVertices[i], curveVertices[i + 1]); 
+        edge.SetTwoSided(trackVertices[i], trackVertices[i + 1]);
 
         b2FixtureDef edgeFixtureDef;
         edgeFixtureDef.shape = &edge;
@@ -32,18 +36,17 @@ PhysicsManager::PhysicsManager()
     }
 }
 
-// Generate curve vertices
-void PhysicsManager::generateCurveVertices(int numVertices, float startX, float endX) {
-    curveVertices.resize(numVertices);
-    float step = (endX - startX) / (numVertices - 1);
-
-    for (int i = 0; i < numVertices; ++i) {
-        float x = startX + i * step;
-        float t = (float)i / (numVertices - 1); 
-        float y = (WINDOW_HEIGHT / SCALE / 2.0f) + 5.0f * sinf(t * 2.0f * b2_pi) * cosf(t * b2_pi);
-        curveVertices[i] = b2Vec2(x, y); 
-    }
+// Initialize predefined obstacles
+void PhysicsManager::initializeObstacles() {
+    obstacleManager.addObstacle({ {{0, 0}, {5, 2}, {10, 4}, {15, 6}}, 0.0f, 6.0f }); // Ramp
+    obstacleManager.addObstacle({ {{0, 0}, {5, 2}, {10, 0}}, 0.0f, 0.0f });          // Bump
 }
+
+// Generate the track using obstacles
+void PhysicsManager::generateTrack() {
+    obstacleManager.generateTrack(trackVertices, 10); // Generate track with 10 obstacles
+}
+
 
 // Apply gravity
 void PhysicsManager::applyGravity(const b2Vec2& gravity) {
@@ -61,14 +64,14 @@ void PhysicsManager::applyGravityIfNeeded(bool& gravityApplied, float elapsedTim
     }
 }
 
-// Step the simulation
+// Step the physics simulation
 void PhysicsManager::step() {
     world.Step(timeStep, velocityIterations, positionIterations);
 }
 
 // Render the ground
 void PhysicsManager::renderGround(sf::RenderWindow& window) {
-    const int numVertices = curveVertices.size();
+    const int numVertices = trackVertices.size();
     sf::VertexArray groundShape(sf::LineStrip, numVertices);
 
     float offsetX = WINDOW_WIDTH / 2.0f; // Center X in pixels
@@ -76,8 +79,8 @@ void PhysicsManager::renderGround(sf::RenderWindow& window) {
 
     for (int i = 0; i < numVertices; ++i) {
         groundShape[i].position = sf::Vector2f(
-            curveVertices[i].x * SCALE + offsetX,
-            offsetY - (curveVertices[i].y * SCALE)
+            trackVertices[i].x * SCALE + offsetX,
+            offsetY - (trackVertices[i].y * SCALE)
         );
         groundShape[i].color = sf::Color::Green;
     }
@@ -85,7 +88,7 @@ void PhysicsManager::renderGround(sf::RenderWindow& window) {
     window.draw(groundShape);
 }
 
-// Get the Box2D world
+// Access the Box2D world
 b2World& PhysicsManager::getWorld() {
     return world;
 }

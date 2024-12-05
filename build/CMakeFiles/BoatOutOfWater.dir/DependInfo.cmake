@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/cooperkeenan/Documents/GitHub/BOOW/src/Boat.cpp" "CMakeFiles/BoatOutOfWater.dir/src/Boat.cpp.o" "gcc" "CMakeFiles/BoatOutOfWater.dir/src/Boat.cpp.o.d"
+  "/Users/cooperkeenan/Documents/GitHub/BOOW/src/ObstacleManager.cpp" "CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o" "gcc" "CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o.d"
   "/Users/cooperkeenan/Documents/GitHub/BOOW/src/PhysicsManager.cpp" "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o" "gcc" "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o.d"
   "/Users/cooperkeenan/Documents/GitHub/BOOW/src/main.cpp" "CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o" "gcc" "CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o.d"
   )
