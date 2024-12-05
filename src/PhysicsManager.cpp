@@ -21,7 +21,7 @@ PhysicsManager::PhysicsManager()
     // Use b2EdgeShape for the physics boundary
     for (size_t i = 0; i < curveVertices.size() - 1; ++i) {
         b2EdgeShape edge;
-        edge.SetTwoSided(curveVertices[i], curveVertices[i + 1]); // Connect  vertices
+        edge.SetTwoSided(curveVertices[i], curveVertices[i + 1]); 
 
         b2FixtureDef edgeFixtureDef;
         edgeFixtureDef.shape = &edge;
@@ -39,9 +39,9 @@ void PhysicsManager::generateCurveVertices(int numVertices, float startX, float 
 
     for (int i = 0; i < numVertices; ++i) {
         float x = startX + i * step;
-        float t = (float)i / (numVertices - 1); // Normalized [0, 1]
+        float t = (float)i / (numVertices - 1); 
         float y = (WINDOW_HEIGHT / SCALE / 2.0f) + 5.0f * sinf(t * 2.0f * b2_pi) * cosf(t * b2_pi);
-        curveVertices[i] = b2Vec2(x, y); // Save the vertex
+        curveVertices[i] = b2Vec2(x, y); 
     }
 }
 

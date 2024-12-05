@@ -33,5 +33,4 @@
 
 # Ignore specific files
 copyme.py
-build_and_run.sh
 output.txt
