@@ -1,32 +1,46 @@
 #include "ObstacleManager.h"
-#include <cstdlib> // For rand()
 
-// Add an obstacle to the manager
 void ObstacleManager::addObstacle(const Obstacle& obstacle) {
     obstacles.push_back(obstacle);
 }
 
-// Generate a seamless track from obstacles
+const std::vector<Obstacle>& ObstacleManager::getObstacles() const {
+    return obstacles;
+}
+
 void ObstacleManager::generateTrack(std::vector<b2Vec2>& trackVertices, int numObstacles) {
     float currentX = 0.0f;
     float currentHeight = 0.0f;
 
     for (int i = 0; i < numObstacles; ++i) {
-        // Select a random obstacle
-        const Obstacle& obstacle = obstacles[rand() % obstacles.size()];
-
-        // Add the obstacle's vertices to the track
-        for (const auto& vertex : obstacle.vertices) {
-            trackVertices.push_back(b2Vec2(currentX + vertex.x, currentHeight + vertex.y));
+        if (obstacles.empty()) {
+            // No obstacles at all
+            break;
         }
 
-        // Update the position for the next obstacle
-        currentX += obstacle.vertices.back().x; // Move forward by obstacle's width
-        currentHeight += obstacle.endHeight - obstacle.startHeight; // Adjust height
-    }
-}
+        // Cycle through obstacles
+        Obstacle obstacle = obstacles[i % obstacles.size()];
+        float heightOffset = currentHeight - obstacle.startHeight;
 
-// Get the list of predefined obstacles
-const std::vector<Obstacle>& ObstacleManager::getObstacles() const {
-    return obstacles;
+        if (obstacle.vertices.size() == 1) {
+            // GAP OBSTACLE
+            float gapLength = obstacle.vertices[0].x;
+            currentX += gapLength;
+            // currentHeight unchanged
+            continue;
+        } 
+        else if (obstacle.vertices.size() > 1) {
+            // NORMAL OBSTACLE
+            for (auto& vertex : obstacle.vertices) {
+                trackVertices.push_back(b2Vec2(currentX + vertex.x, vertex.y + heightOffset));
+            }
+
+            float lastX = obstacle.vertices.back().x;
+            currentX += lastX;
+            currentHeight = obstacle.endHeight + heightOffset;
+        } else {
+            // Empty obstacle, just continue
+            continue;
+        }
+    }
 }

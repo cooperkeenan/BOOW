@@ -1,3 +1,6 @@
+//Boat.cpp
+
+
 #include "Boat.h"
 #include "Constants.h"
 #include <iostream>
@@ -19,7 +22,7 @@ Boat::Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& siz
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &boatShape;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.007f;
+    fixtureDef.friction = 0.005f;
     fixtureDef.restitution = 0.5f;
     boatBody->CreateFixture(&fixtureDef);
 

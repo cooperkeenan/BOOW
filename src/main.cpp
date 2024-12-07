@@ -1,3 +1,6 @@
+//Main.cpp
+
+
 #include <SFML/Graphics.hpp>
 #include "Boat.h"
 #include "PhysicsManager.h"
@@ -26,9 +29,9 @@ int main() {
 
         // Controls
         float directionX = 0.0f, directionY = 0.0f;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 1.0f;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.8f;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.8f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 0.5f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.4f;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.4f;
 
         boat.move(directionX, directionY, 1.0f);
 

@@ -4,28 +4,29 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "ObstacleManager.h" // Include ObstacleManager
+#include "ObstacleManager.h"
+#include "Constants.h"
 
 class PhysicsManager {
 public:
     PhysicsManager();
-    b2World& getWorld();                            // Access the Box2D world
-    void step();                                    // Step the physics simulation
-    void applyGravity(const b2Vec2& gravity);       // Apply global gravity
+    b2World& getWorld();
+    void step();
+    void applyGravity(const b2Vec2& gravity);
     void applyGravityIfNeeded(bool& gravityApplied, float elapsedTime, float triggerTime);
-    void renderGround(sf::RenderWindow& window);    // Render the track (ground)
+    void renderGround(sf::RenderWindow& window);
 
 private:
-    void initializeObstacles();                     // Initialize predefined obstacles
-    void generateTrack();                           // Generate the track using obstacles
+    void initializeObstacles();
+    void createFixturesFromTrack(); // New method to create fixtures from trackVertices
 
-    b2World world;                                  // Box2D world
-    float timeStep;                                 // Time step for physics simulation
-    int32 velocityIterations;                      // Velocity solver iterations
-    int32 positionIterations;                      // Position solver iterations
-    b2Body* groundBody;                             // Ground body for the track
-    std::vector<b2Vec2> trackVertices;              // Vertices for the ground track
-    ObstacleManager obstacleManager;                // Manage obstacles
+    b2World world;
+    float timeStep;
+    int32 velocityIterations;
+    int32 positionIterations;
+    b2Body* groundBody;
+    std::vector<b2Vec2> trackVertices;
+    ObstacleManager obstacleManager;
 };
 
 #endif // PHYSICSMANAGER_H
