@@ -18,7 +18,7 @@ public:
 
 private:
     void initializeObstacles();
-    void createFixturesFromTrack(); // New method to create fixtures from trackVertices
+    void createFixturesFromObstacle(const Obstacle& obs, float offsetX, float offsetY); // New method to create fixtures from trackVertices
 
     b2World world;
     float timeStep;

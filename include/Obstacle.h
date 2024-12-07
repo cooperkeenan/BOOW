@@ -1,6 +1,3 @@
-//Obstacle.h
-
-
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
 
@@ -8,9 +5,10 @@
 #include <Box2D/Box2D.h>
 
 struct Obstacle {
-    std::vector<b2Vec2> vertices; // Vertices of the obstacle
-    float startHeight;            // Starting height
-    float endHeight;              // Ending height
+    std::vector<b2Vec2> vertices;
+    float startHeight;
+    float endHeight;
+    bool isGap; // Make sure this is present and set accordingly
 };
 
 #endif // OBSTACLE_H
