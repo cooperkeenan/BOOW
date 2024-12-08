@@ -1,0 +1,10 @@
+^C:\USERS\KAI\DOCUMENTS\GAMES_ENGINEERING\BOOW\BUILD\CMAKEFILES\07122934B88BFB36C8DC28233BBFF6BC\GENERATE.STAMP.RULE
+setlocal
+C:\Users\Kai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\cmake\data\bin\cmake.exe -SC:/Users/Kai/Documents/Games_Engineering/BOOW -BC:/Users/Kai/Documents/Games_Engineering/BOOW/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Kai/Documents/Games_Engineering/BOOW/build/BoatOutOfWater.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

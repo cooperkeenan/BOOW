@@ -1,0 +1,10 @@
+^C:\USERS\KAI\DOCUMENTS\GAMES_ENGINEERING\BOOW\CMAKELISTS.TXT
+setlocal
+C:\Users\Kai\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\cmake\data\bin\cmake.exe -SC:/Users/Kai/Documents/Games_Engineering/BOOW -BC:/Users/Kai/Documents/Games_Engineering/BOOW/build --check-stamp-file C:/Users/Kai/Documents/Games_Engineering/BOOW/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

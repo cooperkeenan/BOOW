@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Kai\Documents\Games_Engineering\BOOW\build\CMakeFiles\07122934b88bfb36c8dc28233bbff6bc\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{BAA7009B-6762-3E9E-B669-33BCB7F993C0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
