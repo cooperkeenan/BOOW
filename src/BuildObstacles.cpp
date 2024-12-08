@@ -1,44 +1,73 @@
 #include "BuildObstacles.h"
-#include <cmath> // for std::nanf
 
-Obstacle gap(float gapStartX, float gapLength, float height) {
-    // Create a small horizontal segment at the same height as the ramp end
+// Constants for standard dimensions
+constexpr float INITIAL_START_X = -20.0f;
+constexpr float INITIAL_START_Y = 20.0f;
+constexpr float LINE_LENGTH = 10.0f;
+constexpr float RAMP_LENGTH = 10.0f;
+constexpr float RAMP_HEIGHT = 5.0f;
+constexpr float GAP_LENGTH = 5.0f;
+
+// Global variables to track current position
+float currentX = INITIAL_START_X;
+float currentY = INITIAL_START_Y;
+
+//Starting Line
+Obstacle startingLine() {
     std::vector<b2Vec2> vertices;
-    vertices.push_back(b2Vec2(gapStartX, height));
-    vertices.push_back(b2Vec2(gapStartX + gapLength, height));
-    return { vertices, height, height, true }; // isGap = true
+    vertices.push_back(b2Vec2(currentX, currentY));
+    vertices.push_back(b2Vec2(currentX + LINE_LENGTH, currentY));
+    currentX += LINE_LENGTH;  
+    return {vertices, currentY, currentY, false};  // isGap = false
 }
 
 
+// Create Line
+Obstacle line(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f) {
+    currentX += horizontalOffset; 
+    float length = LINE_LENGTH + lengthAdjustment; 
+    float startY = currentY + verticalOffset;
+    std::vector<b2Vec2> vertices;
+    vertices.push_back(b2Vec2(currentX, startY));
+    vertices.push_back(b2Vec2(currentX + length, startY));
+    currentX += length; 
+    currentY = startY;  
+    return {vertices, startY, startY, false};  
+}
 
-std::vector<Obstacle> createSimpleRampSet() {
+// Create Ramp
+Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f, float heightAdjustment = 0.0f) {
+    currentX += horizontalOffset; 
+    float length = RAMP_LENGTH + lengthAdjustment; 
+    float height = RAMP_HEIGHT + heightAdjustment; 
+    float startY = currentY + verticalOffset;
+    std::vector<b2Vec2> vertices;
+    vertices.push_back(b2Vec2(currentX, startY));
+    vertices.push_back(b2Vec2(currentX + length, startY + height));
+    currentX += length;  
+    currentY = startY + height;  
+    return {vertices, startY, currentY, false};
+}
+
+// Create Gap (Invisible Line)
+Obstacle gap(float horizontalOffset = 0.0f, float length = GAP_LENGTH) {
+    currentX += horizontalOffset;
+    std::vector<b2Vec2> vertices;
+    vertices.push_back(b2Vec2(currentX, currentY));
+    vertices.push_back(b2Vec2(currentX + length, currentY));
+    currentX += length; 
+    return {vertices, currentY, currentY, true};  // isGap = true
+}
+
+// Function to create a complete obstacle set
+std::vector<Obstacle> Obstacle_1() {
     std::vector<Obstacle> obstacleSet;
 
-    // Define start coordinates for the first obstacle
-    float initialStartX = -20.0f;  // Hard coded start x value
-    float initialStartY = 20.0f;  // Hard coded start y value
-
-    // First obstacle: line(10) + ramp(10)
-    {
-        std::vector<b2Vec2> vertices;
-        vertices.push_back(b2Vec2(initialStartX, initialStartY)); // Starting at (5,0)
-        vertices.push_back(b2Vec2(initialStartX + 10.0f, initialStartY)); // Continues horizontally to (15,0)
-        vertices.push_back(b2Vec2(initialStartX + 20.0f, initialStartY + 5.0f)); // Ramps up to (25,5)
-        Obstacle firstObstacle = { vertices, initialStartY, initialStartY + 5.0f, false };
-        obstacleSet.push_back(firstObstacle);
-    }
-
-    // Gap follows the ramp, starting where the ramp ends
-    obstacleSet.push_back(gap(initialStartX + 20.0f, 5.0f, initialStartY + 5.0f));
-
-    // Second obstacle: line(10) at ground level from (25,0) to (35,0)
-    {
-        std::vector<b2Vec2> vertices;
-        vertices.push_back(b2Vec2(initialStartX + 25.0f, initialStartY)); // Starting at the ground level after the gap
-        vertices.push_back(b2Vec2(initialStartX + 35.0f, initialStartY)); // Continues horizontally at ground level
-        Obstacle secondObstacle = { vertices, initialStartY, initialStartY, false };
-        obstacleSet.push_back(secondObstacle);
-    }
+    obstacleSet.push_back(startingLine());
+    obstacleSet.push_back(ramp());
+    obstacleSet.push_back(gap(50));
+    obstacleSet.push_back(line(0, -5));  
 
     return obstacleSet;
 }
+

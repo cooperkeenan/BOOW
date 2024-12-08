@@ -8,7 +8,7 @@ struct Obstacle {
     std::vector<b2Vec2> vertices;
     float startHeight;
     float endHeight;
-    bool isGap; // Make sure this is present and set accordingly
+    bool isGap; 
 };
 
 #endif // OBSTACLE_H

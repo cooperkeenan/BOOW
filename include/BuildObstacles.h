@@ -5,14 +5,19 @@
 #include <Box2D/Box2D.h>
 #include "Obstacle.h"
 
-// Returns a set of obstacles forming:
-// line(10) -> ramp(10) -> break marker (NaN,NaN) -> gap(5) -> break marker -> line(10)
-std::vector<Obstacle> createSimpleRampSet();
+// Function to create a standard starting line
+Obstacle startingLine(float startX, float startY, float length);
 
-// Represents a gap obstacle with a single vertex indicating gap length
+Obstacle line(float startX, float startY, float length);
+
+// Function to create a ramp obstacle
+Obstacle ramp(float startX, float startY, float length, float height);
+
+// Function to create a gap obstacle with a single vertex indicating gap length
 Obstacle gap(float gapStartX, float gapLength, float height);
 
-// Represents a break obstacle with a single (NaN, NaN) vertex
-Obstacle breakObstacle();
+// Function to create a complete set of obstacles for a level
+std::vector<Obstacle> Obstacle_1();
+std::vector<Obstacle> Obstacle_2();
 
 #endif // BUILD_OBSTACLES_H

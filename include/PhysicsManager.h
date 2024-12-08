@@ -18,14 +18,13 @@ public:
 
 private:
     void initializeObstacles();
-    void createFixturesFromObstacle(const Obstacle& obs, float offsetX, float offsetY); // New method to create fixtures from trackVertices
+    void createFixturesFromObstacle(const Obstacle& obs, float offsetX, float offsetY);
 
     b2World world;
     float timeStep;
     int32 velocityIterations;
     int32 positionIterations;
     b2Body* groundBody;
-    std::vector<b2Vec2> trackVertices;
     ObstacleManager obstacleManager;
 };
 
