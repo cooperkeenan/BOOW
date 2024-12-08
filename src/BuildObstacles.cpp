@@ -27,13 +27,16 @@ Obstacle line(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float 
     currentX += horizontalOffset; 
     float length = LINE_LENGTH + lengthAdjustment; 
     float startY = currentY + verticalOffset;
+
     std::vector<b2Vec2> vertices;
     vertices.push_back(b2Vec2(currentX, startY));
     vertices.push_back(b2Vec2(currentX + length, startY));
     currentX += length; 
     currentY = startY;  
+    
     return {vertices, startY, startY, false};  
 }
+
 
 // Create Ramp
 Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f, float heightAdjustment = 0.0f) {
@@ -41,24 +44,31 @@ Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float 
     float length = RAMP_LENGTH + lengthAdjustment; 
     float height = RAMP_HEIGHT + heightAdjustment; 
     float startY = currentY + verticalOffset;
+
     std::vector<b2Vec2> vertices;
     vertices.push_back(b2Vec2(currentX, startY));
     vertices.push_back(b2Vec2(currentX + length, startY + height));
     currentX += length;  
     currentY = startY + height;  
+
     return {vertices, startY, currentY, false};
 }
+
 
 // Create Gap (Invisible Line)
 Obstacle gap(float horizontalOffset = 0.0f, float length = GAP_LENGTH) {
     currentX += horizontalOffset;
+
     std::vector<b2Vec2> vertices;
     vertices.push_back(b2Vec2(currentX, currentY));
     vertices.push_back(b2Vec2(currentX + length, currentY));
     currentX += length; 
+
     return {vertices, currentY, currentY, true};  // isGap = true
 }
 
+
+//MOVE THIS FUNCTION TO OBSTACLE MANAGER?
 // Function to create a complete obstacle set
 std::vector<Obstacle> Obstacle_1() {
     std::vector<Obstacle> obstacleSet;
