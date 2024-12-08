@@ -34,3 +34,7 @@
 # Ignore specific files
 copyme.py
 output.txt
+
+
+# Ignore the build directory
+build/
