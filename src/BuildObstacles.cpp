@@ -14,25 +14,29 @@ Obstacle gap(float gapStartX, float gapLength, float height) {
 std::vector<Obstacle> createSimpleRampSet() {
     std::vector<Obstacle> obstacleSet;
 
+    // Define start coordinates for the first obstacle
+    float initialStartX = -20.0f;  // Hard coded start x value
+    float initialStartY = 20.0f;  // Hard coded start y value
+
     // First obstacle: line(10) + ramp(10)
     {
         std::vector<b2Vec2> vertices;
-        vertices.push_back(b2Vec2(0.0f, 0.0f));
-        vertices.push_back(b2Vec2(10.0f, 0.0f));
-        vertices.push_back(b2Vec2(20.0f, 5.0f));
-        Obstacle firstObstacle = { vertices, 0.0f, 5.0f, false };
+        vertices.push_back(b2Vec2(initialStartX, initialStartY)); // Starting at (5,0)
+        vertices.push_back(b2Vec2(initialStartX + 10.0f, initialStartY)); // Continues horizontally to (15,0)
+        vertices.push_back(b2Vec2(initialStartX + 20.0f, initialStartY + 5.0f)); // Ramps up to (25,5)
+        Obstacle firstObstacle = { vertices, initialStartY, initialStartY + 5.0f, false };
         obstacleSet.push_back(firstObstacle);
     }
 
-    // gap(5) at height=5 as a sensor line
-    obstacleSet.push_back(gap(20.0f, 5.0f, 5.0f));
+    // Gap follows the ramp, starting where the ramp ends
+    obstacleSet.push_back(gap(initialStartX + 20.0f, 5.0f, initialStartY + 5.0f));
 
-    // Second obstacle: line(10) at ground level (25,0)->(35,0)
+    // Second obstacle: line(10) at ground level from (25,0) to (35,0)
     {
         std::vector<b2Vec2> vertices;
-        vertices.push_back(b2Vec2(25.0f, 0.0f));
-        vertices.push_back(b2Vec2(35.0f, 0.0f));
-        Obstacle secondObstacle = { vertices, 5.0f, 0.0f, false };
+        vertices.push_back(b2Vec2(initialStartX + 25.0f, initialStartY)); // Starting at the ground level after the gap
+        vertices.push_back(b2Vec2(initialStartX + 35.0f, initialStartY)); // Continues horizontally at ground level
+        Obstacle secondObstacle = { vertices, initialStartY, initialStartY, false };
         obstacleSet.push_back(secondObstacle);
     }
 
