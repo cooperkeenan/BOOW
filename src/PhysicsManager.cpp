@@ -11,7 +11,8 @@ PhysicsManager::PhysicsManager()
       timeStep(1.0f / 60.0f),
       velocityIterations(8),
       positionIterations(3),
-      groundBody(nullptr)
+      groundBody(nullptr),
+      gravityApplied(false)
 {
     // Define the ground body as static
     b2BodyDef groundBodyDef;
@@ -19,31 +20,18 @@ PhysicsManager::PhysicsManager()
     groundBodyDef.position.Set(0.0f, 0.0f);
     groundBody = world.CreateBody(&groundBodyDef);
 
-    // Example usage: you could call initializeObstacles(Obstacle_1()) here or elsewhere
-    // For now, let's just do Obstacle_1 by default:
+    // Initialize obstacles once
     initializeObstacles(level_1());
 }
 
+
 void PhysicsManager::initializeObstacles(const std::vector<Obstacle>& selected_level) {
-    // Build the level using the obstacle manager
     auto builtLevel = obstacleManager.buildLevel(selected_level);
 
-    // Debug: Print obstacle positions
-    std::cout << "Built Level Obstacles:\n";
-    for (size_t i = 0; i < builtLevel.size(); ++i) {
-        const auto& obs = builtLevel[i];
-        std::cout << "Obstacle " << i << " (isGap: " << obs.isGap << "):\n";
-        for (size_t v = 0; v < obs.vertices.size(); ++v) {
-            std::cout << "  Vertex " << v << ": (" << obs.vertices[v].x << ", " << obs.vertices[v].y << ")\n";
-        }
-    }
-
-    // Add them to the obstacle manager
     for (const auto& obs : builtLevel) {
         obstacleManager.addObstacle(obs);
     }
 
-    // Now that obstacles are placed, create their fixtures
     const auto& obsList = obstacleManager.getObstacles();
     for (const auto& obs : obsList) {
         createFixturesFromObstacle(obs, 0.0f, 0.0f);

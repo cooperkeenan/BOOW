@@ -22,6 +22,26 @@ std::vector<Obstacle> level1_obstacle_2() {
     return obstacleSet;
 }
 
+std::vector<Obstacle> level1_obstacle_3() {
+    // No reset here either, just continue from where obstacle_1 ended
+    std::vector<Obstacle> obstacleSet;
+    obstacleSet.push_back(line());
+    obstacleSet.push_back(ramp());
+    obstacleSet.push_back(gap());
+    obstacleSet.push_back(line(0, -5));
+    return obstacleSet;
+}
+
+std::vector<Obstacle> level1_obstacle_4() {
+    // No reset here either, just continue from where obstacle_1 ended
+    std::vector<Obstacle> obstacleSet;
+    obstacleSet.push_back(line());
+    obstacleSet.push_back(ramp());
+    obstacleSet.push_back(gap());
+    obstacleSet.push_back(line(0, -5));
+    return obstacleSet;
+}
+
 
 
 std::vector<Obstacle> level_1() {
@@ -32,10 +52,14 @@ std::vector<Obstacle> level_1() {
     std::vector<Obstacle> level;
     auto part1 = level1_obstacle_1();
     auto part2 = level1_obstacle_2();
+    auto part3 = level1_obstacle_3();
+    auto part4 = level1_obstacle_4();
 
     // Concatenate the parts
     level.insert(level.end(), part1.begin(), part1.end());
     level.insert(level.end(), part2.begin(), part2.end());
+    level.insert(level.end(), part3.begin(), part3.end());
+    level.insert(level.end(), part4.begin(), part4.end());
 
     return level;
 }

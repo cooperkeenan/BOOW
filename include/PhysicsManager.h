@@ -15,6 +15,8 @@ public:
     void applyGravity(const b2Vec2& gravity);
     void applyGravityIfNeeded(bool& gravityApplied, float elapsedTime, float triggerTime);
     void renderGround(sf::RenderWindow& window);
+    bool gravityApplied;
+    sf::Clock clock;
 
 private:
     void initializeObstacles(const std::vector<Obstacle>& selected_level);

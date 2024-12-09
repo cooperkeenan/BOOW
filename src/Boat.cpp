@@ -1,8 +1,7 @@
-//Boat.cpp
-
-
 #include "Boat.h"
 #include "Constants.h"
+#include "BuildObstacles.h"
+#include "PhysicsManager.h"
 #include <iostream>
 
 // Helper function to convert SFML to Box2D coordinates
@@ -10,7 +9,9 @@ b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
     return b2Vec2((position.x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
 }
 
-Boat::Boat(b2World& world, const sf::Vector2f& position, const sf::Vector2f& size) {
+Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size)
+    : physicsMgr(physicsManager)
+{
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = sfmlToBox2D(position);
@@ -47,7 +48,32 @@ void Boat::move(const b2Vec2& force) {
     boatBody->ApplyForceToCenter(force, true);
 }
 
+
+b2Body* Boat::getBoatBody() const {
+    return boatBody;
+}
+
 void Boat::move(float directionX, float directionY, float magnitude) {
     b2Vec2 force(directionX * magnitude, directionY * magnitude);
     boatBody->ApplyForceToCenter(force, true);
+}
+
+// Set the boat's position
+void Boat::setPosition(float x, float y) {
+    boatBody->SetTransform(b2Vec2((x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - y) / SCALE), boatBody->GetAngle());
+    boatBody->SetAwake(true);
+}
+
+bool Boat::checkRespawnNeeded() const {
+    b2Vec2 pos = boatBody->GetPosition();
+    float worldY = WINDOW_HEIGHT - (pos.y * SCALE);
+    return (worldY > 1000); // True if boat has fallen too far
+}
+
+void Boat::respawnBoat() {
+    // Reset velocity
+    boatBody->SetLinearVelocity(b2Vec2(0, 0));
+
+    // Move the boat back to a stable starting position on screen
+    setPosition(150, 100.0f);
 }
