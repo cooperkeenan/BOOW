@@ -4,14 +4,9 @@
 float currentX = INITIAL_START_X;
 float currentY = INITIAL_START_Y;
 
-Obstacle startingLine() {
-    std::vector<b2Vec2> vertices;
-    vertices.push_back(b2Vec2(currentX, currentY));
-    vertices.push_back(b2Vec2(currentX + LINE_LENGTH, currentY));
-    currentX += LINE_LENGTH;  
-    return {vertices, currentY, currentY, false};  
-}
 
+
+//Line
 Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustment) {
     currentX += horizontalOffset; 
     float length = LINE_LENGTH + lengthAdjustment; 
@@ -26,6 +21,8 @@ Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, startY, false};  
 }
 
+
+//Ramp
 Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment) {
     currentX += horizontalOffset; 
     float length = RAMP_LENGTH + lengthAdjustment; 
@@ -41,6 +38,8 @@ Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, currentY, false};
 }
 
+
+//Gap
 Obstacle gap(float horizontalOffset, float lengthAdjustment) {
     currentX += horizontalOffset;
     float length = GAP_LENGTH + lengthAdjustment; 

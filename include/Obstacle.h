@@ -1,5 +1,4 @@
-#ifndef OBSTACLE_H
-#define OBSTACLE_H
+#pragma once
 
 #include <vector>
 #include <Box2D/Box2D.h>
@@ -11,4 +10,3 @@ struct Obstacle {
     bool isGap; 
 };
 
-#endif // OBSTACLE_H

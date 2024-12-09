@@ -1,5 +1,4 @@
-#ifndef PHYSICSMANAGER_H
-#define PHYSICSMANAGER_H
+#pragma once
 
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
@@ -20,7 +19,7 @@ public:
 
 private:
     void initializeObstacles(const std::vector<Obstacle>& selected_level);
-    void createFixturesFromObstacle(const Obstacle& obs, float offsetX, float offsetY);
+    void createFixturesFromObstacle(const Obstacle& obs);
 
     b2World world;
     float timeStep;
@@ -30,4 +29,3 @@ private:
     ObstacleManager obstacleManager;
 };
 
-#endif // PHYSICSMANAGER_H

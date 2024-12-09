@@ -1,5 +1,4 @@
-#ifndef BOAT_H
-#define BOAT_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
@@ -13,8 +12,6 @@ public:
     void move(const b2Vec2& force);
     void move(float directionX, float directionY, float magnitude);
     b2Body* getBoatBody() const; 
-
-    // Added for respawn logic
     bool checkRespawnNeeded() const;
     void respawnBoat();
 
@@ -25,4 +22,4 @@ private:
     PhysicsManager& physicsMgr; 
 };
 
-#endif // BOAT_H
+

@@ -53,10 +53,12 @@ b2Body* Boat::getBoatBody() const {
     return boatBody;
 }
 
+//Move Boat 
 void Boat::move(float directionX, float directionY, float magnitude) {
     b2Vec2 force(directionX * magnitude, directionY * magnitude);
     boatBody->ApplyForceToCenter(force, true);
 }
+
 
 // Set the boat's position
 void Boat::setPosition(float x, float y) {
@@ -64,16 +66,18 @@ void Boat::setPosition(float x, float y) {
     boatBody->SetAwake(true);
 }
 
+
+//Check if boat needs respawned 
 bool Boat::checkRespawnNeeded() const {
     b2Vec2 pos = boatBody->GetPosition();
     float worldY = WINDOW_HEIGHT - (pos.y * SCALE);
-    return (worldY > 1000); // True if boat has fallen too far
+    return (worldY > 1000); 
 }
 
-void Boat::respawnBoat() {
-    // Reset velocity
-    boatBody->SetLinearVelocity(b2Vec2(0, 0));
 
-    // Move the boat back to a stable starting position on screen
+//Respawn Boat
+void Boat::respawnBoat() {
+    boatBody->SetLinearVelocity(b2Vec2(0, 0));
+    boatBody->SetAngularVelocity(0.0f);
     setPosition(150, 100.0f);
 }

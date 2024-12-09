@@ -1,5 +1,4 @@
-#ifndef LEVELS_H
-#define LEVELS_H
+#pragma once
 
 #include <vector>
 #include "Obstacle.h"
@@ -11,6 +10,6 @@ std::vector<Obstacle> level1_obstacle_3();
 std::vector<Obstacle> level1_obstacle_4();
 std::vector<Obstacle> level_1();
 
-// ... and so on for all your levels
 
-#endif // LEVELS_H
+
+

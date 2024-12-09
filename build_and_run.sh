@@ -17,7 +17,7 @@ cmake --build .
 
 # Check if the build succeeded
 if [ $? -eq 0 ]; then
-    echo "Build successful! Running BoatOutOfWater"
+    echo "Build successful! Running..."
     # Run the executable (relative to current directory)
     ./BoatOutOfWater
 else

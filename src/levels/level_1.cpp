@@ -1,10 +1,11 @@
 #include "levels.h"
 #include "BuildObstacles.h"
 
+
+//Obstacle 1 
 std::vector<Obstacle> level1_obstacle_1() {
-    // Do not reset here. Assume currentX/currentY continue from outside.
     std::vector<Obstacle> obstacleSet;
-    obstacleSet.push_back(startingLine());
+    obstacleSet.push_back(line());
     obstacleSet.push_back(line());
     obstacleSet.push_back(ramp());
     obstacleSet.push_back(gap());
@@ -12,8 +13,8 @@ std::vector<Obstacle> level1_obstacle_1() {
     return obstacleSet;
 }
 
+//Obstacle 2 
 std::vector<Obstacle> level1_obstacle_2() {
-    // No reset here either, just continue from where obstacle_1 ended
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
     obstacleSet.push_back(ramp());
@@ -22,8 +23,8 @@ std::vector<Obstacle> level1_obstacle_2() {
     return obstacleSet;
 }
 
+//Obstacle 3
 std::vector<Obstacle> level1_obstacle_3() {
-    // No reset here either, just continue from where obstacle_1 ended
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
     obstacleSet.push_back(ramp());
@@ -32,8 +33,8 @@ std::vector<Obstacle> level1_obstacle_3() {
     return obstacleSet;
 }
 
+//Obstacle 4
 std::vector<Obstacle> level1_obstacle_4() {
-    // No reset here either, just continue from where obstacle_1 ended
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
     obstacleSet.push_back(ramp());
@@ -45,17 +46,18 @@ std::vector<Obstacle> level1_obstacle_4() {
 
 
 std::vector<Obstacle> level_1() {
-    // Reset at the start of the entire level
+    // Reset Variables 
     currentX = INITIAL_START_X;
     currentY = INITIAL_START_Y;
     
+    //Assemble Obstacles 
     std::vector<Obstacle> level;
     auto part1 = level1_obstacle_1();
     auto part2 = level1_obstacle_2();
     auto part3 = level1_obstacle_3();
     auto part4 = level1_obstacle_4();
 
-    // Concatenate the parts
+    // Concatenate Obstacles 
     level.insert(level.end(), part1.begin(), part1.end());
     level.insert(level.end(), part2.begin(), part2.end());
     level.insert(level.end(), part3.begin(), part3.end());
