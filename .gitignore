@@ -42,3 +42,7 @@ build_and_run.sh
 
 # Ignore Build folder
 /build
+
+
+# CMakeLists
+CMakeLists.txt
