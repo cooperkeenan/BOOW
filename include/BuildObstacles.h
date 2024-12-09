@@ -5,19 +5,29 @@
 #include <Box2D/Box2D.h>
 #include "Obstacle.h"
 
-// Function to create a standard starting line
-Obstacle startingLine(float startX, float startY, float length);
+// Constants for standard dimensions
+constexpr float INITIAL_START_X = -30.0f;
+constexpr float INITIAL_START_Y = 30.0f;
+constexpr float LINE_LENGTH = 5.0f;
+constexpr float RAMP_LENGTH = 10.0f;
+constexpr float RAMP_HEIGHT = 5.0f;
+constexpr float GAP_LENGTH = 10.0f;
 
-Obstacle line(float startX, float startY, float length);
+// In BuildObstacles.h
+extern float currentX;
+extern float currentY;
 
-// Function to create a ramp obstacle
-Obstacle ramp(float startX, float startY, float length, float height);
 
-// Function to create a gap obstacle with a single vertex indicating gap length
-Obstacle gap(float gapStartX, float gapLength, float height);
+//Goes at start of each level
+Obstacle startingLine();
 
-// Function to create a complete set of obstacles for a level
-std::vector<Obstacle> Obstacle_1();
-std::vector<Obstacle> Obstacle_2();
+//Line 
+Obstacle line(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f);
+
+//ramp
+Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f, float heightAdjustment = 0.0f);
+
+//Gap
+Obstacle gap(float horizontalOffset = 0.0f, float lengthAdjustment = 0.0f);
 
 #endif // BUILD_OBSTACLES_H

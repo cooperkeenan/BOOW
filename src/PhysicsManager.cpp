@@ -1,7 +1,10 @@
 #include "PhysicsManager.h"
+#include "levels.h"
 #include "Constants.h"
 #include "BuildObstacles.h"
 #include <cmath>
+#include <iostream>
+
 
 PhysicsManager::PhysicsManager()
     : world(b2Vec2(0.0f, 0.0f)),
@@ -16,26 +19,37 @@ PhysicsManager::PhysicsManager()
     groundBodyDef.position.Set(0.0f, 0.0f);
     groundBody = world.CreateBody(&groundBodyDef);
 
-    // Initialize predefined obstacles
-    initializeObstacles();
+    // Example usage: you could call initializeObstacles(Obstacle_1()) here or elsewhere
+    // For now, let's just do Obstacle_1 by default:
+    initializeObstacles(level_1());
+}
 
-    // Create fixtures for each obstacle
+void PhysicsManager::initializeObstacles(const std::vector<Obstacle>& selected_level) {
+    // Build the level using the obstacle manager
+    auto builtLevel = obstacleManager.buildLevel(selected_level);
+
+    // Debug: Print obstacle positions
+    std::cout << "Built Level Obstacles:\n";
+    for (size_t i = 0; i < builtLevel.size(); ++i) {
+        const auto& obs = builtLevel[i];
+        std::cout << "Obstacle " << i << " (isGap: " << obs.isGap << "):\n";
+        for (size_t v = 0; v < obs.vertices.size(); ++v) {
+            std::cout << "  Vertex " << v << ": (" << obs.vertices[v].x << ", " << obs.vertices[v].y << ")\n";
+        }
+    }
+
+    // Add them to the obstacle manager
+    for (const auto& obs : builtLevel) {
+        obstacleManager.addObstacle(obs);
+    }
+
+    // Now that obstacles are placed, create their fixtures
     const auto& obsList = obstacleManager.getObstacles();
     for (const auto& obs : obsList) {
         createFixturesFromObstacle(obs, 0.0f, 0.0f);
     }
 }
 
-void PhysicsManager::initializeObstacles() {
-    // Add predefined obstacles (line, ramp, gap, line)
-    Obstacle line;
-
-    auto obstacles = Obstacle_1();
-    
-    for (const auto& obs : obstacles) {
-        obstacleManager.addObstacle(obs);
-    }
-}
 
 void PhysicsManager::createFixturesFromObstacle(const Obstacle& obs, float offsetX, float offsetY) {
     if (obs.vertices.size() < 2) return; // Need at least 2 vertices to form edges

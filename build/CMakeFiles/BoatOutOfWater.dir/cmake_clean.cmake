@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o.d"
   "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o"
   "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o.d"
+  "CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o"
+  "CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o.d"
   "CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o"
   "CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o.d"
 )

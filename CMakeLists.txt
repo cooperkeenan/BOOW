@@ -11,7 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(include)
 
 # Add source files
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB SOURCES "src/*.cpp" "src/levels/*.cpp")
+
 
 # Add the executable
 add_executable(BoatOutOfWater ${SOURCES})

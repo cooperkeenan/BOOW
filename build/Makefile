@@ -225,6 +225,30 @@ src/PhysicsManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.s
 .PHONY : src/PhysicsManager.cpp.s
 
+src/levels/level_1.o: src/levels/level_1.cpp.o
+.PHONY : src/levels/level_1.o
+
+# target to build an object file
+src/levels/level_1.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o
+.PHONY : src/levels/level_1.cpp.o
+
+src/levels/level_1.i: src/levels/level_1.cpp.i
+.PHONY : src/levels/level_1.i
+
+# target to preprocess a source file
+src/levels/level_1.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.i
+.PHONY : src/levels/level_1.cpp.i
+
+src/levels/level_1.s: src/levels/level_1.cpp.s
+.PHONY : src/levels/level_1.s
+
+# target to generate assembly for a file
+src/levels/level_1.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/BoatOutOfWater.dir/build.make CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.s
+.PHONY : src/levels/level_1.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -270,6 +294,9 @@ help:
 	@echo "... src/PhysicsManager.o"
 	@echo "... src/PhysicsManager.i"
 	@echo "... src/PhysicsManager.s"
+	@echo "... src/levels/level_1.o"
+	@echo "... src/levels/level_1.i"
+	@echo "... src/levels/level_1.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

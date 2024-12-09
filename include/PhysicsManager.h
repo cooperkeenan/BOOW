@@ -17,7 +17,7 @@ public:
     void renderGround(sf::RenderWindow& window);
 
 private:
-    void initializeObstacles();
+    void initializeObstacles(const std::vector<Obstacle>& selected_level);
     void createFixturesFromObstacle(const Obstacle& obs, float offsetX, float offsetY);
 
     b2World world;

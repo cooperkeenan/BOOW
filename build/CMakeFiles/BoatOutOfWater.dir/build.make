@@ -125,10 +125,24 @@ CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cooperkeenan/Documents/GitHub/BOOW/src/PhysicsManager.cpp -o CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.s
 
+CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o: CMakeFiles/BoatOutOfWater.dir/flags.make
+CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o: /Users/cooperkeenan/Documents/GitHub/BOOW/src/levels/level_1.cpp
+CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o: CMakeFiles/BoatOutOfWater.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/cooperkeenan/Documents/GitHub/BOOW/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o -MF CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o.d -o CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o -c /Users/cooperkeenan/Documents/GitHub/BOOW/src/levels/level_1.cpp
+
+CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cooperkeenan/Documents/GitHub/BOOW/src/levels/level_1.cpp > CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.i
+
+CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cooperkeenan/Documents/GitHub/BOOW/src/levels/level_1.cpp -o CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.s
+
 CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o: CMakeFiles/BoatOutOfWater.dir/flags.make
 CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o: /Users/cooperkeenan/Documents/GitHub/BOOW/src/main.cpp
 CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o: CMakeFiles/BoatOutOfWater.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/cooperkeenan/Documents/GitHub/BOOW/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/cooperkeenan/Documents/GitHub/BOOW/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o -MF CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o.d -o CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o -c /Users/cooperkeenan/Documents/GitHub/BOOW/src/main.cpp
 
 CMakeFiles/BoatOutOfWater.dir/src/main.cpp.i: cmake_force
@@ -145,6 +159,7 @@ BoatOutOfWater_OBJECTS = \
 "CMakeFiles/BoatOutOfWater.dir/src/BuildObstacles.cpp.o" \
 "CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o" \
 "CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o" \
+"CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o" \
 "CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o"
 
 # External object files for target BoatOutOfWater
@@ -154,6 +169,7 @@ BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/src/Boat.cpp.o
 BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/src/BuildObstacles.cpp.o
 BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/src/ObstacleManager.cpp.o
 BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/src/PhysicsManager.cpp.o
+BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/src/levels/level_1.cpp.o
 BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/src/main.cpp.o
 BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/build.make
 BoatOutOfWater: /opt/homebrew/lib/libsfml-graphics.2.6.2.dylib
@@ -161,7 +177,7 @@ BoatOutOfWater: /opt/homebrew/lib/libsfml-window.2.6.2.dylib
 BoatOutOfWater: /opt/homebrew/lib/libsfml-system.2.6.2.dylib
 BoatOutOfWater: /opt/homebrew/lib/libbox2d.a
 BoatOutOfWater: CMakeFiles/BoatOutOfWater.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/cooperkeenan/Documents/GitHub/BOOW/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable BoatOutOfWater"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/cooperkeenan/Documents/GitHub/BOOW/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable BoatOutOfWater"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/BoatOutOfWater.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
