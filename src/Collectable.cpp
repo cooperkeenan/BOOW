@@ -18,6 +18,7 @@ Collectable::Collectable(b2World& world, const sf::Vector2f& position, float rad
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     body->CreateFixture(&fixtureDef);
 
+
     // Create SFML shape
     shape.setRadius(radius);
     shape.setFillColor(sf::Color::Yellow);
