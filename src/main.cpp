@@ -100,7 +100,7 @@ int main() {
 
             gravityApplied = false;
             clock.restart();
-            if (previousState != GameState::Paused) { 
+            if (previousState != GameState::Paused) {
                 // Reset timer only when starting level from menu
                 timeRemaining = 30.0f;
                 timerClock.restart();
@@ -140,7 +140,7 @@ int main() {
 
             physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
             physicsManager.step();
-            boat.update();
+            boat.update(currentState);
 
             // Check if boat needs respawn
             if (boat.checkRespawnNeeded()) {
@@ -191,6 +191,9 @@ int main() {
             // Draw pause menu
             window.setView(window.getDefaultView());
             pauseMenu.draw();
+        } else if (currentState == GameState::LevelComplete) {
+            // Draw "Level Complete" screen
+            menu.drawLevelCompleteScreen(window);
         }
 
         window.display();

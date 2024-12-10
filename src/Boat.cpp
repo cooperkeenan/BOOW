@@ -4,6 +4,8 @@
 #include "PhysicsManager.h"
 #include <iostream>
 #include "levels.h"
+#include "GameState.h"
+
 
 // Helper function to convert SFML to Box2D coordinates
 b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
@@ -32,7 +34,7 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
     boatSprite.setFillColor(sf::Color::Blue);
 }
 
-void Boat::update() {
+void Boat::update(GameState &currentState) {
     b2Vec2 position = boatBody->GetPosition();
     float angle = boatBody->GetAngle();
     float finishLinePosition = getFinishLineX();
@@ -44,6 +46,7 @@ void Boat::update() {
     if (!hasCrossedFinishLine && position.x >= finishLinePosition) {
         std::cout << "Boat has crossed the finish line!" << std::endl;
         hasCrossedFinishLine = true;
+        currentState = GameState::LevelComplete;
     }
 }
 
