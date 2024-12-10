@@ -27,4 +27,5 @@ private:
     sf::RectangleShape button;  // The visual rectangle representing the button
     sf::Text buttonText;        // The text displayed on the button
     sf::Font* buttonFont = nullptr;  // Pointer to the font used by the button text
+    bool hasCrossedFinishLine = false; 
 };

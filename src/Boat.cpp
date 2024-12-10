@@ -3,6 +3,7 @@
 #include "BuildObstacles.h"
 #include "PhysicsManager.h"
 #include <iostream>
+#include "levels.h"
 
 // Helper function to convert SFML to Box2D coordinates
 b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
@@ -10,8 +11,7 @@ b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
 }
 
 Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size)
-    : physicsMgr(physicsManager)
-{
+    : physicsMgr(physicsManager), hasCrossedFinishLine(false) {
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = sfmlToBox2D(position);
@@ -35,9 +35,16 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
 void Boat::update() {
     b2Vec2 position = boatBody->GetPosition();
     float angle = boatBody->GetAngle();
+    float finishLinePosition = getFinishLineX();
 
     boatSprite.setPosition(position.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT - (position.y * SCALE));
     boatSprite.setRotation(-angle * 180.0f / b2_pi);
+
+
+    if (!hasCrossedFinishLine && position.x >= finishLinePosition) {
+        std::cout << "Boat has crossed the finish line!" << std::endl;
+        hasCrossedFinishLine = true;
+    }
 }
 
 void Boat::render(sf::RenderWindow& window) {

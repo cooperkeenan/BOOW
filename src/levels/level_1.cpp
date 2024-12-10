@@ -1,6 +1,10 @@
 #include "levels.h"
 #include "BuildObstacles.h"
 
+
+static float finishLineX = 0;
+
+
 // Obstacle 1
 std::vector<Obstacle> level1_obstacle_1() {
     std::vector<Obstacle> obstacleSet;
@@ -52,6 +56,13 @@ std::vector<Obstacle> level1_obstacle_5() {
     return obstacleSet;
 }
 
+//finish line
+std::vector<Obstacle> level1_finish_line() {
+    std::vector<Obstacle> obstacleSet;
+    obstacleSet.push_back(finishLine(0,0,10));
+    return obstacleSet;
+}
+
 std::vector<Obstacle> level_1() {
     // Reset Variables
     currentX = INITIAL_START_X;
@@ -64,6 +75,7 @@ std::vector<Obstacle> level_1() {
     auto part3 = level1_obstacle_3();
     auto part4 = level1_obstacle_4();
     auto part5 = level1_obstacle_5();
+    auto part6 = level1_finish_line();
 
     // Concatenate Obstacles
     level.insert(level.end(), part1.begin(), part1.end());
@@ -71,6 +83,7 @@ std::vector<Obstacle> level_1() {
     level.insert(level.end(), part3.begin(), part3.end());
     level.insert(level.end(), part4.begin(), part4.end());
     level.insert(level.end(), part5.begin(), part5.end());
+    level.insert(level.end(), part6.begin(), part6.end());
 
     return level;
 }

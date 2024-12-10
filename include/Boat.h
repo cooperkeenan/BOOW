@@ -11,13 +11,14 @@ public:
     void render(sf::RenderWindow& window);
     void move(const b2Vec2& force);
     void move(float directionX, float directionY, float magnitude);
-    b2Body* getBoatBody() const; 
+    b2Body* getBoatBody() const;
     bool checkRespawnNeeded() const;
     void respawnBoat();
+    void setPosition(float x, float y); // Declare the setPosition method
 
 private:
     sf::RectangleShape boatSprite;
     b2Body* boatBody;
-    void setPosition(float x, float y); 
-    PhysicsManager& physicsMgr; 
+    PhysicsManager& physicsMgr;
+    bool hasCrossedFinishLine = false;
 };

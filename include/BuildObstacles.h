@@ -25,3 +25,8 @@ Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float 
 
 //Gap
 Obstacle gap(float horizontalOffset = 0.0f, float lengthAdjustment = 0.0f);
+
+//Finish Line
+Obstacle finishLine(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f);
+
+float getFinishLineX();
