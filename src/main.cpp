@@ -11,7 +11,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Boat Out of Water");
 
     sf::Font font;
-    if (!font.loadFromFile("../../arial.ttf")) {  // Adjust this path if needed
+    if (!font.loadFromFile("../arial.ttf")) {  // Adjust this path if needed
         std::cerr << "Failed to load font" << std::endl;
         return -1;
     }

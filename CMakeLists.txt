@@ -1,11 +1,12 @@
 # Minimum CMake version
 cmake_minimum_required(VERSION 3.10)
 
-# Project name
+# Project name and a few useful settings. Other commands can pick up the results
 project(BoatOutOfWater)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Include directories
 include_directories(include)
@@ -16,20 +17,28 @@ file(GLOB SOURCES "src/*.cpp" "src/levels/*.cpp")
 # Add the executable
 add_executable(BoatOutOfWater ${SOURCES})
 
+# Ensure vcpkg is used
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    message(FATAL_ERROR "CMAKE_TOOLCHAIN_FILE must be set to the vcpkg toolchain file.")
+endif()
+
 # Find and link SFML
-find_package(SFML 2.5 COMPONENTS graphics window system audio REQUIRED)
-target_link_libraries(BoatOutOfWater PRIVATE sfml-graphics sfml-window sfml-system)
+find_package(SFML 2.6 REQUIRED COMPONENTS graphics window system audio)
 
 # Find and link Box2D
-find_library(BOX2D_LIBRARY Box2D PATHS /opt/homebrew/lib /opt/homebrew/Cellar/box2d/2.4.2/lib)
-find_path(BOX2D_INCLUDE_DIR Box2D PATHS /opt/homebrew/include /opt/homebrew/Cellar/box2d/2.4.2/include)
-include_directories(${BOX2D_INCLUDE_DIR})
+find_package(box2d CONFIG REQUIRED)
 
-# Note: Adjust this to the actual path or link by the found library name
-# If the path you provided is consistent across platforms, it's okay to use a direct path
-# Otherwise, you should rely on find_library() to provide the proper link directive
-if(BOX2D_LIBRARY)
-    target_link_libraries(BoatOutOfWater PRIVATE ${BOX2D_LIBRARY})
-else()
-    message(FATAL_ERROR "Box2D library not found")
-endif()
+# Link libraries
+target_link_libraries(BoatOutOfWater PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+    sfml-audio
+    box2d::box2d
+)
+
+# Output the build type for debugging
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+
+
+
