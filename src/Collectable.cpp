@@ -1,11 +1,12 @@
 #include "Collectable.h"
+#include "Constants.h"
 
 Collectable::Collectable(b2World& world, const sf::Vector2f& position, float radius)
     : collected(false) {
     // Create Box2D body
     b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
-    bodyDef.position.Set(position.x / 10.0f, position.y / 10.0f);
+    bodyDef.position.Set((position.x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
     body = world.CreateBody(&bodyDef);
 
     b2CircleShape circleShape;

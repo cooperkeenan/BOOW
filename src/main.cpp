@@ -17,7 +17,7 @@ int main() {
 
     // Load Font
     sf::Font font;
-    if (!font.loadFromFile("img/RobotoMono-Regular.ttf")) {
+    if (!font.loadFromFile("../img/RobotoMono-Regular.ttf")) {
         std::cerr << "Failed to load font\n";
         return -1;
     }
