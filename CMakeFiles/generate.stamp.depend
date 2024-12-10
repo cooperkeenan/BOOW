@@ -1,0 +1,36 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-Initialize.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/WindowsPaths.cmake
+C:/Users/Cmerc/CW_Games/BOOW/CMakeFiles/3.30.3/CMakeCCompiler.cmake
+C:/Users/Cmerc/CW_Games/BOOW/CMakeFiles/3.30.3/CMakeCXXCompiler.cmake
+C:/Users/Cmerc/CW_Games/BOOW/CMakeFiles/3.30.3/CMakeRCCompiler.cmake
+C:/Users/Cmerc/CW_Games/BOOW/CMakeFiles/3.30.3/CMakeSystem.cmake
+C:/Users/Cmerc/CW_Games/BOOW/CMakeLists.txt
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/box2d/box2dConfig-debug.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/box2d/box2dConfig-release.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/box2d/box2dConfig.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/box2d/box2dConfigVersion.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/sfml/SFMLConfig.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/sfml/SFMLConfigDependencies.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/sfml/SFMLConfigVersion.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/sfml/SFMLSharedTargets-debug.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/sfml/SFMLSharedTargets-release.cmake
+C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/share/sfml/SFMLSharedTargets.cmake

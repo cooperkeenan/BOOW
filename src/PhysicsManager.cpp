@@ -5,7 +5,6 @@
 #include <cmath>
 #include <iostream>
 
-
 PhysicsManager::PhysicsManager()
     : world(b2Vec2(0.0f, 0.0f)),
       timeStep(1.0f / 60.0f),
@@ -22,21 +21,25 @@ PhysicsManager::PhysicsManager()
 
     //Select Level
     initializeObstacles(level_1());
-}
 
+    // Initialize collectables
+    collectables.emplace_back(world, sf::Vector2f(500, 280), 10.0f);
+    collectables.emplace_back(world, sf::Vector2f(800, 280), 10.0f);
+    collectables.emplace_back(world, sf::Vector2f(1050, 280), 10.0f);
+
+}
 
 //Add each obstacle to the manager  
 void PhysicsManager::initializeObstacles(const std::vector<Obstacle>& selected_level) {
     for (const auto& obs : selected_level) {
         obstacleManager.addObstacle(obs);
-        createFixturesFromObstacle(obs); 
+        createFixturesFromObstacle(obs);
     }
 }
 
-
 //Create Fixtures
 void PhysicsManager::createFixturesFromObstacle(const Obstacle& obs) {
-    if (obs.vertices.size() < 2) return; 
+    if (obs.vertices.size() < 2) return;
 
     for (size_t i = 0; i < obs.vertices.size() - 1; ++i) {
         b2EdgeShape edge;
@@ -78,12 +81,10 @@ void PhysicsManager::applyGravityIfNeeded(bool& gravityApplied, float elapsedTim
     }
 }
 
-
-//Move world forward one timestep 
+//Move world forward one timestep
 void PhysicsManager::step() {
     world.Step(timeStep, velocityIterations, positionIterations);
 }
-
 
 //Render Track 
 void PhysicsManager::renderGround(sf::RenderWindow& window) {
@@ -113,4 +114,23 @@ void PhysicsManager::renderGround(sf::RenderWindow& window) {
 
         window.draw(groundShape);
     }
+}
+
+//Render Collectables
+void PhysicsManager::renderCollectables(sf::RenderWindow& window) {
+    for (auto& collectable : collectables) {
+        collectable.render(window);
+    }
+}
+
+//Check Collectables
+int PhysicsManager::checkCollectables() {
+    int collectedCount = 0;
+    for (auto& collectable : collectables) {
+        if (!collectable.isCollected() && collectable.getBody()->GetContactList() != nullptr) {
+            collectable.markCollected();
+            collectedCount++;
+        }
+    }
+    return collectedCount;
 }

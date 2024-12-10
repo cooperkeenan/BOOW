@@ -9,4 +9,3 @@ struct Obstacle {
     float endHeight;
     bool isGap; 
 };
-

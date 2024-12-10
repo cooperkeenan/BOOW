@@ -15,6 +15,22 @@ int main() {
     // Create boat 
     Boat boat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
+    // Load Font
+    sf::Font font;
+    if (!font.loadFromFile("../img/RobotoMono-Regular.ttf")) {
+        std::cerr << "Failed to load font\n";
+        return -1;
+    }
+
+    // Create score text
+    sf::Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(24);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(10.0f, 10.0f);
+
+    int score = 0;
+
     // Adjust the camera to boat's position
     {
         b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
@@ -23,10 +39,11 @@ int main() {
         window.setView(view);
     }
 
+
+
     sf::Clock clock;
     bool gravityApplied = false;
     float lerpFactor = 2.0f;
-    
 
     while (window.isOpen()) {
         sf::Event event;
@@ -49,15 +66,13 @@ int main() {
         physicsManager.step();
         boat.update();
 
-
-        // Check if boat needs respawned 
+        // Check if boat needs respawn
         if (boat.checkRespawnNeeded()) {
             boat.respawnBoat();
             b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
             sf::Vector2f instantCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
             view.setCenter(instantCenter);
             window.setView(view);
-
         } else {
             b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
             sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, view.getCenter().y);
@@ -67,9 +82,22 @@ int main() {
             window.setView(view);
         }
 
+        // Update score
+        score += physicsManager.checkCollectables();
+        scoreText.setString("Score: " + std::to_string(score));
+
+        // Clear window and render scene
         window.clear();
         physicsManager.renderGround(window);
+        physicsManager.renderCollectables(window);
         boat.render(window);
+
+        // Draw score in the fixed position
+        window.setView(window.getDefaultView());
+        window.draw(scoreText);
+        window.setView(view);
+
+        
         window.display();
     }
 
