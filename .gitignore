@@ -35,14 +35,11 @@
 copyme.py
 output.txt
 
-
 # Ignore Build script 
 build_and_run.sh
-
 
 # Ignore Build folder
 /build
 
-
-# CMakeLists
-CMakeLists.txt
+# Ignore backup or temporary CMakeLists files
+CMakeLists.txt.*

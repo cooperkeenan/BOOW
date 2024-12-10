@@ -21,5 +21,3 @@ private:
     void setPosition(float x, float y); 
     PhysicsManager& physicsMgr; 
 };
-
-

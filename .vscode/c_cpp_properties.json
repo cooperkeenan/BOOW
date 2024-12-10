@@ -1,22 +1,21 @@
 {
     "configurations": [
         {
-            "name": "Mac",
+            "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/include", // Your project's headers
-                "/opt/homebrew/include",     // Homebrew includes
-                "/opt/homebrew/Cellar/sfml/2.6.2/include", // SFML (adjust if needed)
-                "/opt/homebrew/Cellar/box2d/2.4.2/include" // Box2D (adjust if needed)
+                "${workspaceFolder}/**",
+                "C:/Users/Cmerc/CW_Games/vcpkg/installed/x64-windows/include"
             ],
-            "defines": [],
-            "macFrameworkPath": [
-                "/System/Library/Frameworks",
-                "/Library/Frameworks"
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
             ],
-            "compilerPath": "/usr/bin/clang", // Ensure correct compiler path
+            "windowsSdkVersion": "10.0.22621.0",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/cl.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64"
+            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4
