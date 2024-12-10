@@ -1,4 +1,3 @@
-// Pause.h
 #pragma once
 
 #include <SFML/Graphics.hpp>
@@ -13,11 +12,12 @@ public:
     // Handles events specific to the pause menu
     void handleEvent(const sf::Event& event, GameState& currentState);
 
-    // Draws the pause overlay and Resume button
+    // Draws the pause overlay and buttons
     void draw();
 
 private:
     sf::RenderWindow& window;            // Reference to the main window
     sf::RectangleShape overlay;          // Semi-transparent overlay
     Button resumeButton;                 // Resume button
+    Button mainMenuButton;               // Main Menu button
 };
