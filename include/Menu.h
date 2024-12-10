@@ -12,6 +12,7 @@ public:
 private:
     sf::RenderWindow& window;
     Button levelsButton;
+    Button controlsButton; // New Controls Button
     Button quitButton;
     Button level1Button;
     Button level2Button;

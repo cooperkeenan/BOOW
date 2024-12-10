@@ -1,18 +1,23 @@
-#include <iostream>
 #include "Menu.h"
+#include <iostream>
 
-Menu::Menu(sf::RenderWindow& window, sf::Font& font) : window(window),
-    levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::White),
-    quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::White),
-    level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-    level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-    level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White)
-{
+
+Menu::Menu(sf::RenderWindow& window, sf::Font& font) 
+    : window(window),
+      levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::White),
+      controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::Black), // Initialize Controls Button
+      quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::White),
+      level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::White),
+      level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::White),
+      level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White) {
+    
     // Set font and position for each button
     levelsButton.setFont(font);
-    levelsButton.setPosition({300, 200});
+    levelsButton.setPosition({300, 150}); // Adjusted for spacing
+    controlsButton.setFont(font);
+    controlsButton.setPosition({300, 250}); // Between Levels and Quit
     quitButton.setFont(font);
-    quitButton.setPosition({300, 300});
+    quitButton.setPosition({300, 350});
     level1Button.setFont(font);
     level1Button.setPosition({300, 150});
     level2Button.setFont(font);
@@ -28,6 +33,8 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
                 window.close();
             } else if (levelsButton.isMouseOver(window)) {
                 currentState = GameState::LevelSelection;
+            } else if (controlsButton.isMouseOver(window)) { // Handle Controls Button
+                currentState = GameState::Controls;
             }
         } else if (currentState == GameState::LevelSelection) {
             if (level1Button.isMouseOver(window)) {
@@ -43,9 +50,9 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
 }
 
 void Menu::draw(GameState currentState) {
-    // Draw only relevant buttons based on the current state
     if (currentState == GameState::MainMenu) {
         levelsButton.draw(window);
+        controlsButton.draw(window); // Draw Controls Button
         quitButton.draw(window);
     } else if (currentState == GameState::LevelSelection) {
         level1Button.draw(window);

@@ -47,6 +47,16 @@ int main() {
     // Initialize the Pause class
     Pause pauseMenu(window, font);
 
+    // Controls screen setup
+    std::vector<std::string> controlsText = {
+        "Use left and right arrow keys to rotate",
+        "Use up and down arrow keys to control speed",
+        "Use escape to pause"
+    };
+    Button backButton("Back", {200, 50}, 20, sf::Color::Blue, sf::Color::White);
+    backButton.setFont(font);
+    backButton.setPosition({300, 400});
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -67,6 +77,13 @@ int main() {
                 }
             } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
+            } else if (currentState == GameState::Controls) {
+                // Handle Back button on the Controls screen
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    if (backButton.isMouseOver(window)) {
+                        currentState = GameState::MainMenu;
+                    }
+                }
             }
 
             // Handle Escape Key for Pausing and Resuming
@@ -161,6 +178,19 @@ int main() {
             boat.render(window);
             window.setView(window.getDefaultView());
             pauseMenu.draw();
+        } else if (currentState == GameState::Controls) {
+            // Draw controls instructions
+            float yOffset = 100.0f;
+            for (const auto& line : controlsText) {
+                sf::Text text(line, font, 20);
+                text.setFillColor(sf::Color::White);
+                text.setPosition(50, yOffset);
+                yOffset += 50;
+                window.draw(text);
+            }
+
+            // Draw Back button
+            backButton.draw(window);
         }
 
         window.display();
