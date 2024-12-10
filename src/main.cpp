@@ -3,14 +3,12 @@
 #include "PhysicsManager.h"
 #include "GameState.h"
 #include "Menu.h"
-#include "Pause.h"          // Include the Pause class
+#include "Pause.h"
 #include "Constants.h"
-#include <SFML/System/Clock.hpp>
 #include <iostream>
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Boat Out of Water");
-
 
     sf::Font font;
     if (!font.loadFromFile("../../arial.ttf")) {  // Adjust this path if needed
@@ -27,6 +25,16 @@ int main() {
     float lerpFactor = 2.0f;
     GameState currentState = GameState::MainMenu;
     GameState previousState = currentState;
+
+    // Timer setup
+    sf::Clock timerClock; // Clock to track elapsed time
+    float timeRemaining = 30.0f; // Timer starts at 30 seconds
+    bool timerPaused = false; // Track if the timer is paused
+    sf::Text timerText;
+    timerText.setFont(font);
+    timerText.setCharacterSize(20);
+    timerText.setFillColor(sf::Color::White);
+    timerText.setPosition(10.0f, 10.0f);
 
     // Define a separate view for the game
     sf::View gameView(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -54,39 +62,37 @@ int main() {
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (pauseButton.isMouseOver(window)) {
                         currentState = GameState::Paused;
-                        // Restart clock to prevent immediate gravity application after resuming
-                        clock.restart();
+                        timerPaused = true; // Pause the timer
                     }
                 }
-            }
-            else if (currentState == GameState::Paused) {
+            } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
             }
 
-            // **Handle Escape Key for Pausing and Resuming**
+            // Handle Escape Key for Pausing and Resuming
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 if (currentState == GameState::Playing) {
                     currentState = GameState::Paused;
-                    // Restart clock to prevent immediate gravity application after resuming
-                    clock.restart();
-                }
-                else if (currentState == GameState::Paused) {
+                    timerPaused = true; // Pause the timer
+                } else if (currentState == GameState::Paused) {
                     currentState = GameState::Playing;
-                    // Restart clock as gameplay resumes
-                    clock.restart();
+                    timerPaused = false; // Resume the timer
                 }
             }
         }
 
         // If we just switched to playing, initialize the camera properly
         if (previousState != currentState && currentState == GameState::Playing) {
-            // Center camera on the boat at the start
             b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
             sf::Vector2f initialCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
             gameView.setCenter(initialCenter);
 
             gravityApplied = false;
             clock.restart();
+            if (previousState != GameState::Paused) { // Reset timer only when starting level
+                timeRemaining = 30.0f;
+                timerClock.restart();
+            }
         }
 
         previousState = currentState;
@@ -96,31 +102,33 @@ int main() {
         window.clear(sf::Color::Black);
 
         if (currentState == GameState::MainMenu || currentState == GameState::LevelSelection) {
-            // Draw UI using the default view
             window.setView(window.getDefaultView());
             menu.draw(currentState);
-        }
-        else if (currentState == GameState::Playing) {
-            // Switch to the game view
+        } else if (currentState == GameState::Playing) {
+            // Update timer if not paused
+            if (!timerPaused) {
+                timeRemaining -= timerClock.restart().asSeconds();
+                if (timeRemaining < 0.0f) timeRemaining = 0.0f; // Clamp timer to 0
+            }
+
+            timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
+
             window.setView(gameView);
 
             // Player input and boat movement
             float directionX = 0.0f, directionY = 0.0f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    directionY = 0.5f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  directionX = -0.25f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 0.5f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.25f;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.25f;
 
             boat.move(directionX, directionY, 1.0f);
 
-            // Apply gravity and update physics only if not paused
             physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
             physicsManager.step();
             boat.update();
 
-            // Check respawn
             if (boat.checkRespawnNeeded()) {
                 boat.respawnBoat();
-                // Re-center camera
                 b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
                 sf::Vector2f instantCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
                 gameView.setCenter(instantCenter);
@@ -128,9 +136,11 @@ int main() {
 
                 gravityApplied = false;
                 clock.restart();
-            }
-            else {
-                // Smooth camera follow
+
+                // Reset timer only on death
+                timeRemaining = 30.0f;
+                timerClock.restart();
+            } else {
                 b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
                 sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, gameView.getCenter().y);
                 sf::Vector2f currentCenter = gameView.getCenter();
@@ -139,23 +149,17 @@ int main() {
                 window.setView(gameView);
             }
 
-            // Render game world
             physicsManager.renderGround(window);
             boat.render(window);
 
-            // Draw Pause Button
-            window.setView(window.getDefaultView());  // Draw UI elements like buttons using default view
+            window.setView(window.getDefaultView());
+            window.draw(timerText);
             pauseButton.draw(window);
-        }
-        else if (currentState == GameState::Paused) {
-            // Draw the game view as is without updating
+        } else if (currentState == GameState::Paused) {
             window.setView(gameView);
-            // Render game world (so the pause overlay appears over it)
             physicsManager.renderGround(window);
             boat.render(window);
-
-            // Draw the pause menu (overlay and Resume button)
-            window.setView(window.getDefaultView());  // Draw UI elements using default view
+            window.setView(window.getDefaultView());
             pauseMenu.draw();
         }
 
