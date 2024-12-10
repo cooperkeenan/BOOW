@@ -77,11 +77,19 @@ int main() {
                 }
             } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
+                if (currentState == GameState::MainMenu) {
+                    boat.respawnBoat(); // Reset the boat position
+                    timeRemaining = 30.0f; // Reset the timer
+                    timerPaused = true; // Pause the timer
+                }
             } else if (currentState == GameState::Controls) {
                 // Handle Back button on the Controls screen
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (backButton.isMouseOver(window)) {
                         currentState = GameState::MainMenu;
+                        boat.respawnBoat(); // Reset the boat position
+                        timeRemaining = 30.0f; // Reset the timer
+                        timerPaused = true; // Pause the timer
                     }
                 }
             }
@@ -106,10 +114,16 @@ int main() {
 
             gravityApplied = false;
             clock.restart();
-            if (previousState != GameState::Paused) { // Reset timer only when starting level
-                timeRemaining = 30.0f;
-                timerClock.restart();
+
+            // Ensure the timer starts correctly when transitioning from other states
+            if (previousState != GameState::Paused) { 
+                timeRemaining = 30.0f; // Reset to 30 seconds
+                timerClock.restart(); // Restart the clock for proper countdown
+                timerPaused = false;  // Resume the timer
             }
+
+            // Update timer immediately
+            timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
         }
 
         previousState = currentState;
@@ -144,7 +158,7 @@ int main() {
             boat.move(directionX, 0.0f, 5.0f); // Apply movement force
             boat.rotate(torque);              // Apply rotational torque
 
-            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
+            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 0.5f);
             physicsManager.step();
             boat.update();
 
