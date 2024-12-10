@@ -1,17 +1,16 @@
-// main.cpp
 #include <SFML/Graphics.hpp>
 #include "Boat.h"
 #include "PhysicsManager.h"
 #include "GameState.h"
 #include "Menu.h"
 #include "Pause.h"          // Include the Pause class
-#include "Timer.h"          // Include the Timer class
 #include "Constants.h"
 #include <SFML/System/Clock.hpp>
 #include <iostream>
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Boat Out of Water");
+
 
     sf::Font font;
     if (!font.loadFromFile("../../arial.ttf")) {  // Adjust this path if needed
@@ -23,7 +22,7 @@ int main() {
     Menu menu(window, font);
     PhysicsManager physicsManager;
     Boat boat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
-    sf::Clock clock;  // Used for general timing (e.g., deltaTime)
+    sf::Clock clock;
     bool gravityApplied = false;
     float lerpFactor = 2.0f;
     GameState currentState = GameState::MainMenu;
@@ -39,9 +38,6 @@ int main() {
 
     // Initialize the Pause class
     Pause pauseMenu(window, font);
-
-    // --- Timer Initialization ---
-    Timer timer(15.0f, font, 24, sf::Color::White);  // 15-second countdown
 
     while (window.isOpen()) {
         sf::Event event;
@@ -82,7 +78,7 @@ int main() {
             }
         }
 
-        // If we just switched to playing, initialize the camera and timer properly
+        // If we just switched to playing, initialize the camera properly
         if (previousState != currentState && currentState == GameState::Playing) {
             // Center camera on the boat at the start
             b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
@@ -91,9 +87,6 @@ int main() {
 
             gravityApplied = false;
             clock.restart();
-
-            // Reset and start the timer when starting to play
-            timer.reset();
         }
 
         previousState = currentState;
@@ -111,9 +104,6 @@ int main() {
             // Switch to the game view
             window.setView(gameView);
 
-            // Calculate deltaTime
-            float deltaTime = clock.restart().asSeconds();
-
             // Player input and boat movement
             float directionX = 0.0f, directionY = 0.0f;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    directionY = 0.5f;
@@ -123,20 +113,9 @@ int main() {
             boat.move(directionX, directionY, 1.0f);
 
             // Apply gravity and update physics only if not paused
-            physicsManager.applyGravityIfNeeded(gravityApplied, deltaTime, 2.0f);
+            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
             physicsManager.step();
             boat.update();
-
-            // --- Timer Update ---
-            timer.update(deltaTime);
-
-            // Check if timer has reached zero
-            if (timer.getRemainingTime() <= 0.0f) {
-                // Handle timer reaching zero (e.g., end the game, respawn, etc.)
-                std::cout << "Time's up! Timer reached zero." << std::endl;
-                // For example, you could transition to a GameOver state
-                // currentState = GameState::GameOver;
-            }
 
             // Check respawn
             if (boat.checkRespawnNeeded()) {
@@ -149,9 +128,6 @@ int main() {
 
                 gravityApplied = false;
                 clock.restart();
-
-                // Reset and start the timer upon respawn
-                timer.reset();
             }
             else {
                 // Smooth camera follow
@@ -170,9 +146,6 @@ int main() {
             // Draw Pause Button
             window.setView(window.getDefaultView());  // Draw UI elements like buttons using default view
             pauseButton.draw(window);
-
-            // Draw Timer
-            timer.draw(window);
         }
         else if (currentState == GameState::Paused) {
             // Draw the game view as is without updating
@@ -184,13 +157,10 @@ int main() {
             // Draw the pause menu (overlay and Resume button)
             window.setView(window.getDefaultView());  // Draw UI elements using default view
             pauseMenu.draw();
-
-            // Draw Timer (still visible but not updating)
-            timer.draw(window);
         }
 
         window.display();
     }
-
+//
     return 0;
 }
