@@ -133,12 +133,16 @@ int main() {
             window.setView(gameView);
 
             // Player input and boat movement
-            float directionX = 0.0f, directionY = 0.0f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 0.5f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.25f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.25f;
+            float directionX = 0.0f; // Movement along x-axis
+            float torque = 0.0f;     // Rotation
 
-            boat.move(directionX, directionY, 1.0f);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionX = 0.4f;    // Reduced force for forward
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) directionX = -0.4f; // Reduced force for backward
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) torque = 1.0f;      // Reduced torque for left rotation
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) torque = -1.0f;    // Reduced torque for right rotation
+
+            boat.move(directionX, 0.0f, 5.0f); // Apply movement force
+            boat.rotate(torque);              // Apply rotational torque
 
             physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
             physicsManager.step();
