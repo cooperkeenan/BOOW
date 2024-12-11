@@ -86,7 +86,7 @@ void Boat::update(GameState& currentState) {
         } else {
             // For other levels, transition to LevelComplete
             std::cout << "Boat has crossed the finish line!" << std::endl;
-            currentState = GameState::LevelComplete;
+            //currentState = GameState::LevelComplete;
         }
     }
 }

@@ -26,4 +26,5 @@ private:
     Button level2Button;
     Button level3Button;
     LevelResult levelResult;  // Add a member to track the result of the level
+    int currentLevelInMenu;
 };
