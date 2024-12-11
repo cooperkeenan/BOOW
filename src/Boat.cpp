@@ -32,7 +32,7 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &boatShape;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.001f;
+    fixtureDef.friction = 0.007f;
     fixtureDef.restitution = 0.5f;
 
     // Set collision filtering
