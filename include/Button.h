@@ -23,9 +23,6 @@ public:
     // Retrieves the size of the button
     sf::Vector2f getSize() const;
 
-    void setText(const std::string& text);
-
-
 private:
     sf::RectangleShape button;  // The visual rectangle representing the button
     sf::Text buttonText;        // The text displayed on the button

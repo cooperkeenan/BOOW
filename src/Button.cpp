@@ -44,16 +44,6 @@ void Button::setPosition(sf::Vector2f pos) {
     }
 }
 
-void Button::setText(const std::string& text) {
-    buttonText.setString(text);
-
-    // Recalculate the origin and position for centering
-    sf::FloatRect textRect = buttonText.getLocalBounds();
-    buttonText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-    sf::Vector2f buttonPos = button.getPosition();
-    buttonText.setPosition(buttonPos.x + button.getSize().x / 2.0f, buttonPos.y + button.getSize().y / 2.0f);
-}
-
 // Draws the button and its text onto the window
 void Button::draw(sf::RenderWindow& window) const {
     window.draw(button);

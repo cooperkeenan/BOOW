@@ -4,17 +4,17 @@
 #include "GameSetup.h"
 #include "PhysicsManager.h"
 #include "Boat.h"
-#include "levels.h" // Ensure this is included so level_2() is accessible
+#include "levels.h"
+#include "AIController.h" 
 
-Menu::Menu(sf::RenderWindow& window, sf::Font& font) 
-    : window(window), font(font),  
+Menu::Menu(sf::RenderWindow& window, sf::Font& font)
+    : window(window), font(font),
       levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::Black),
       quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::Black),
       level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::Black),
       level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::Black),
       level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::Black),
-      controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::Black)
-{
+      controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::Black) {
     levelsButton.setFont(font);
     levelsButton.setPosition({300, 200});
 
@@ -34,8 +34,7 @@ Menu::Menu(sf::RenderWindow& window, sf::Font& font)
     controlsButton.setPosition({300, 100});
 }
 
-void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int& currentLevel) 
-{
+void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int& currentLevel) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (currentState == GameState::MainMenu) {
             if (quitButton.isMouseOver(window)) {
@@ -47,36 +46,13 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager
             }
         } else if (currentState == GameState::LevelSelection) {
             if (level1Button.isMouseOver(window)) {
-                currentState = GameState::Playing;
-                // If you need to reset to level 1:
-                // physicsManager.reset(level_1());
-                // boat.respawnBoat(physicsManager, 1);
-                // secondBoat.respawnBoat(physicsManager, 1);
-                // timeRemaining = 30.0f;  
-                // score = 0; 
-
+                currentLevel = 1;
+                loadLevel(currentState, physicsManager, boat, secondBoat, timeRemaining, score, currentLevel, level_1());
                 std::cout << "Starting Level 1" << std::endl;
             } else if (level2Button.isMouseOver(window)) {
-                currentState = GameState::Playing;
-
-                // Set the current level to 2
                 currentLevel = 2;
-
-                // Initialize Physics for Level 2
-                physicsManager.reset(level_2()); 
-
-                // Respawn both boats for level 2
-                boat.respawnBoat(physicsManager, currentLevel);
-                secondBoat.respawnBoat(physicsManager, currentLevel);
-
-                // Reset timer and score
-                timeRemaining = 30.0f;  
-                score = 0;              
-
+                loadLevel(currentState, physicsManager, boat, secondBoat, timeRemaining, score, currentLevel, level_2());
                 std::cout << "Starting Level 2" << std::endl;
-            } else if (level3Button.isMouseOver(window)) {
-                std::cout << "Starting Level 3" << std::endl;
-                // Implement logic for Level 3 if needed
             }
         }
     }
@@ -85,25 +61,22 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager
 void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (levelsButton.isMouseOver(window)) {
-            // Change to Main Menu logic instead of LevelSelection
             currentState = GameState::MainMenu;
 
-            // Reset game state
-            boat.respawnBoat(physicsManager, 1); // Respawn the boat to its initial state
-            physicsManager.reset(level_1());    // Reset physics (obstacles and collectables)
-            timeRemaining = 30.0f;              // Reset timer
-            score = 0;                          // Reset score
+            boat.respawnBoat(physicsManager, 1);
+            physicsManager.reset(level_1());
+            timeRemaining = 30.0f;
+            score = 0;
         } else if (quitButton.isMouseOver(window)) {
-            window.close(); // Exit the game
+            window.close();
         }
     }
 }
 
 void Menu::draw(GameState currentState) {
-    // Draw only relevant buttons based on the current state
     if (currentState == GameState::MainMenu) {
         levelsButton.draw(window);
-        controlsButton.draw(window);  // Draw the controls button
+        controlsButton.draw(window);
         quitButton.draw(window);
     } else if (currentState == GameState::LevelSelection) {
         level1Button.draw(window);
@@ -122,11 +95,8 @@ void Menu::drawLevelCompleteScreen(LevelResult result) {
     text.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3));
     window.draw(text);
 
-    // Update "Levels" button text to "Main"
     levelsButton.setFont(font);
     levelsButton.setPosition({300, 300});
-    levelsButton.setText("Main"); // Use the new label for the button
-
     quitButton.setPosition({300, 400});
     levelsButton.draw(window);
     quitButton.draw(window);
@@ -138,4 +108,13 @@ void Menu::setLevelResult(LevelResult result) {
 
 LevelResult Menu::getLevelResult() const {
     return levelResult;
+}
+
+void Menu::loadLevel(GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int currentLevel, const std::vector<Obstacle>& levelData) {
+    currentState = GameState::Playing;
+    physicsManager.reset(levelData);
+    boat.respawnBoat(physicsManager, currentLevel);
+    secondBoat.respawnBoat(physicsManager, currentLevel);
+    timeRemaining = 30.0f;
+    score = 0;
 }
