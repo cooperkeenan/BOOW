@@ -53,17 +53,25 @@ void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow
 // Rendering and logic updates for the Playing state
 void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     if (!components.timerPaused) {
-        components.timeRemaining -= components.timerClock.restart().asSeconds();
-        if (components.timeRemaining < 0.0f) {
+        // Update timer
+        float elapsed = components.timerClock.restart().asSeconds();
+        components.timeRemaining -= elapsed;
+
+        // Debug log
+        std::cout << "Time Remaining: " << components.timeRemaining << " seconds" << std::endl;
+
+        if (components.timeRemaining <= 0.0f) {
             components.timeRemaining = 0.0f;
             components.currentState = GameState::LevelComplete;
             components.menu->setLevelResult(LevelResult::Failed);
         }
     }
 
+    // Update timer and score texts
     components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
     components.scoreText.setString("Score: " + std::to_string(components.score));
 
+    // Set the game view
     window.setView(components.gameView);
 
     // Update camera position smoothly
@@ -83,11 +91,13 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     components.boat->move(directionX, 0.0f, 5.0f);
     components.boat->rotate(torque);
 
+    // Update physics
     components.physicsManager->applyGravityIfNeeded(
         components.gravityApplied, components.clock.getElapsedTime().asSeconds(), 0.5f);
     components.physicsManager->step();
     components.boat->update(components.currentState);
 
+    // Check for respawn
     if (components.boat->checkRespawnNeeded()) {
         components.boat->respawnBoat(*components.physicsManager);
         components.gravityApplied = false;
@@ -97,17 +107,22 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
         components.score = 0;
     }
 
+    // Update score
     components.score += components.physicsManager->checkCollectables();
 
+    // Render game objects
     components.physicsManager->renderGround(window);
     components.physicsManager->renderCollectables(window);
     components.boat->render(window);
 
+    // Render UI elements
     window.setView(window.getDefaultView());
     window.draw(components.timerText);
     window.draw(components.scoreText);
     components.pauseButton->draw(window);
 }
+
+
 
 
 // Paused state

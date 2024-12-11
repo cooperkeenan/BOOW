@@ -33,6 +33,7 @@ GameComponents initializeGame(sf::RenderWindow& window) {
     // Timer setup
     components.timeRemaining = 30.0f;
     components.timerPaused = false;
+    components.timerClock.restart();
     components.timerText.setFont(components.font);
     components.timerText.setCharacterSize(20);
     components.timerText.setFillColor(sf::Color::White);
