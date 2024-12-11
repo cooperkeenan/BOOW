@@ -16,7 +16,13 @@ Collectable::Collectable(b2World& world, const sf::Vector2f& position, float rad
     fixtureDef.shape = &circleShape;
     fixtureDef.isSensor = true;
     fixtureDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+
+    // Add collision filtering
+    fixtureDef.filter.categoryBits = CATEGORY_COLLECTABLE; // Set collectable category
+    fixtureDef.filter.maskBits = CATEGORY_PLAYER;         // Only collides with the player
+
     body->CreateFixture(&fixtureDef);
+
 
 
     // Create SFML shape

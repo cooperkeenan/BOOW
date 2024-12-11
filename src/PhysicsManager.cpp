@@ -6,9 +6,6 @@
 #include <iostream>
 
 // Collision categories
-constexpr uint16_t CATEGORY_PLAYER = 0x0001;   // Player-controlled boat
-constexpr uint16_t CATEGORY_AI = 0x0002;       // AI-controlled boat
-constexpr uint16_t CATEGORY_OBSTACLE = 0x0004; // Obstacles (platforms)
 
 PhysicsManager::PhysicsManager()
     : world(b2Vec2(0.0f, 0.0f)),
@@ -135,12 +132,25 @@ int PhysicsManager::checkCollectables() {
     int collectedCount = 0;
     for (auto& collectable : collectables) {
         if (!collectable.isCollected() && collectable.getBody()->GetContactList() != nullptr) {
-            collectable.markCollected();
-            collectedCount++;
+            std::cout << "Contact detected for collectable!" << std::endl;
+            auto contact = collectable.getBody()->GetContactList();
+            while (contact) {
+                std::cout << "Contact with category: " << contact->other->GetFixtureList()->GetFilterData().categoryBits << std::endl;
+                if (contact->other->GetFixtureList()->GetFilterData().categoryBits == CATEGORY_PLAYER) {
+                    collectable.markCollected();
+                    collectedCount++;
+                    break;
+                }
+                contact = contact->next;
+            }
         }
+
     }
     return collectedCount;
 }
+
+
+
 
 
 void PhysicsManager::reset() {

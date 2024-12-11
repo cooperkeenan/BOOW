@@ -11,9 +11,6 @@ constexpr float MAX_SPEED = 0.7f; // Maximum linear velocity
 constexpr float MAX_ROTATION_SPEED = 0.2f; // Maximum angular velocity (radians per second)
 
 // Collision categories
-constexpr uint16_t CATEGORY_PLAYER = 0x0001;   // Player-controlled boat
-constexpr uint16_t CATEGORY_AI = 0x0002;       // AI-controlled boat
-constexpr uint16_t CATEGORY_OBSTACLE = 0x0004; // Obstacles (platforms)
 
 // Helper function to convert SFML coordinates to Box2D
 b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
@@ -95,13 +92,11 @@ void Boat::render(sf::RenderWindow& window) {
 void Boat::move(float directionX, float directionY, float magnitude) {
     float scaledMagnitude = magnitude * 0.1f; // Scale down by 80%
     b2Vec2 force(directionX * scaledMagnitude, directionY * scaledMagnitude);
-    std::cout << "Applying force: (" << force.x << ", " << force.y << ")" << std::endl;
     boatBody->ApplyForceToCenter(force, true);
 }
 
 void Boat::rotate(float torque) {
     float scaledTorque = torque * 0.08f; // Scale torque down
-    std::cout << "Applying torque: " << scaledTorque << std::endl;
     boatBody->ApplyTorque(scaledTorque, true);
 }
 
