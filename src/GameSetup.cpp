@@ -87,7 +87,7 @@ GameComponents initializeGame(sf::RenderWindow& window) {
         "Use up and down arrow keys to control speed",
         "Use escape to pause"
     };
-    components.backButton = new Button("Back", {200, 50}, 20, sf::Color::Blue, sf::Color::White);
+    components.backButton = new Button("Back", {200, 50}, 20, sf::Color::Blue, sf::Color::Black);
     components.backButton->setFont(components.font);
     components.backButton->setPosition({300, 400});
 
@@ -115,3 +115,5 @@ void handlePlayingState(GameComponents& components) {
 
     components.previousState = components.currentState;
 }
+
+

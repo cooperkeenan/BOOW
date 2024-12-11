@@ -61,6 +61,9 @@ void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents
 // Handle events in Level Complete state
 void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
     components.menu->handleLevelCompleteEvent(event, components.currentState, *components.physicsManager, *components.boat, components.timeRemaining, components.score);
+    components.timeRemaining = 30.0f; 
+    components.timerPaused = true;    // Ensure the timer doesn't start immediately
+    components.timerClock.restart();
 }
 
 
@@ -104,6 +107,8 @@ void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameCom
         components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
     }
 }
+
+
 
 // Handle events in the Paused state
 void handlePausedStateEvent(sf::Event& event, GameComponents& components) {

@@ -7,15 +7,14 @@
 #include "levels.h" // Ensure this is included so level_2() is accessible
 
 Menu::Menu(sf::RenderWindow& window, sf::Font& font) 
-    : window(window), font(font),  // Initialize font reference
-      levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::White),
-      quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::White),
-      level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-      level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-      level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-      controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::White)
+    : window(window), font(font),  
+      levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::Black),
+      quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::Black),
+      level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::Black),
+      level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::Black),
+      level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::Black),
+      controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::Black)
 {
-    // Initialize all buttons' fonts and positions as before
     levelsButton.setFont(font);
     levelsButton.setPosition({300, 200});
 
@@ -86,14 +85,14 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager
 void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (levelsButton.isMouseOver(window)) {
-            // Reset game state
-            boat.respawnBoat(physicsManager, 1); // Assuming level 1 or handle dynamically
-            physicsManager.reset(level_1());      // Reset physics (obstacles and collectables)
-            timeRemaining = 30.0f;                // Reset timer
-            score = 0;                            // Reset score
+            // Change to Main Menu logic instead of LevelSelection
+            currentState = GameState::MainMenu;
 
-            // Set game state to LevelSelection
-            currentState = GameState::LevelSelection;
+            // Reset game state
+            boat.respawnBoat(physicsManager, 1); // Respawn the boat to its initial state
+            physicsManager.reset(level_1());    // Reset physics (obstacles and collectables)
+            timeRemaining = 30.0f;              // Reset timer
+            score = 0;                          // Reset score
         } else if (quitButton.isMouseOver(window)) {
             window.close(); // Exit the game
         }
@@ -123,7 +122,11 @@ void Menu::drawLevelCompleteScreen(LevelResult result) {
     text.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3));
     window.draw(text);
 
+    // Update "Levels" button text to "Main"
+    levelsButton.setFont(font);
     levelsButton.setPosition({300, 300});
+    levelsButton.setText("Main"); // Use the new label for the button
+
     quitButton.setPosition({300, 400});
     levelsButton.draw(window);
     quitButton.draw(window);
