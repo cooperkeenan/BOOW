@@ -4,9 +4,7 @@
 float currentX = INITIAL_START_X;
 float currentY = INITIAL_START_Y;
 
-
-
-//Line
+// Line
 Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustment) {
     currentX += horizontalOffset; 
     float length = LINE_LENGTH + lengthAdjustment; 
@@ -21,8 +19,7 @@ Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, startY, false};  
 }
 
-
-//Ramp
+// Ramp
 Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment) {
     currentX += horizontalOffset; 
     float length = RAMP_LENGTH + lengthAdjustment; 
@@ -38,8 +35,7 @@ Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, currentY, false};
 }
 
-
-//Gap
+// Gap
 Obstacle gap(float horizontalOffset, float lengthAdjustment) {
     currentX += horizontalOffset;
     float length = GAP_LENGTH + lengthAdjustment; 
@@ -50,4 +46,17 @@ Obstacle gap(float horizontalOffset, float lengthAdjustment) {
     currentX += length; 
 
     return {vertices, currentY, currentY, true}; 
+}
+
+// Large Platform
+Obstacle largePlatform(float horizontalOffset, float lengthAdjustment) {
+    currentX += horizontalOffset;
+    float length = LINE_LENGTH + lengthAdjustment; // Extend the length for a large platform
+
+    std::vector<b2Vec2> vertices;
+    vertices.push_back(b2Vec2(currentX, currentY));
+    vertices.push_back(b2Vec2(currentX + length, currentY));
+    currentX += length; // Update currentX for next obstacle
+
+    return {vertices, currentY, currentY, false}; // No gap
 }

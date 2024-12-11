@@ -6,7 +6,7 @@
 
 class Boat {
 public:
-    Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size);
+    Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size, bool isAIControlled = false);
     void update();
     void render(sf::RenderWindow& window);
     void move(float directionX, float directionY, float magnitude);

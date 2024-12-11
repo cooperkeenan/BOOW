@@ -7,12 +7,16 @@
 constexpr float MAX_SPEED = 0.7f; // Maximum linear velocity
 constexpr float MAX_ROTATION_SPEED = 0.2f; // Maximum angular velocity (radians per second)
 
-// Helper function to convert SFML to Box2D coordinates
+// Collision categories
+constexpr uint16_t CATEGORY_PLAYER = 0x0001;  // Player-controlled boat
+constexpr uint16_t CATEGORY_AI = 0x0002;      // AI-controlled boat
+constexpr uint16_t CATEGORY_OBSTACLE = 0x0004; // Obstacles (platforms)
+
 b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
     return b2Vec2((position.x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - position.y) / SCALE);
 }
 
-Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size)
+Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size, bool isAIControlled)
     : physicsMgr(physicsManager)
 {
     b2BodyDef bodyDef;
@@ -28,11 +32,27 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.005f;
     fixtureDef.restitution = 0.5f;
+
+    // Set collision filtering
+    if (isAIControlled) {
+        fixtureDef.filter.categoryBits = CATEGORY_AI; // AI boat
+        fixtureDef.filter.maskBits = CATEGORY_OBSTACLE; // Collides only with obstacles
+    } else {
+        fixtureDef.filter.categoryBits = CATEGORY_PLAYER; // Player boat
+        fixtureDef.filter.maskBits = CATEGORY_OBSTACLE; // Collides only with obstacles
+    }
+
     boatBody->CreateFixture(&fixtureDef);
 
     boatSprite.setSize(size);
     boatSprite.setOrigin(size.x / 2.0f, size.y / 2.0f);
-    boatSprite.setFillColor(sf::Color::Blue);
+
+    // Set color: Red with transparency for AI, Blue (opaque) for player
+    if (isAIControlled) {
+        boatSprite.setFillColor(sf::Color(255, 0, 0, 128)); // Red, semi-transparent
+    } else {
+        boatSprite.setFillColor(sf::Color(0, 0, 255, 255)); // Blue, fully opaque
+    }
 }
 
 void Boat::update() {

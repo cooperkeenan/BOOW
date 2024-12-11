@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <SFML/Graphics.hpp>
 #include "Obstacle.h"
 
 // Level 1 declarations

@@ -21,7 +21,7 @@ int main() {
     Menu menu(window, font);
     PhysicsManager physicsManager;
     Boat playerBoat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
-    Boat secondBoat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 200.0f), sf::Vector2f(40.0f, 20.0f));
+    Boat secondBoat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 200.0f), sf::Vector2f(40.0f, 20.0f), true);
 
     // Define AI input sequence
     std::vector<AIInput> aiInputs = {
