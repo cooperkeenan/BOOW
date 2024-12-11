@@ -58,11 +58,13 @@ void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents
     handleEscapeKeyEvent(event, components);
 }
 
-// Handle events in Level Complete state
 void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
-    components.menu->handleLevelCompleteEvent(event, components.currentState, *components.physicsManager, *components.boat, components.timeRemaining, components.score);
-    components.timeRemaining = 30.0f; 
-    components.timerPaused = true;    // Ensure the timer doesn't start immediately
+    components.menu->handleLevelCompleteEvent(
+        event, components.currentState, *components.physicsManager,
+        *components.boat, components.timeRemaining, components.score
+    );
+    components.timeRemaining = 30.0f;
+    components.timerPaused = true; // Ensure timer is paused during victory screen
     components.timerClock.restart();
 }
 
@@ -135,5 +137,14 @@ void handleEscapeKeyEvent(sf::Event& event, GameComponents& components) {
             // Update timer text immediately
             components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
         }
+    }
+}
+// Function to handle menu events
+void handleMenuEvent(sf::Event& event, GameComponents& components) {
+    if (components.menu != nullptr) {
+        components.menu->handleEvent(event, components.currentState, 
+                                     *components.physicsManager, *components.boat, 
+                                     *components.secondBoat, components.timeRemaining, 
+                                     components.score, components.currentLevel);
     }
 }

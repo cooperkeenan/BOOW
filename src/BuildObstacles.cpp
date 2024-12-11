@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include <cmath>
 #include <algorithm> 
+#include <iostream>
 
 
 // Global variables to track current position
@@ -113,6 +114,7 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
     float startY = currentY + verticalOffset;
 
     finishLineX = currentX; // Set finish line position
+    std::cout << "Finish Line created at X: " << finishLineX << std::endl;
 
     std::vector<b2Vec2> vertices;
     vertices.push_back(b2Vec2(currentX, startY));
