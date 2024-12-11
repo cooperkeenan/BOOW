@@ -16,13 +16,26 @@ int main() {
                 window.close();
             }
 
-            // Delegate event handling to the new function
+            // Handle game events
             handleGameEvents(window, event, components);
         }
 
-        // Render the game state
+        // Update game state (e.g., physics and logic)
+        if (components.currentState == GameState::Playing) {
+            float elapsedTime = components.clock.restart().asSeconds();
+
+            // Apply gravity for player and AI boats
+            components.physicsManager->applyGravityIfNeeded(
+                components.gravityApplied, components.gravityClock.getElapsedTime().asSeconds(), 0.5f);
+            
+            // Update AI
+            components.aiController->update(elapsedTime);
+
+            // Step the physics simulation
+            components.physicsManager->step();
+        }
+
+        // Render the game
         renderGameState(components, window);
     }
-
-    return 0;
 }

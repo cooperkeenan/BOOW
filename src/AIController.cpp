@@ -5,22 +5,17 @@
 
 AIController::AIController(Boat& controlledBoat, const std::vector<AIInput>& inputs)
     : boat(controlledBoat), inputs(inputs), currentIndex(0), actionTimer(0.0f) {
-    std::cout << "AIController constructor called." << std::endl;
 }
 
 
 void AIController::update(float deltaTime) {
     if (currentIndex >= inputs.size()) {
-        std::cout << "AIController: No more actions to perform.\n";
         return;
     }
 
     const AIInput& currentInput = inputs[currentIndex];
     actionTimer += deltaTime;
 
-    std::cout << "AIController: Performing action " << currentIndex 
-              << " for " << currentInput.duration 
-              << " seconds. Timer: " << actionTimer << "\n";
 
     if (currentInput.key != sf::Keyboard::Unknown) {
         if (currentInput.key == sf::Keyboard::Up) {

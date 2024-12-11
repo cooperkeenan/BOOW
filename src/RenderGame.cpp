@@ -43,11 +43,6 @@ void clearWindow(sf::RenderWindow& window) {
 }
 
 // Handle Main Menu or Level Selection states
-void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window) {
-    components.menu->draw(components.currentState);
-}
-
-// Rendering and logic updates for the Playing state
 void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     if (!components.timerPaused) {
         // Update timer
@@ -65,33 +60,58 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
     components.scoreText.setString("Score: " + std::to_string(components.score));
 
-    // Smooth camera follow for the player boat
+    // Calculate deltaTime for this frame
+    float deltaTime = components.clock.restart().asSeconds();
+
+    // **Player Controls** (Re-added)
+    float directionX = 0.0f;
+    float torque = 0.0f;
+
+    // Debugging: Verify input detection
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        std::cout << "Up key pressed" << std::endl;
+        directionX = 0.4f;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        std::cout << "Down key pressed" << std::endl;
+        directionX = -0.4f;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        std::cout << "Left key pressed" << std::endl;
+        torque = 1.0f;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        std::cout << "Right key pressed" << std::endl;
+        torque = -1.0f;
+    }
+
+
+    components.boat->move(directionX, 0.0f, 5.0f); // Apply linear force
+    components.boat->rotate(torque);              // Apply torque
+
+    // **Physics and AI Updates**
+    components.aiController->update(deltaTime); // Update AI Controller
+
+    // Apply gravity
+    components.physicsManager->applyGravityIfNeeded(
+        components.gravityApplied, components.clock.getElapsedTime().asSeconds(), 0.5f
+    );
+
+    // Step the physics world
+    components.physicsManager->step();
+
+    // Update boats
+    components.boat->update(components.currentState);
+    components.secondBoat->update(components.currentState);
+
+    // Smooth Camera Follow Logic
     b2Vec2 boatPos = components.boat->getBoatBody()->GetPosition();
     sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
     sf::Vector2f currentCenter = components.gameView.getCenter();
-    components.gameView.setCenter(currentCenter + components.lerpFactor * (targetCenter - currentCenter));
 
-    // Handle player input
-    float directionX = 0.0f;
-    float torque = 0.0f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionX = 0.4f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) directionX = -0.4f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) torque = 1.0f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) torque = -1.0f;
-
-    components.boat->move(directionX, 0.0f, 5.0f);
-    components.boat->rotate(torque);
-
-    // Update second boat via AI
-    components.aiController->update(components.clock.restart().asSeconds());
-
-    // Apply gravity
-    components.physicsManager->applyGravityIfNeeded(components.gravityApplied, components.clock.getElapsedTime().asSeconds(), 0.5f);
-
-    // Update physics and boats
-    components.physicsManager->step();
-    components.boat->update(components.currentState);
-    components.secondBoat->update(components.currentState);
+    // Smooth camera movement using lerp
+    float lerpFactor = 0.1f; // Adjust this for smoother movement
+    components.gameView.setCenter(currentCenter + lerpFactor * (targetCenter - currentCenter));
 
     // Check for respawn
     if (components.boat->checkRespawnNeeded()) {
@@ -105,18 +125,24 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
         components.score = 0;
     }
 
-    // Update score and render
+    // Update score
     components.score += components.physicsManager->checkCollectables();
+
+    // Render game objects
+    window.setView(components.gameView); // Apply the game view for rendering
     components.physicsManager->renderGround(window);
+    components.physicsManager->renderCollectables(window);
     components.boat->render(window);
     components.secondBoat->render(window);
 
-    // Render UI
+    // Render UI elements
     window.setView(window.getDefaultView());
     window.draw(components.timerText);
     window.draw(components.scoreText);
     components.pauseButton->draw(window);
 }
+
+
 
 // Remaining functions: Paused, Controls, and LevelComplete states
 
@@ -153,4 +179,8 @@ void handleControlsState(GameComponents& components, sf::RenderWindow& window) {
 void handleLevelCompleteState(GameComponents& components, sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
     components.menu->drawLevelCompleteScreen(components.menu->getLevelResult());
+}
+
+void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window) {
+    components.menu->draw(components.currentState);
 }
