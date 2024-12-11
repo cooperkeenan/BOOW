@@ -28,3 +28,8 @@ void AIController::update(float deltaTime) {
         currentIndex++;
     }
 }
+
+void AIController::reset() {
+    currentIndex = 0;   // Reset to the first action
+    actionTimer = 0.0f; // Reset the timer
+}

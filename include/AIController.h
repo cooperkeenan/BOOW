@@ -15,6 +15,7 @@ public:
     AIController(Boat& controlledBoat, const std::vector<AIInput>& inputs);
 
     void update(float deltaTime);
+    void reset(); // Modified reset function
 
 private:
     Boat& boat;                  // Reference to the controlled boat

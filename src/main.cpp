@@ -189,6 +189,9 @@ int main() {
                 b2Vec2 playerPosition = playerBoat.getBoatBody()->GetPosition();
                 secondBoat.getBoatBody()->SetTransform(b2Vec2(playerPosition.x, playerPosition.y + 2.0f), 0.0f);
 
+                // Reset AIController's state
+                aiController.reset();
+
                 // Update the camera to center on the player's new position
                 b2Vec2 boatPos = playerBoat.getBoatBody()->GetPosition();
                 sf::Vector2f instantCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
