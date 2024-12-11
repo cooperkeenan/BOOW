@@ -10,12 +10,12 @@ public:
     Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size);
     void update(GameState &currentState);
     void render(sf::RenderWindow& window);
-    void move(const b2Vec2& force);
     void move(float directionX, float directionY, float magnitude);
     b2Body* getBoatBody() const;
     bool checkRespawnNeeded() const;
     void respawnBoat();
     void setPosition(float x, float y); // Declare the setPosition method
+    void rotate(float torque);
 
 private:
     sf::RectangleShape boatSprite;

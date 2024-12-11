@@ -6,5 +6,6 @@ enum class GameState {
     LevelSelection,
     Playing,
     Paused,
-    LevelComplete
+    LevelComplete,
+    Controls
 };

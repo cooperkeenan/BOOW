@@ -5,7 +5,6 @@
 #include "Menu.h"
 #include "Pause.h"
 #include "Constants.h"
-#include <SFML/System/Clock.hpp>
 #include <iostream>
 
 int main() {
@@ -45,7 +44,7 @@ int main() {
     scoreText.setFont(font);
     scoreText.setCharacterSize(24);
     scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(10.0f, 40.0f);  // Position below timer
+    scoreText.setPosition(10.0f, 40.0f);
 
     // Define a separate view for the game
     sf::View gameView(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -53,10 +52,20 @@ int main() {
     // Initialize Pause and Resume Buttons
     Button pauseButton("Pause", {100, 40}, 20, sf::Color::Yellow, sf::Color::Black);
     pauseButton.setFont(font);
-    pauseButton.setPosition({WINDOW_WIDTH - 120, 20});  // Top-right corner with some padding
+    pauseButton.setPosition({WINDOW_WIDTH - 120, 20});
 
     // Initialize the Pause class
     Pause pauseMenu(window, font);
+
+    // Controls screen setup
+    std::vector<std::string> controlsText = {
+        "Use left and right arrow keys to rotate",
+        "Use up and down arrow keys to control speed",
+        "Use escape to pause"
+    };
+    Button backButton("Back", {200, 50}, 20, sf::Color::Blue, sf::Color::White);
+    backButton.setFont(font);
+    backButton.setPosition({300, 400});
 
     while (window.isOpen()) {
         sf::Event event;
@@ -65,11 +74,11 @@ int main() {
                 window.close();
             }
 
-            // Handle menu events, possibly switching states
+            // Handle menu events
             menu.handleEvent(event, currentState);
 
-            // Handle Pause and Resume button clicks when Playing
             if (currentState == GameState::Playing) {
+                // Handle Pause button
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (pauseButton.isMouseOver(window)) {
                         currentState = GameState::Paused;
@@ -78,21 +87,36 @@ int main() {
                 }
             } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
+                if (currentState == GameState::MainMenu) {
+                    boat.respawnBoat();
+                    timeRemaining = 30.0f; // Reset timer
+                    timerPaused = true;
+                }
+            } else if (currentState == GameState::Controls) {
+                // Handle Back button on Controls screen
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    if (backButton.isMouseOver(window)) {
+                        currentState = GameState::MainMenu;
+                        boat.respawnBoat();
+                        timeRemaining = 30.0f;
+                        timerPaused = true;
+                    }
+                }
             }
 
-            // Handle Escape Key for Pausing and Resuming
+            // Handle Escape Key
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                 if (currentState == GameState::Playing) {
                     currentState = GameState::Paused;
-                    timerPaused = true; // Pause the timer
+                    timerPaused = true;
                 } else if (currentState == GameState::Paused) {
                     currentState = GameState::Playing;
-                    timerPaused = false; // Resume the timer
+                    timerPaused = false;
                 }
             }
         }
 
-        // If we just switched to playing, initialize the camera and timer
+        // Initialize camera and timer when switching to Playing
         if (previousState != currentState && currentState == GameState::Playing) {
             b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
             sf::Vector2f initialCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
@@ -100,29 +124,27 @@ int main() {
 
             gravityApplied = false;
             clock.restart();
+
             if (previousState != GameState::Paused) {
-                // Reset timer only when starting level from menu
                 timeRemaining = 30.0f;
                 timerClock.restart();
-                score = 0; // Reset score when starting a new level
+                timerPaused = false;
             }
+
+            timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
         }
 
         previousState = currentState;
 
-        // Clear the window using the default view
         window.setView(window.getDefaultView());
         window.clear(sf::Color::Black);
 
         if (currentState == GameState::MainMenu || currentState == GameState::LevelSelection) {
-            // Draw the menu
-            window.setView(window.getDefaultView());
             menu.draw(currentState);
         } else if (currentState == GameState::Playing) {
-            // Update timer if not paused
             if (!timerPaused) {
                 timeRemaining -= timerClock.restart().asSeconds();
-                if (timeRemaining < 0.0f) timeRemaining = 0.0f; // Clamp timer to 0
+                if (timeRemaining < 0.0f) timeRemaining = 0.0f;
             }
 
             timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
@@ -130,33 +152,28 @@ int main() {
 
             window.setView(gameView);
 
-            // Player input and boat movement
-            float directionX = 0.0f, directionY = 0.0f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionY = 0.5f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) directionX = -0.25f;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) directionX = 0.25f;
+            // Handle player input
+            float directionX = 0.0f;
+            float torque = 0.0f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionX = 0.4f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) directionX = -0.4f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) torque = 1.0f;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) torque = -1.0f;
 
-            boat.move(directionX, directionY, 1.0f);
+            boat.move(directionX, 0.0f, 5.0f);
+            boat.rotate(torque);
 
-            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 2.0f);
+            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 0.5f);
             physicsManager.step();
             boat.update(currentState);
 
-            // Check if boat needs respawn
+            // Respawn boat if needed
             if (boat.checkRespawnNeeded()) {
                 boat.respawnBoat();
-                b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
-                sf::Vector2f instantCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
-                gameView.setCenter(instantCenter);
-                window.setView(gameView);
-
                 gravityApplied = false;
                 clock.restart();
-
-                // Reset timer on death
                 timeRemaining = 30.0f;
                 timerClock.restart();
-                // Reset score on death if desired; if not, leave score as is
                 score = 0;
             } else {
                 b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
@@ -164,35 +181,38 @@ int main() {
                 sf::Vector2f currentCenter = gameView.getCenter();
                 sf::Vector2f newCenter = currentCenter + lerpFactor * (targetCenter - currentCenter);
                 gameView.setCenter(newCenter);
-                window.setView(gameView);
             }
 
-            // Update score by checking for collected collectables
             score += physicsManager.checkCollectables();
 
-            // Render scene
             physicsManager.renderGround(window);
             physicsManager.renderCollectables(window);
             boat.render(window);
 
-            // Draw UI elements (timer, score, pause button) using default view
             window.setView(window.getDefaultView());
             window.draw(timerText);
             window.draw(scoreText);
             pauseButton.draw(window);
 
         } else if (currentState == GameState::Paused) {
-            // Render game elements before overlaying pause menu
             window.setView(gameView);
             physicsManager.renderGround(window);
             physicsManager.renderCollectables(window);
             boat.render(window);
-
-            // Draw pause menu
             window.setView(window.getDefaultView());
             pauseMenu.draw();
+        } else if (currentState == GameState::Controls) {
+            float yOffset = 100.0f;
+            for (const auto& line : controlsText) {
+                sf::Text text(line, font, 20);
+                text.setFillColor(sf::Color::White);
+                text.setPosition(50, yOffset);
+                yOffset += 50;
+                window.draw(text);
+            }
+
+            backButton.draw(window);
         } else if (currentState == GameState::LevelComplete) {
-            // Draw "Level Complete" screen
             menu.drawLevelCompleteScreen(window);
         }
 

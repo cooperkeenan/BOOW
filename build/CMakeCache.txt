@@ -26,7 +26,6 @@ BoatOutOfWater_SOURCE_DIR:STATIC=/Users/cooperkeenan/Documents/GitHub/BOOW
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
 
-//Path to a program.
 CMAKE_AR:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ar
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
@@ -224,6 +223,42 @@ CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/Users/cooperkeenan/Documents/GitHub/BOOW/vcp
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+
+//Path to a library.
+FLAC_LIB:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libFLAC.a
+
+//The directory containing a CMake configuration file for Freetype.
+Freetype_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/share/freetype
+
+//Path to a file.
+OPENAL_INCLUDE_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include/AL
+
+//Path to a library.
+OPENAL_LIBRARY:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libopenal.a
+
+//Include for the OpenGL GLU library
+OPENGL_GLU_INCLUDE_DIR:PATH=/usr/X11R6/include
+
+//Include for OpenGL
+OPENGL_INCLUDE_DIR:PATH=/usr/X11R6/include
+
+//OpenGL GL library
+OPENGL_gl_LIBRARY:FILEPATH=/usr/X11R6/lib/libGL.dylib
+
+//OpenGL GLU library
+OPENGL_glu_LIBRARY:FILEPATH=/usr/X11R6/lib/libGLU.dylib
+
+//Path to a library.
+Ogg_LIB:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libogg.a
+
+//Path to a library.
+PNG_LIBRARY_DEBUG:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libpng16d.a
+
+//Path to a library.
+PNG_LIBRARY_RELEASE:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libpng16.a
+
+//Path to a file.
+PNG_PNG_INCLUDE_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include
 
 //The directory containing a CMake configuration file for SFML.
 SFML_DIR:PATH=/opt/homebrew/lib/cmake/SFML

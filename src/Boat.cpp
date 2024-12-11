@@ -1,9 +1,10 @@
 #include "Boat.h"
 #include "Constants.h"
-#include "BuildObstacles.h"
-#include "PhysicsManager.h"
+#include "GameState.h"
+#include "levels.h"
 #include <iostream>
 #include "levels.h"
+#include "BuildObstacles.h"
 #include "GameState.h"
 
 
@@ -54,38 +55,32 @@ void Boat::render(sf::RenderWindow& window) {
     window.draw(boatSprite);
 }
 
-void Boat::move(const b2Vec2& force) {
+void Boat::move(float directionX, float directionY, float magnitude) {
+    // Reduce the magnitude to slow down the movement
+    float scaledMagnitude = magnitude * 0.1f; // Scale down by 80%
+    b2Vec2 force(directionX * scaledMagnitude, directionY * scaledMagnitude);
     boatBody->ApplyForceToCenter(force, true);
 }
 
+void Boat::rotate(float torque) {
+    boatBody->ApplyTorque(torque * 0.08f, true); // Scale torque down for smoother rotation
+}
 
 b2Body* Boat::getBoatBody() const {
     return boatBody;
 }
 
-//Move Boat 
-void Boat::move(float directionX, float directionY, float magnitude) {
-    b2Vec2 force(directionX * magnitude, directionY * magnitude);
-    boatBody->ApplyForceToCenter(force, true);
-}
-
-
-// Set the boat's position
 void Boat::setPosition(float x, float y) {
     boatBody->SetTransform(b2Vec2((x - WINDOW_WIDTH / 2.0f) / SCALE, (WINDOW_HEIGHT - y) / SCALE), boatBody->GetAngle());
     boatBody->SetAwake(true);
 }
 
-
-//Check if boat needs respawned 
 bool Boat::checkRespawnNeeded() const {
     b2Vec2 pos = boatBody->GetPosition();
     float worldY = WINDOW_HEIGHT - (pos.y * SCALE);
-    return (worldY > 1000); 
+    return (worldY > 1000);
 }
 
-
-//Respawn Boat
 void Boat::respawnBoat() {
     boatBody->SetLinearVelocity(b2Vec2(0, 0));
     boatBody->SetAngularVelocity(0.0f);

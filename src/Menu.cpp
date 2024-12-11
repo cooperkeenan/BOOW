@@ -2,12 +2,14 @@
 #include "Menu.h"
 #include "Constants.h"
 
+
 Menu::Menu(sf::RenderWindow& window, sf::Font& font) : window(window),
     levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::White),
     quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::White),
     level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::White),
     level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-    level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White)
+    level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White),
+    controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::White)  // Add this
 {
     // Set font and position for each button
     levelsButton.setFont(font);
@@ -20,6 +22,8 @@ Menu::Menu(sf::RenderWindow& window, sf::Font& font) : window(window),
     level2Button.setPosition({300, 250});
     level3Button.setFont(font);
     level3Button.setPosition({300, 350});
+    controlsButton.setFont(font);  // Set font for controls button
+    controlsButton.setPosition({300, 100});  // Set position for controls button
 }
 
 void Menu::handleEvent(sf::Event& event, GameState& currentState) {
@@ -29,6 +33,9 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
                 window.close();
             } else if (levelsButton.isMouseOver(window)) {
                 currentState = GameState::LevelSelection;
+            } else if (controlsButton.isMouseOver(window)) {  // Handle Controls button click
+                std::cout << "Controls button clicked!" << std::endl;
+                // Add your logic here for what happens when the Controls button is clicked
             }
         } else if (currentState == GameState::LevelSelection) {
             if (level1Button.isMouseOver(window)) {
@@ -47,6 +54,7 @@ void Menu::draw(GameState currentState) {
     // Draw only relevant buttons based on the current state
     if (currentState == GameState::MainMenu) {
         levelsButton.draw(window);
+        controlsButton.draw(window);  // Draw the controls button
         quitButton.draw(window);
     } else if (currentState == GameState::LevelSelection) {
         level1Button.draw(window);
