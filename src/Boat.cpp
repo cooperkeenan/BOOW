@@ -86,4 +86,5 @@ void Boat::respawnBoat() {
     boatBody->SetAngularVelocity(0.0f);
     setPosition(150, 100.0f);
     boatBody->SetAwake(true); 
+    hasCrossedFinishLine = false;  
 }

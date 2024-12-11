@@ -52,15 +52,23 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
 }
 
 
-void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState) {
+void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (levelsButton.isMouseOver(window)) {
-            currentState = GameState::MainMenu;  // Change state to Main Menu
+            // Reset game state
+            boat.respawnBoat();                // Reset boat
+            physicsManager.reset();      // Reset physics (obstacles and collectables)
+            timeRemaining = 30.0f;       // Reset timer
+            score = 0;                   // Reset score
+
+            // Set game state to LevelSelection
+            currentState = GameState::LevelSelection;
         } else if (quitButton.isMouseOver(window)) {
-            window.close();  // Exit the game
+            window.close(); // Exit the game
         }
     }
 }
+
 
 
 

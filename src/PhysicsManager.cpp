@@ -134,3 +134,15 @@ int PhysicsManager::checkCollectables() {
     }
     return collectedCount;
 }
+
+
+void PhysicsManager::reset() {
+    // Reset collectables
+    for (auto& collectable : collectables) {
+        collectable.markCollected(); // Ensure they are marked as not collected
+    }
+
+    // Reset obstacles and world
+    world.ClearForces(); // Clear any forces applied
+    initializeObstacles(level_1()); // Reinitialize the level
+}

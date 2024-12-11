@@ -76,8 +76,9 @@ int main() {
 
             // Handle menu events
             if (currentState == GameState::LevelComplete) {
-                menu.handleLevelCompleteEvent(event, currentState);
-            } else {
+                 menu.handleLevelCompleteEvent(event, currentState, physicsManager, boat, timeRemaining, score);
+                }
+             else {
                 menu.handleEvent(event, currentState);
             }
 

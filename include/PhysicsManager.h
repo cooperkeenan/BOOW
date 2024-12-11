@@ -17,6 +17,7 @@ public:
     void renderGround(sf::RenderWindow& window);
     void renderCollectables(sf::RenderWindow& window);
     int checkCollectables();
+    void reset();
     bool gravityApplied;
     sf::Clock clock;
 

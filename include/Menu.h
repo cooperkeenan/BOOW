@@ -2,12 +2,14 @@
 #include <SFML/Graphics.hpp>
 #include "Button.h"
 #include "GameState.h"
+#include "PhysicsManager.h"
+#include "Boat.h"
 
 class Menu {
 public:
     Menu(sf::RenderWindow& window, sf::Font& font);
     void handleEvent(sf::Event& event, GameState& currentState);
-    void handleLevelCompleteEvent(sf::Event& event, GameState& currentState);
+    void handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score);
     void draw(GameState currentState);
     void drawLevelCompleteScreen();
 
