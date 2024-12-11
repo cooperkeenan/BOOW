@@ -12,6 +12,8 @@ constexpr float RAMP_LENGTH = 10.0f;
 constexpr float RAMP_HEIGHT = 5.0f;
 constexpr float TRIANGLE_SIDE = 5.0f; 
 constexpr float GAP_LENGTH = 10.0f;
+constexpr float PARTIAL_CIRCLE_RADIUS = 7.0f;
+constexpr float PARTIAL_CIRCLE_ANGLE = 270.0f; 
 
 // Function Declarations
 extern float currentX;

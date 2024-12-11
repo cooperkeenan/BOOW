@@ -128,12 +128,6 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
 
 
 
-// Getter function for the finish line X position
-float getFinishLineX() {
-    return finishLineX;
-}
-
-
 
 Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment, bool inward) {
     currentX += horizontalOffset;
@@ -160,3 +154,12 @@ Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustm
     return { vertices, startY, startY + (heightAdjustment > 0 ? (inward ? -height : height) : (inward ? height : -height)), false };
 }
 
+
+
+
+
+
+// Getter function for the finish line X position
+float getFinishLineX() {
+    return finishLineX;
+}

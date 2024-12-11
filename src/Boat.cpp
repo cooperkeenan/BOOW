@@ -8,7 +8,7 @@
 
 
 // Constants for speed and rotation caps
-constexpr float MAX_SPEED = 0.5f; // Maximum linear velocity
+constexpr float MAX_SPEED = 0.6f; // Maximum linear velocity
 constexpr float MAX_ROTATION_SPEED = 0.1f; // Maximum angular velocity (radians per second)
 
 // Collision categories
@@ -32,7 +32,7 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &boatShape;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 0.005f;
+    fixtureDef.friction = 0.007f;
     fixtureDef.restitution = 0.5f;
 
     // Set collision filtering
