@@ -22,8 +22,7 @@ GameComponents initializeGame(sf::RenderWindow& window) {
     // Initialize menu and game components
     components.menu = new Menu(window, components.font);
     components.physicsManager = new PhysicsManager();
-    components.boat = new Boat(components.physicsManager->getWorld(), *components.physicsManager,
-                               sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
+    components.boat = new Boat(components.physicsManager->getWorld(), *components.physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
     components.clock.restart();
     components.gravityApplied = false;
@@ -68,4 +67,25 @@ GameComponents initializeGame(sf::RenderWindow& window) {
     components.backButton->setPosition({300, 400});
 
     return components;
+}
+
+void handlePlayingState(GameComponents& components) {
+    if (components.previousState != components.currentState && components.currentState == GameState::Playing) {
+        b2Vec2 boatPos = components.boat->getBoatBody()->GetPosition();
+        sf::Vector2f initialCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
+        components.gameView.setCenter(initialCenter);
+
+        components.gravityApplied = false;
+        components.clock.restart();
+
+        if (components.previousState != GameState::Paused) {
+            components.timeRemaining = 30.0f;
+            components.timerClock.restart();
+            components.timerPaused = false;
+        }
+
+        components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
+    }
+
+    components.previousState = components.currentState;
 }
