@@ -15,7 +15,7 @@ GameComponents initializeGame(sf::RenderWindow& window) {
     GameComponents components;
 
     // Load Font
-    if (!components.font.loadFromFile("../img/RobotoMono-Regular.ttf")) {
+    if (!components.font.loadFromFile("../../img/RobotoMono-Regular.ttf")) {
         std::cerr << "Failed to load font\n";
         std::exit(-1); // Exit if font fails to load
     }
