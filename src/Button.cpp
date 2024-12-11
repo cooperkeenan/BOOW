@@ -52,10 +52,11 @@ void Button::draw(sf::RenderWindow& window) const {
 
 // Checks if the mouse is currently over the button
 bool Button::isMouseOver(sf::RenderWindow& window) const {
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    sf::FloatRect btnBounds = button.getGlobalBounds();
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);  // Get mouse position relative to the window
+    sf::FloatRect btnBounds = button.getGlobalBounds();      // Get button bounds
     return btnBounds.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 }
+
 
 // Retrieves the size of the button
 sf::Vector2f Button::getSize() const {

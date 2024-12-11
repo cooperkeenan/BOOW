@@ -24,14 +24,14 @@ int main() {
 
     sf::Clock clock;
     bool gravityApplied = false;
-    float lerpFactor = 2.0f;
+    float lerpFactor = 0.1f; // Smoothness factor for camera movement
     GameState currentState = GameState::MainMenu;
     GameState previousState = currentState;
 
     // Timer setup
-    sf::Clock timerClock; // Clock to track elapsed time
-    float timeRemaining = 30.0f; // Timer starts at 30 seconds
-    bool timerPaused = false; // Track if the timer is paused
+    sf::Clock timerClock;
+    float timeRemaining = 30.0f;
+    bool timerPaused = false;
     sf::Text timerText;
     timerText.setFont(font);
     timerText.setCharacterSize(20);
@@ -75,25 +75,27 @@ int main() {
             }
 
             // Handle menu events
-            menu.handleEvent(event, currentState);
+            if (currentState == GameState::LevelComplete) {
+                menu.handleLevelCompleteEvent(event, currentState);
+            } else {
+                menu.handleEvent(event, currentState);
+            }
 
             if (currentState == GameState::Playing) {
-                // Handle Pause button
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (pauseButton.isMouseOver(window)) {
                         currentState = GameState::Paused;
-                        timerPaused = true; // Pause the timer
+                        timerPaused = true;
                     }
                 }
             } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
                 if (currentState == GameState::MainMenu) {
                     boat.respawnBoat();
-                    timeRemaining = 30.0f; // Reset timer
+                    timeRemaining = 30.0f;
                     timerPaused = true;
                 }
             } else if (currentState == GameState::Controls) {
-                // Handle Back button on Controls screen
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (backButton.isMouseOver(window)) {
                         currentState = GameState::MainMenu;
@@ -167,21 +169,11 @@ int main() {
             physicsManager.step();
             boat.update(currentState);
 
-            // Respawn boat if needed
-            if (boat.checkRespawnNeeded()) {
-                boat.respawnBoat();
-                gravityApplied = false;
-                clock.restart();
-                timeRemaining = 30.0f;
-                timerClock.restart();
-                score = 0;
-            } else {
-                b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
-                sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, gameView.getCenter().y);
-                sf::Vector2f currentCenter = gameView.getCenter();
-                sf::Vector2f newCenter = currentCenter + lerpFactor * (targetCenter - currentCenter);
-                gameView.setCenter(newCenter);
-            }
+            // Smoothly move the view to follow the boat
+            b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
+            sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
+            sf::Vector2f currentCenter = gameView.getCenter();
+            gameView.setCenter(currentCenter + lerpFactor * (targetCenter - currentCenter));
 
             score += physicsManager.checkCollectables();
 
@@ -210,10 +202,10 @@ int main() {
                 yOffset += 50;
                 window.draw(text);
             }
-
             backButton.draw(window);
         } else if (currentState == GameState::LevelComplete) {
-            menu.drawLevelCompleteScreen(window);
+            window.clear(sf::Color::Black);
+            menu.drawLevelCompleteScreen();
         }
 
         window.display();

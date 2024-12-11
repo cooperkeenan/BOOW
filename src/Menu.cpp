@@ -3,15 +3,16 @@
 #include "Constants.h"
 
 
-Menu::Menu(sf::RenderWindow& window, sf::Font& font) : window(window),
-    levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::White),
-    quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::White),
-    level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-    level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-    level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White),
-    controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::White)  // Add this
+Menu::Menu(sf::RenderWindow& window, sf::Font& font) 
+    : window(window), font(font),  // Initialize font reference
+      levelsButton("Levels", {200, 50}, 20, sf::Color::Blue, sf::Color::White),
+      quitButton("Quit", {200, 50}, 20, sf::Color::Red, sf::Color::White),
+      level1Button("Level 1", {200, 50}, 20, sf::Color::Green, sf::Color::White),
+      level2Button("Level 2", {200, 50}, 20, sf::Color::Green, sf::Color::White),
+      level3Button("Level 3", {200, 50}, 20, sf::Color::Green, sf::Color::White),
+      controlsButton("Controls", {200, 50}, 20, sf::Color::Yellow, sf::Color::White)
 {
-    // Set font and position for each button
+    // Initialize all buttons' fonts and positions as before
     levelsButton.setFont(font);
     levelsButton.setPosition({300, 200});
     quitButton.setFont(font);
@@ -22,9 +23,10 @@ Menu::Menu(sf::RenderWindow& window, sf::Font& font) : window(window),
     level2Button.setPosition({300, 250});
     level3Button.setFont(font);
     level3Button.setPosition({300, 350});
-    controlsButton.setFont(font);  // Set font for controls button
-    controlsButton.setPosition({300, 100});  // Set position for controls button
+    controlsButton.setFont(font);
+    controlsButton.setPosition({300, 100});
 }
+
 
 void Menu::handleEvent(sf::Event& event, GameState& currentState) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
@@ -48,6 +50,21 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
         }
     }
 }
+
+
+void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState) {
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        if (levelsButton.isMouseOver(window)) {
+            currentState = GameState::MainMenu;  // Change state to Main Menu
+        } else if (quitButton.isMouseOver(window)) {
+            window.close();  // Exit the game
+        }
+    }
+}
+
+
+
+
 void Menu::draw(GameState currentState) {
     // Draw only relevant buttons based on the current state
     if (currentState == GameState::MainMenu) {
@@ -62,13 +79,21 @@ void Menu::draw(GameState currentState) {
 }
 
 
-void Menu::drawLevelCompleteScreen(sf::RenderWindow& window) {
+void Menu::drawLevelCompleteScreen() {
+    // Set up the "Level Complete" text
     sf::Text text("Level Complete!", font, 50);
     text.setFillColor(sf::Color::White);
     text.setStyle(sf::Text::Bold);
     sf::FloatRect textRect = text.getLocalBounds();
     text.setOrigin(textRect.width / 2, textRect.height / 2);
-    text.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
+    text.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3));
+    window.draw(text);
 
-    window.draw(text);  // Draw the "Level Complete" text
+    // Adjust and draw the buttons
+    levelsButton.setPosition({300, 300});  // Ensure these match handleLevelCompleteEvent
+    quitButton.setPosition({300, 400});
+    levelsButton.draw(window);
+    quitButton.draw(window);
 }
+
+
