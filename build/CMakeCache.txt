@@ -14,13 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-:UNINITIALIZED=======
-
-BOX2D_INCLUDE_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include
-
-//Path to a library.
-BOX2D_LIBRARY:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libbox2d.a
-
 //Path to a library.
 BROTLICOMMON_LIBRARY_DEBUG:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libbrotlicommon.a
 
@@ -54,6 +47,7 @@ BoatOutOfWater_SOURCE_DIR:STATIC=/Users/cooperkeenan/Documents/GitHub/BOOW
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
 
+//Path to a program.
 CMAKE_AR:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ar
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
@@ -132,6 +126,7 @@ CMAKE_INSTALL_PREFIX:PATH=/usr/local
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ld
 
+//Path to a program.
 CMAKE_MAKE_PROGRAM:FILEPATH=/opt/homebrew/bin/gmake
 
 //Flags used by the linker during the creation of modules during
@@ -242,8 +237,8 @@ CMAKE_STRIP:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/strip
 //Path to a program.
 CMAKE_TAPI:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/tapi
 
-//No help, variable specified on the command line.
-CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/scripts/buildsystems/vcpkg.cmake
+//The CMake toolchain file
+CMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -290,6 +285,7 @@ PNG_PNG_INCLUDE_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/install
 //The directory containing a CMake configuration file for SFML.
 SFML_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/share/sfml
 
+//Path to a file.
 SFML_DOC_DIR:PATH=/opt/homebrew/share/doc/SFML
 
 //Automatically copy dependencies into the output directory for
@@ -357,7 +353,7 @@ Z_VCPKG_CL:FILEPATH=Z_VCPKG_CL-NOTFOUND
 _VCPKG_INSTALLED_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed
 
 //The directory containing a CMake configuration file for box2d.
-box2d_DIR:PATH=/opt/homebrew/lib/cmake/box2d
+box2d_DIR:PATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/share/box2d
 
 
 ########################
@@ -526,7 +522,7 @@ FIND_PACKAGE_MESSAGE_DETAILS_BZip2:INTERNAL=[optimized;/Users/cooperkeenan/Docum
 //Details about finding OpenAL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenAL:INTERNAL=[/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libopenal.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include/AL][v()]
 //Details about finding OpenGL
-FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/X11R6/lib/libGL.dylib][/usr/X11R6/include][c ][v======()]
+FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/X11R6/lib/libGL.dylib][/usr/X11R6/include][c ][v()]
 //Details about finding PNG
 FIND_PACKAGE_MESSAGE_DETAILS_PNG:INTERNAL=[optimized;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libpng16.a;debug;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libpng16d.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][v1.6.44()]
 //Details about finding ZLIB

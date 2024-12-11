@@ -1,5 +1,5 @@
-#ifndef AICONTROLLER_H
-#define AICONTROLLER_H
+
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -21,7 +21,5 @@ private:
     Boat& boat;                  // Reference to the controlled boat
     std::vector<AIInput> inputs; // List of actions
     size_t currentIndex;         // Current action index
-    float actionTimer;           // Timer for the current action
+    float actionTimer;           // Ti
 };
-
-#endif // AICONTROLLER_H
