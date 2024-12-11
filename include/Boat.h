@@ -7,20 +7,19 @@
 
 class Boat {
 public:
-    Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size);
-    void update(GameState &currentState);
+    Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size, bool isAIControlled = false);
+    void update(GameState& currentState);
     void render(sf::RenderWindow& window);
     void move(float directionX, float directionY, float magnitude);
+    void rotate(float torque);
     b2Body* getBoatBody() const;
+    void setPosition(float x, float y);
     bool checkRespawnNeeded() const;
     void respawnBoat(PhysicsManager& physicsManager);
-    void setPosition(float x, float y); // Declare the setPosition method
-    void rotate(float torque);
-    
 
 private:
     sf::RectangleShape boatSprite;
     b2Body* boatBody;
     PhysicsManager& physicsMgr;
-    bool hasCrossedFinishLine = false;
+    bool hasCrossedFinishLine;
 };

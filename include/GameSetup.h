@@ -7,6 +7,7 @@
 #include "Menu.h"
 #include "Pause.h"
 #include "Button.h"
+#include "AIController.h"
 #include <vector>
 #include <string>
 
@@ -15,9 +16,12 @@ struct GameComponents {
     sf::Font font;                      // Font for text
     Menu* menu;                         // Main menu
     PhysicsManager* physicsManager;     // Physics manager for the game
-    Boat* boat;                         // Boat object
+    Boat* boat;                         // Player boat object
+    Boat* secondBoat;                   // Second boat object (AI-controlled)
     sf::Clock clock;                    // Clock for gameplay
-    bool gravityApplied;                // Flag for gravity application
+    sf::Clock gravityClock;             // Clock for gravity timing
+    bool gravityApplied;                // Flag for player gravity application
+    bool secondBoatGravityApplied;      // Flag for second boat gravity application
     float lerpFactor;                   // Camera lerp factor
     GameState currentState;             // Current game state
     GameState previousState;            // Previous game state
@@ -32,6 +36,8 @@ struct GameComponents {
     Pause* pauseMenu;                   // Pause menu
     std::vector<std::string> controlsText; // Text for controls screen
     Button* backButton;                 // Back button
+    std::vector<AIInput> aiInputs;      //Ai inputs
+    AIController* aiController;         // AI controller for the second boat
 };
 
 // Function to initialize all game components

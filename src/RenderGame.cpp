@@ -37,18 +37,15 @@ void renderGameState(GameComponents& components, sf::RenderWindow& window) {
     window.display();
 }
 
-
 // Function to clear the game window
 void clearWindow(sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
 }
 
-
 // Handle Main Menu or Level Selection states
 void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window) {
     components.menu->draw(components.currentState);
 }
-
 
 // Rendering and logic updates for the Playing state
 void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
@@ -68,10 +65,7 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
     components.scoreText.setString("Score: " + std::to_string(components.score));
 
-    // Set the game view
-    window.setView(components.gameView);
-
-    // Update camera position smoothly
+    // Smooth camera follow for the player boat
     b2Vec2 boatPos = components.boat->getBoatBody()->GetPosition();
     sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
     sf::Vector2f currentCenter = components.gameView.getCenter();
@@ -88,15 +82,22 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     components.boat->move(directionX, 0.0f, 5.0f);
     components.boat->rotate(torque);
 
-    // Update physics
-    components.physicsManager->applyGravityIfNeeded(
-        components.gravityApplied, components.clock.getElapsedTime().asSeconds(), 0.5f);
+    // Update second boat via AI
+    components.aiController->update(components.clock.restart().asSeconds());
+
+    // Apply gravity
+    components.physicsManager->applyGravityIfNeeded(components.gravityApplied, components.clock.getElapsedTime().asSeconds(), 0.5f);
+
+    // Update physics and boats
     components.physicsManager->step();
     components.boat->update(components.currentState);
+    components.secondBoat->update(components.currentState);
 
     // Check for respawn
     if (components.boat->checkRespawnNeeded()) {
         components.boat->respawnBoat(*components.physicsManager);
+        components.secondBoat->respawnBoat(*components.physicsManager);
+
         components.gravityApplied = false;
         components.clock.restart();
         components.timeRemaining = 30.0f;
@@ -104,20 +105,21 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
         components.score = 0;
     }
 
-    // Update score
+    // Update score and render
     components.score += components.physicsManager->checkCollectables();
-
-    // Render game objects
     components.physicsManager->renderGround(window);
-    components.physicsManager->renderCollectables(window);
     components.boat->render(window);
+    components.secondBoat->render(window);
 
-    // Render UI elements
+    // Render UI
     window.setView(window.getDefaultView());
     window.draw(components.timerText);
     window.draw(components.scoreText);
     components.pauseButton->draw(window);
 }
+
+// Remaining functions: Paused, Controls, and LevelComplete states
+
 
 
 

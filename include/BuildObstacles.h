@@ -12,21 +12,13 @@ constexpr float RAMP_LENGTH = 10.0f;
 constexpr float RAMP_HEIGHT = 5.0f;
 constexpr float GAP_LENGTH = 10.0f;
 
-
+// Function Declarations
 extern float currentX;
 extern float currentY;
 
-
-//Line 
 Obstacle line(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f);
-
-//ramp
 Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f, float heightAdjustment = 0.0f);
-
-//Gap
 Obstacle gap(float horizontalOffset = 0.0f, float lengthAdjustment = 0.0f);
-
-//Finish Line
 Obstacle finishLine(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f);
 
 float getFinishLineX();

@@ -22,8 +22,7 @@ Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, startY, false};  
 }
 
-
-//Ramp
+// Ramp
 Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment) {
     currentX += horizontalOffset; 
     float length = RAMP_LENGTH + lengthAdjustment; 
@@ -39,8 +38,7 @@ Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, currentY, false};
 }
 
-
-//Gap
+// Gap
 Obstacle gap(float horizontalOffset, float lengthAdjustment) {
     currentX += horizontalOffset;
     float length = GAP_LENGTH + lengthAdjustment; 

@@ -60,6 +60,7 @@ void handlePausedStateEvent(sf::Event& event, GameComponents& components) {
     components.pauseMenu->handleEvent(event, components.currentState);
     if (components.currentState == GameState::MainMenu) {
         components.boat->respawnBoat(*components.physicsManager);
+        components.secondBoat->respawnBoat(*components.physicsManager);
         components.timeRemaining = 30.0f;
         components.timerPaused = true;
     }
@@ -71,6 +72,7 @@ void handleControlsStateEvent(sf::RenderWindow& window, sf::Event& event, GameCo
         if (components.backButton->isMouseOver(window)) {
             components.currentState = GameState::MainMenu;
             components.boat->respawnBoat(*components.physicsManager);
+            components.secondBoat->respawnBoat(*components.physicsManager);
             components.timeRemaining = 30.0f;
             components.timerPaused = true;
         }

@@ -6,6 +6,7 @@
 #include "Pause.h"
 #include "Button.h"
 #include "Constants.h"
+#include "AIController.h" // Include for AIController
 #include <vector>
 #include <iostream>
 #include <string>
@@ -24,9 +25,26 @@ GameComponents initializeGame(sf::RenderWindow& window) {
     components.physicsManager = new PhysicsManager();
     components.boat = new Boat(components.physicsManager->getWorld(), *components.physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
+    // Initialize second boat for AI
+    components.secondBoat = new Boat(components.physicsManager->getWorld(), *components.physicsManager, sf::Vector2f(150.0f, 200.0f), sf::Vector2f(40.0f, 20.0f), true);
+
+    // Define AI input sequence
+    components.aiInputs = {
+        {sf::Keyboard::Enter, 2.0f},
+        {sf::Keyboard::Up, 2.0f},
+        {sf::Keyboard::Right, 1.5f},
+        {sf::Keyboard::Down, 2.0f},
+        {sf::Keyboard::Left, 1.0f}
+    };
+
+    components.aiController = new AIController(*components.secondBoat, components.aiInputs);
+
+
+
     components.clock.restart();
     components.gravityApplied = false;
-    components.lerpFactor = 0.1f; // Smoothness factor for camera movement
+    components.secondBoatGravityApplied = false;
+    components.lerpFactor = 2.0f; // Smoothness factor for camera movement
     components.currentState = GameState::MainMenu;
     components.previousState = components.currentState;
 
@@ -77,6 +95,7 @@ void handlePlayingState(GameComponents& components) {
         components.gameView.setCenter(initialCenter);
 
         components.gravityApplied = false;
+        components.secondBoatGravityApplied = false;
         components.clock.restart();
 
         if (components.previousState != GameState::Paused) {
