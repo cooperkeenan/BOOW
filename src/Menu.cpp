@@ -55,7 +55,6 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager
 
                 // Set the current level to 2
                 currentLevel = 2;
-                currentLevelInMenu = currentLevel; // Keep them in sync
 
 
                 // Initialize Physics for Level 2
