@@ -8,7 +8,7 @@
 
 
 // Constants for speed and rotation caps
-constexpr float MAX_SPEED = 0.3f; // Maximum linear velocity
+constexpr float MAX_SPEED = 0.5f; // Maximum linear velocity
 constexpr float MAX_ROTATION_SPEED = 0.1f; // Maximum angular velocity (radians per second)
 
 // Collision categories

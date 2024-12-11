@@ -64,22 +64,6 @@ void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
 }
 
 
-// Handle menu-related events
-void handleMenuEvent(sf::Event& event, GameComponents& components) {
-    // Call the menu's handleEvent with all required arguments
-    components.menu->handleEvent(
-        event, 
-        components.currentState,
-        *components.physicsManager,
-        *components.boat,
-        *components.secondBoat,
-        components.timeRemaining,
-        components.score,
-        components.currentLevel
-    );
-}
-
-
 
 // Handle events in the Playing state
 void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {
