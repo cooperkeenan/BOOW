@@ -57,9 +57,6 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
         float elapsed = components.timerClock.restart().asSeconds();
         components.timeRemaining -= elapsed;
 
-        // Debug log
-        std::cout << "Time Remaining: " << components.timeRemaining << " seconds" << std::endl;
-
         if (components.timeRemaining <= 0.0f) {
             components.timeRemaining = 0.0f;
             components.currentState = GameState::LevelComplete;
