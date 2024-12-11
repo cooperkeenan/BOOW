@@ -132,39 +132,29 @@ float getFinishLineX() {
 }
 
 
-// Add this to BuildObstacles.cpp or a similar file
-// We'll define a new curve function
 
-Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment) {
-    // Move the "pen" to the start position of the curve
+Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment, bool inward) {
     currentX += horizontalOffset;
     float startY = currentY + verticalOffset;
-
-    // Determine the final length and height of the curve
-    // For simplicity, reusing RAMP_LENGTH and RAMP_HEIGHT constants, but you could introduce new constants if desired.
     float length = RAMP_LENGTH + lengthAdjustment; 
-    float height = RAMP_HEIGHT + heightAdjustment;
+    float height = RAMP_HEIGHT + std::abs(heightAdjustment); 
 
-    // We'll create a series of points along a quadratic curve from t=0 to t=1
-    // x(t) = currentX + t*length
-    // y(t) = startY + height*t^2
-    const int NUM_SEGMENTS = 20; // The curve resolution
+    const int NUM_SEGMENTS = 20;
     std::vector<b2Vec2> vertices;
     vertices.reserve(NUM_SEGMENTS + 1);
 
     for (int i = 0; i <= NUM_SEGMENTS; ++i) {
         float t = static_cast<float>(i) / NUM_SEGMENTS; 
         float x = currentX + t * length;
-        float y = startY + height * (t * t); // Quadratic growth
 
+        // Decide the y-value based on the `inward` parameter
+        float y = startY + (inward ? (heightAdjustment > 0 ? -height * (1 - t) * (1 - t) : height * (1 - t) * (1 - t)) : (heightAdjustment > 0 ? height * t * t : -height * t * t));           
         vertices.push_back(b2Vec2(x, y));
     }
 
-    // After creating the curve, update currentX, currentY to the end point of the curve
     currentX += length; 
-    currentY = startY + height; // end height at t=1
+    currentY = startY + (heightAdjustment > 0 ? (inward ? -height : height) : (inward ? height : -height));
 
-    // Return the Obstacle struct
-    // The lowest point is startY, the highest point is startY+height
-    return { vertices, startY, startY + height, false };
+    return { vertices, startY, startY + (heightAdjustment > 0 ? (inward ? -height : height) : (inward ? height : -height)), false };
 }
+

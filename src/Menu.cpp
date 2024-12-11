@@ -49,10 +49,26 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager
                 currentLevel = 1;
                 loadLevel(currentState, physicsManager, boat, secondBoat, timeRemaining, score, currentLevel, level_1());
                 std::cout << "Starting Level 1" << std::endl;
+                currentState = GameState::Playing;
+
             } else if (level2Button.isMouseOver(window)) {
                 currentLevel = 2;
+
+
+                // Initialize Physics for Level 2
+                physicsManager.reset(level_2()); 
+
+                // Respawn both boats for level 2
+                boat.respawnBoat(physicsManager, currentLevel);
+                secondBoat.respawnBoat(physicsManager, currentLevel);
+
+                // Reset timer and score
+                timeRemaining = 30.0f;  
+                score = 0;              
                 loadLevel(currentState, physicsManager, boat, secondBoat, timeRemaining, score, currentLevel, level_2());
                 std::cout << "Starting Level 2" << std::endl;
+
+            } else if (level3Button.isMouseOver(window)) {
             }
         }
     }
@@ -86,7 +102,7 @@ void Menu::draw(GameState currentState) {
 }
 
 void Menu::drawLevelCompleteScreen(LevelResult result) {
-    std::string displayText = (result == LevelResult::Complete) ? "Level Complete!" : "Level Failed!";
+    std::string displayText = (result == LevelResult::Complete && currentLevel) ? "Level Complete!" : "Level Failed!";
     sf::Text text(displayText, font, 50);
     text.setFillColor(sf::Color::White);
     text.setStyle(sf::Text::Bold);
@@ -100,6 +116,7 @@ void Menu::drawLevelCompleteScreen(LevelResult result) {
     quitButton.setPosition({300, 400});
     levelsButton.draw(window);
     quitButton.draw(window);
+    
 }
 
 void Menu::setLevelResult(LevelResult result) {
