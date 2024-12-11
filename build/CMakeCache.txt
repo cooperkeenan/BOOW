@@ -52,7 +52,7 @@ CMAKE_AR:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/ar
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
 // MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Release
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -237,8 +237,8 @@ CMAKE_STRIP:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/strip
 //Path to a program.
 CMAKE_TAPI:FILEPATH=/Library/Developer/CommandLineTools/usr/bin/tapi
 
-//The CMake toolchain file
-CMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/scripts/buildsystems/vcpkg.cmake
+//No help, variable specified on the command line.
+CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -518,15 +518,15 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding BZip2
-FIND_PACKAGE_MESSAGE_DETAILS_BZip2:INTERNAL=[/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libbz2.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][v1.0.8()]
+FIND_PACKAGE_MESSAGE_DETAILS_BZip2:INTERNAL=[optimized;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libbz2.a;debug;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libbz2d.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][v1.0.8()]
 //Details about finding OpenAL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenAL:INTERNAL=[/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libopenal.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include/AL][v()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/X11R6/lib/libGL.dylib][/usr/X11R6/include][c ][v()]
 //Details about finding PNG
-FIND_PACKAGE_MESSAGE_DETAILS_PNG:INTERNAL=[/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libpng16.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][v1.6.44()]
+FIND_PACKAGE_MESSAGE_DETAILS_PNG:INTERNAL=[optimized;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libpng16.a;debug;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libpng16d.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][v1.6.44()]
 //Details about finding ZLIB
-FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libz.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][c ][v1.3.1()]
+FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[optimized;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libz.a;debug;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libz.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][c ][v1.3.1()]
 //ADVANCED property for variable: FLAC_LIB
 FLAC_LIB-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: FREETYPE_LIBRARY_DEBUG
