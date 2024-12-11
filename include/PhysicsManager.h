@@ -28,4 +28,3 @@ private:
     b2Body* groundBody;
     ObstacleManager obstacleManager;
 };
-

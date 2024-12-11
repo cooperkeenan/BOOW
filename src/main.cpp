@@ -5,6 +5,7 @@
 #include "Menu.h"
 #include "Pause.h"
 #include "Constants.h"
+#include "AIController.h"
 #include <iostream>
 
 int main() {
@@ -19,9 +20,23 @@ int main() {
     // Initialize menu and game components
     Menu menu(window, font);
     PhysicsManager physicsManager;
-    Boat boat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
+    Boat playerBoat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
+    Boat secondBoat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 200.0f), sf::Vector2f(40.0f, 20.0f));
+
+    // Define AI input sequence
+    std::vector<AIInput> aiInputs = {
+        {sf::Keyboard::Enter, 5.0f}, // Idle for 4 seconds
+        {sf::Keyboard::Up, 2.0f},
+        {sf::Keyboard::Right, 1.5f},
+        {sf::Keyboard::Down, 2.0f},
+        {sf::Keyboard::Left, 1.0f}
+    };
+    AIController aiController(secondBoat, aiInputs);
+
     sf::Clock clock;
-    bool gravityApplied = false;
+    sf::Clock gravityClock; // Added clock specifically for gravity tracking
+    bool playerGravityApplied = false;
+    bool secondBoatGravityApplied = false;
     float lerpFactor = 2.0f;
     GameState currentState = GameState::MainMenu;
     GameState previousState = currentState;
@@ -42,7 +57,7 @@ int main() {
     // Initialize Pause and Resume Buttons
     Button pauseButton("Pause", {100, 40}, 20, sf::Color::Yellow, sf::Color::Black);
     pauseButton.setFont(font);
-    pauseButton.setPosition({WINDOW_WIDTH - 120, 20});  // Top-right corner with some padding
+    pauseButton.setPosition({WINDOW_WIDTH - 120, 20});
 
     // Initialize the Pause class
     Pause pauseMenu(window, font);
@@ -78,7 +93,8 @@ int main() {
             } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
                 if (currentState == GameState::MainMenu) {
-                    boat.respawnBoat(); // Reset the boat position
+                    playerBoat.respawnBoat(); // Reset the player boat position
+                    secondBoat.respawnBoat(); // Reset the second boat position
                     timeRemaining = 30.0f; // Reset the timer
                     timerPaused = true; // Pause the timer
                 }
@@ -87,7 +103,8 @@ int main() {
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (backButton.isMouseOver(window)) {
                         currentState = GameState::MainMenu;
-                        boat.respawnBoat(); // Reset the boat position
+                        playerBoat.respawnBoat(); // Reset the player boat position
+                        secondBoat.respawnBoat(); // Reset the second boat position
                         timeRemaining = 30.0f; // Reset the timer
                         timerPaused = true; // Pause the timer
                     }
@@ -108,15 +125,17 @@ int main() {
 
         // If we just switched to playing, initialize the camera properly
         if (previousState != currentState && currentState == GameState::Playing) {
-            b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
+            b2Vec2 boatPos = playerBoat.getBoatBody()->GetPosition();
             sf::Vector2f initialCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
             gameView.setCenter(initialCenter);
 
-            gravityApplied = false;
+            playerGravityApplied = false;
+            secondBoatGravityApplied = false;
             clock.restart();
+            gravityClock.restart(); // Reset the gravity clock on state change
 
             // Ensure the timer starts correctly when transitioning from other states
-            if (previousState != GameState::Paused) { 
+            if (previousState != GameState::Paused) {
                 timeRemaining = 30.0f; // Reset to 30 seconds
                 timerClock.restart(); // Restart the clock for proper countdown
                 timerPaused = false;  // Resume the timer
@@ -144,39 +163,46 @@ int main() {
 
             timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
 
-            window.setView(gameView);
-
             // Player input and boat movement
             float directionX = 0.0f; // Movement along x-axis
             float torque = 0.0f;     // Rotation
 
+            // Process player input
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) directionX = 0.4f;    // Reduced force for forward
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) directionX = -0.4f; // Reduced force for backward
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) torque = 1.0f;      // Reduced torque for left rotation
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) torque = -1.0f;    // Reduced torque for right rotation
 
-            boat.move(directionX, 0.0f, 5.0f); // Apply movement force
-            boat.rotate(torque);              // Apply rotational torque
+            // Apply forces based on player input
+            playerBoat.move(directionX, 0.0f, 5.0f); // Apply movement force
+            playerBoat.rotate(torque);              // Apply rotational torque
 
-            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 0.5f);
-            physicsManager.step();
-            boat.update();
+            // Apply gravity based on elapsed time
+            float elapsedTime = gravityClock.getElapsedTime().asSeconds();
+            physicsManager.applyGravityIfNeeded(playerGravityApplied, elapsedTime, 0.5f);
 
-            if (boat.checkRespawnNeeded()) {
-                boat.respawnBoat();
-                b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
+            // Check for respawn
+            if (playerBoat.checkRespawnNeeded()) {
+                playerBoat.respawnBoat();
+
+                // Respawn second boat slightly below the player boat
+                b2Vec2 playerPosition = playerBoat.getBoatBody()->GetPosition();
+                secondBoat.getBoatBody()->SetTransform(b2Vec2(playerPosition.x, playerPosition.y + 2.0f), 0.0f);
+
+                // Update the camera to center on the player's new position
+                b2Vec2 boatPos = playerBoat.getBoatBody()->GetPosition();
                 sf::Vector2f instantCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
                 gameView.setCenter(instantCenter);
                 window.setView(gameView);
 
-                gravityApplied = false;
+                // Reset game variables on respawn
                 clock.restart();
-
-                // Reset timer only on death
+                gravityClock.restart(); // Restart gravity clock after respawn
                 timeRemaining = 30.0f;
                 timerClock.restart();
             } else {
-                b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
+                // Smooth camera follow logic
+                b2Vec2 boatPos = playerBoat.getBoatBody()->GetPosition();
                 sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, gameView.getCenter().y);
                 sf::Vector2f currentCenter = gameView.getCenter();
                 sf::Vector2f newCenter = currentCenter + lerpFactor * (targetCenter - currentCenter);
@@ -184,8 +210,18 @@ int main() {
                 window.setView(gameView);
             }
 
+            // Update AI controller
+            aiController.update(clock.restart().asSeconds());
+
+            // Step physics
+            physicsManager.step();
+            playerBoat.update();
+            secondBoat.update(); // Update second boat position
+
+            // Render boats and track
             physicsManager.renderGround(window);
-            boat.render(window);
+            playerBoat.render(window);
+            secondBoat.render(window); // Render second boat
 
             window.setView(window.getDefaultView());
             window.draw(timerText);
@@ -193,7 +229,8 @@ int main() {
         } else if (currentState == GameState::Paused) {
             window.setView(gameView);
             physicsManager.renderGround(window);
-            boat.render(window);
+            playerBoat.render(window);
+            secondBoat.render(window); // Render second boat in paused state
             window.setView(window.getDefaultView());
             pauseMenu.draw();
         } else if (currentState == GameState::Controls) {
