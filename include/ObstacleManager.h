@@ -6,6 +6,7 @@ class ObstacleManager {
 public:
     void addObstacle(const Obstacle& obstacle);
     const std::vector<Obstacle>& getObstacles() const;
+    void clearObstacles(); 
 
 
 private:
