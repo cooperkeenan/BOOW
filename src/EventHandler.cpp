@@ -38,10 +38,12 @@ void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
     components.menu->handleLevelCompleteEvent(event, components.currentState, *components.physicsManager, *components.boat, components.timeRemaining, components.score);
 }
 
+
 // Handle menu-related events
 void handleMenuEvent(sf::Event& event, GameComponents& components) {
     components.menu->handleEvent(event, components.currentState);
 }
+
 
 // Handle events in the Playing state
 void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {

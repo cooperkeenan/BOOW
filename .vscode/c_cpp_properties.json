@@ -3,6 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src",
                 "${workspaceFolder}/**",
                 "/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include"
             ],
@@ -12,7 +14,7 @@
                 "/Library/Frameworks"
             ],
             "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
+            "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64"
         }

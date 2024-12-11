@@ -44,3 +44,6 @@ build_and_run.sh
 # Ignore backup or temporary CMakeLists files
 CMakeLists.txt.*
 vcpkg/
+
+#json
+BOOW.code-workspace
