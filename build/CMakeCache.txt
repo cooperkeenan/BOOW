@@ -529,12 +529,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_PNG:INTERNAL=[optimized;/Users/cooperkeenan/Documen
 FIND_PACKAGE_MESSAGE_DETAILS_ZLIB:INTERNAL=[optimized;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libz.a;debug;/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libz.a][/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/include][c ][v1.3.1()]
 //ADVANCED property for variable: FLAC_LIB
 FLAC_LIB-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: FREETYPE_LIBRARY_DEBUG
-FREETYPE_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //vcpkg
 FREETYPE_LIBRARY_DEBUG:INTERNAL=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/debug/lib/libfreetyped.a
-//ADVANCED property for variable: FREETYPE_LIBRARY_RELEASE
-FREETYPE_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //vcpkg
 FREETYPE_LIBRARY_RELEASE:INTERNAL=/Users/cooperkeenan/Documents/GitHub/BOOW/vcpkg/installed/arm64-osx/lib/libfreetype.a
 //ADVANCED property for variable: OPENAL_INCLUDE_DIR
