@@ -15,7 +15,7 @@ public:
     b2Body* getBoatBody() const;
     void setPosition(float x, float y);
     bool checkRespawnNeeded() const;
-    void respawnBoat(PhysicsManager& physicsManager);
+    void respawnBoat(PhysicsManager& physicsManager, int currentLevel);
 
 private:
     sf::RectangleShape boatSprite;

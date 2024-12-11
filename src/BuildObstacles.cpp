@@ -1,5 +1,7 @@
 #include "BuildObstacles.h"
 #include "Constants.h"
+#include <cmath>
+
 
 // Global variables to track current position
 float currentX = INITIAL_START_X;
@@ -37,6 +39,27 @@ Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustme
 
     return {vertices, startY, currentY, false};
 }
+
+
+// Triangle
+Obstacle triangle(float horizontalOffset, float verticalOffset, float lengthAdjustment) {
+    currentX += horizontalOffset; 
+    float side = TRIANGLE_SIDE + lengthAdjustment; // Side length of the equilateral triangle
+    float height = (std::sqrt(3.0f) / 2.0f) * side; // Height of the equilateral triangle
+    float startY = currentY + verticalOffset;
+
+    std::vector<b2Vec2> vertices;
+    vertices.push_back(b2Vec2(currentX, startY));               // Bottom-left corner
+    vertices.push_back(b2Vec2(currentX + side, startY));        // Bottom-right corner
+    vertices.push_back(b2Vec2(currentX + (side / 2), startY + height)); // Top vertex
+
+    currentX += side; // Update currentX to the end of the triangle base
+    currentY = startY; // Maintain the currentY for continuity
+
+    return {vertices, startY, startY + height, false};  
+}
+
+
 
 // Gap
 Obstacle gap(float horizontalOffset, float lengthAdjustment) {

@@ -115,9 +115,8 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
 
     // Check for respawn
     if (components.boat->checkRespawnNeeded()) {
-        components.boat->respawnBoat(*components.physicsManager);
-        components.secondBoat->respawnBoat(*components.physicsManager);
-
+        components.boat->respawnBoat(*components.physicsManager, components.currentLevel);
+        components.secondBoat->respawnBoat(*components.physicsManager, components.currentLevel);
         components.gravityApplied = false;
         components.clock.restart();
         components.timeRemaining = 30.0f;

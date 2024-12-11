@@ -1,7 +1,10 @@
 #include <iostream>
 #include "Menu.h"
 #include "Constants.h"
-
+#include "GameSetup.h"
+#include "PhysicsManager.h"
+#include "Boat.h"
+#include "levels.h" // Ensure this is included so level_2() is accessible
 
 Menu::Menu(sf::RenderWindow& window, sf::Font& font) 
     : window(window), font(font),  // Initialize font reference
@@ -15,51 +18,79 @@ Menu::Menu(sf::RenderWindow& window, sf::Font& font)
     // Initialize all buttons' fonts and positions as before
     levelsButton.setFont(font);
     levelsButton.setPosition({300, 200});
+
     quitButton.setFont(font);
     quitButton.setPosition({300, 300});
+
     level1Button.setFont(font);
     level1Button.setPosition({300, 150});
+
     level2Button.setFont(font);
     level2Button.setPosition({300, 250});
+
     level3Button.setFont(font);
     level3Button.setPosition({300, 350});
+
     controlsButton.setFont(font);
     controlsButton.setPosition({300, 100});
 }
 
-
-void Menu::handleEvent(sf::Event& event, GameState& currentState) {
+void Menu::handleEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int& currentLevel) 
+{
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (currentState == GameState::MainMenu) {
             if (quitButton.isMouseOver(window)) {
                 window.close();
             } else if (levelsButton.isMouseOver(window)) {
                 currentState = GameState::LevelSelection;
-            } else if (controlsButton.isMouseOver(window)) { // Handle Controls Button
+            } else if (controlsButton.isMouseOver(window)) {
                 currentState = GameState::Controls;
             }
         } else if (currentState == GameState::LevelSelection) {
             if (level1Button.isMouseOver(window)) {
                 currentState = GameState::Playing;
+                // If you need to reset to level 1:
+                // physicsManager.reset(level_1());
+                // boat.respawnBoat(physicsManager, 1);
+                // secondBoat.respawnBoat(physicsManager, 1);
+                // timeRemaining = 30.0f;  
+                // score = 0; 
+
                 std::cout << "Starting Level 1" << std::endl;
             } else if (level2Button.isMouseOver(window)) {
+                currentState = GameState::Playing;
+
+                // Set the current level to 2
+                currentLevel = 2;
+
+                // Initialize Physics for Level 2
+                physicsManager.reset(level_2()); 
+
+                // Respawn both boats for level 2
+                boat.respawnBoat(physicsManager, currentLevel);
+                secondBoat.respawnBoat(physicsManager, currentLevel);
+
+                // Reset timer and score
+                timeRemaining = 30.0f;  
+                score = 0;              
+
                 std::cout << "Starting Level 2" << std::endl;
             } else if (level3Button.isMouseOver(window)) {
                 std::cout << "Starting Level 3" << std::endl;
+                // Implement logic for Level 3 if needed
             }
         }
     }
 }
 
-
 void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (levelsButton.isMouseOver(window)) {
             // Reset game state
-            boat.respawnBoat(physicsManager);                // Reset boat
-            physicsManager.reset();      // Reset physics (obstacles and collectables)
-            timeRemaining = 30.0f;       // Reset timer
-            score = 0;                   // Reset score
+            boat.respawnBoat(physicsManager, 1); // Assuming level 1 or handle dynamically
+            physicsManager.reset(level_1());      // Reset physics (obstacles and collectables)
+            timeRemaining = 30.0f;                // Reset timer
+            score = 0;                            // Reset score
 
             // Set game state to LevelSelection
             currentState = GameState::LevelSelection;
@@ -68,10 +99,6 @@ void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState, P
         }
     }
 }
-
-
-
-
 
 void Menu::draw(GameState currentState) {
     // Draw only relevant buttons based on the current state
@@ -85,7 +112,6 @@ void Menu::draw(GameState currentState) {
         level3Button.draw(window);
     }
 }
-
 
 void Menu::drawLevelCompleteScreen(LevelResult result) {
     std::string displayText = (result == LevelResult::Complete) ? "Level Complete!" : "Level Failed!";
@@ -103,11 +129,9 @@ void Menu::drawLevelCompleteScreen(LevelResult result) {
     quitButton.draw(window);
 }
 
-
 void Menu::setLevelResult(LevelResult result) {
     levelResult = result;
 }
-
 
 LevelResult Menu::getLevelResult() const {
     return levelResult;

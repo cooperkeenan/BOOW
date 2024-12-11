@@ -38,7 +38,11 @@ struct GameComponents {
     Button* backButton;                 // Back button
     std::vector<AIInput> aiInputs;      //Ai inputs
     AIController* aiController;         // AI controller for the second boat
+    int currentLevel;
 };
+
+
+
 
 // Function to initialize all game components
 GameComponents initializeGame(sf::RenderWindow& window);
