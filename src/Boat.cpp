@@ -95,12 +95,14 @@ void Boat::render(sf::RenderWindow& window) {
 void Boat::move(float directionX, float directionY, float magnitude) {
     float scaledMagnitude = magnitude * 0.1f; // Scale down by 80%
     b2Vec2 force(directionX * scaledMagnitude, directionY * scaledMagnitude);
+    std::cout << "Applying force: (" << force.x << ", " << force.y << ")" << std::endl;
     boatBody->ApplyForceToCenter(force, true);
 }
 
-// Rotate the boat
 void Boat::rotate(float torque) {
-    boatBody->ApplyTorque(torque * 0.08f, true); // Scale torque down for smoother rotation
+    float scaledTorque = torque * 0.08f; // Scale torque down
+    std::cout << "Applying torque: " << scaledTorque << std::endl;
+    boatBody->ApplyTorque(scaledTorque, true);
 }
 
 // Get the Box2D body of the boat

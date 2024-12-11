@@ -69,20 +69,20 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
 
     // Debugging: Verify input detection
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        std::cout << "Up key pressed" << std::endl;
-        directionX = 0.4f;
+
+        directionX = 0.7f;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        std::cout << "Down key pressed" << std::endl;
-        directionX = -0.4f;
+
+        directionX = -0.7f;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        std::cout << "Left key pressed" << std::endl;
-        torque = 1.0f;
+
+        torque = 2.0f;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        std::cout << "Right key pressed" << std::endl;
-        torque = -1.0f;
+
+        torque = -2.0f;
     }
 
 
