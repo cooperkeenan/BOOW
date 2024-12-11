@@ -1,72 +1,12 @@
 #include <SFML/Graphics.hpp>
-#include "Boat.h"
-#include "PhysicsManager.h"
-#include "GameState.h"
-#include "Menu.h"
-#include "Pause.h"
-#include "Constants.h"
+#include "GameSetup.h"
 #include <iostream>
-
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Boat Out of Water");
 
-    // Load Font
-    sf::Font font;
-    if (!font.loadFromFile("../img/RobotoMono-Regular.ttf")) {
-        std::cerr << "Failed to load font\n";
-        return -1;
-    }
-
-    // Initialize menu and game components
-    Menu menu(window, font);
-    PhysicsManager physicsManager;
-    Boat boat(physicsManager.getWorld(), physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
-
-    sf::Clock clock;
-    bool gravityApplied = false;
-    float lerpFactor = 0.1f; // Smoothness factor for camera movement
-    GameState currentState = GameState::MainMenu;
-    GameState previousState = currentState;
-
-    // Timer setup
-    sf::Clock timerClock;
-    float timeRemaining = 30.0f;
-    bool timerPaused = false;
-    sf::Text timerText;
-    timerText.setFont(font);
-    timerText.setCharacterSize(20);
-    timerText.setFillColor(sf::Color::White);
-    timerText.setPosition(10.0f, 10.0f);
-
-    // Score setup
-    int score = 0;
-    sf::Text scoreText;
-    scoreText.setFont(font);
-    scoreText.setCharacterSize(24);
-    scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(10.0f, 40.0f);
-
-    // Define a separate view for the game
-    sf::View gameView(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-
-    // Initialize Pause and Resume Buttons
-    Button pauseButton("Pause", {100, 40}, 20, sf::Color::Yellow, sf::Color::Black);
-    pauseButton.setFont(font);
-    pauseButton.setPosition({WINDOW_WIDTH - 120, 20});
-
-    // Initialize the Pause class
-    Pause pauseMenu(window, font);
-
-    // Controls screen setup
-    std::vector<std::string> controlsText = {
-        "Use left and right arrow keys to rotate",
-        "Use up and down arrow keys to control speed",
-        "Use escape to pause"
-    };
-    Button backButton("Back", {200, 50}, 20, sf::Color::Blue, sf::Color::White);
-    backButton.setFont(font);
-    backButton.setPosition({300, 400});
+    // Initialize game components
+    GameComponents components = initializeGame(window);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -76,90 +16,88 @@ int main() {
             }
 
             // Handle menu events
-            if (currentState == GameState::LevelComplete) {
-                 menu.handleLevelCompleteEvent(event, currentState, physicsManager, boat, timeRemaining, score);
-                }
-             else {
-                menu.handleEvent(event, currentState);
+            if (components.currentState == GameState::LevelComplete) {
+                components.menu->handleLevelCompleteEvent(event, components.currentState, *components.physicsManager, *components.boat, components.timeRemaining, components.score);
+            } else {
+                components.menu->handleEvent(event, components.currentState);
             }
 
-            if (currentState == GameState::Playing) {
+            if (components.currentState == GameState::Playing) {
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                    if (pauseButton.isMouseOver(window)) {
-                        currentState = GameState::Paused;
-                        timerPaused = true;
+                    if (components.pauseButton->isMouseOver(window)) {
+                        components.currentState = GameState::Paused;
+                        components.timerPaused = true;
                     }
                 }
-            } else if (currentState == GameState::Paused) {
-                pauseMenu.handleEvent(event, currentState);
-                if (currentState == GameState::MainMenu) {
-                    boat.respawnBoat(physicsManager);
-                    timeRemaining = 30.0f;
-                    timerPaused = true;
+            } else if (components.currentState == GameState::Paused) {
+                components.pauseMenu->handleEvent(event, components.currentState);
+                if (components.currentState == GameState::MainMenu) {
+                    components.boat->respawnBoat(*components.physicsManager);
+                    components.timeRemaining = 30.0f;
+                    components.timerPaused = true;
                 }
-            } else if (currentState == GameState::Controls) {
+            } else if (components.currentState == GameState::Controls) {
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                    if (backButton.isMouseOver(window)) {
-                        currentState = GameState::MainMenu;
-                        boat.respawnBoat(physicsManager);
-                        timeRemaining = 30.0f;
-                        timerPaused = true;
+                    if (components.backButton->isMouseOver(window)) {
+                        components.currentState = GameState::MainMenu;
+                        components.boat->respawnBoat(*components.physicsManager);
+                        components.timeRemaining = 30.0f;
+                        components.timerPaused = true;
                     }
                 }
             }
 
             // Handle Escape Key
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                if (currentState == GameState::Playing) {
-                    currentState = GameState::Paused;
-                    timerPaused = true;
-                } else if (currentState == GameState::Paused) {
-                    currentState = GameState::Playing;
-                    timerPaused = false;
+                if (components.currentState == GameState::Playing) {
+                    components.currentState = GameState::Paused;
+                    components.timerPaused = true;
+                } else if (components.currentState == GameState::Paused) {
+                    components.currentState = GameState::Playing;
+                    components.timerPaused = false;
                 }
             }
         }
 
         // Initialize camera and timer when switching to Playing
-        if (previousState != currentState && currentState == GameState::Playing) {
-            b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
+        if (components.previousState != components.currentState && components.currentState == GameState::Playing) {
+            b2Vec2 boatPos = components.boat->getBoatBody()->GetPosition();
             sf::Vector2f initialCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
-            gameView.setCenter(initialCenter);
+            components.gameView.setCenter(initialCenter);
 
-            gravityApplied = false;
-            clock.restart();
+            components.gravityApplied = false;
+            components.clock.restart();
 
-            if (previousState != GameState::Paused) {
-                timeRemaining = 30.0f;
-                timerClock.restart();
-                timerPaused = false;
+            if (components.previousState != GameState::Paused) {
+                components.timeRemaining = 30.0f;
+                components.timerClock.restart();
+                components.timerPaused = false;
             }
 
-            timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
+            components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
         }
 
-        previousState = currentState;
+        components.previousState = components.currentState;
 
         window.setView(window.getDefaultView());
         window.clear(sf::Color::Black);
 
-        if (currentState == GameState::MainMenu || currentState == GameState::LevelSelection) {
-            menu.draw(currentState);
-        } else if (currentState == GameState::Playing) {
-            if (!timerPaused) {
-                timeRemaining -= timerClock.restart().asSeconds();
-                if (timeRemaining < 0.0f) {
-                    timeRemaining = 0.0f;
-                    currentState = GameState::LevelComplete;
-                    menu.setLevelResult(LevelResult::Failed);
+        if (components.currentState == GameState::MainMenu || components.currentState == GameState::LevelSelection) {
+            components.menu->draw(components.currentState);
+        } else if (components.currentState == GameState::Playing) {
+            if (!components.timerPaused) {
+                components.timeRemaining -= components.timerClock.restart().asSeconds();
+                if (components.timeRemaining < 0.0f) {
+                    components.timeRemaining = 0.0f;
+                    components.currentState = GameState::LevelComplete;
+                    components.menu->setLevelResult(LevelResult::Failed);
                 }
             }
 
+            components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
+            components.scoreText.setString("Score: " + std::to_string(components.score));
 
-            timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
-            scoreText.setString("Score: " + std::to_string(score));
-
-            window.setView(gameView);
+            window.setView(components.gameView);
 
             // Handle player input
             float directionX = 0.0f;
@@ -169,59 +107,59 @@ int main() {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) torque = 1.0f;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) torque = -1.0f;
 
-            boat.move(directionX, 0.0f, 5.0f);
-            boat.rotate(torque);
+            components.boat->move(directionX, 0.0f, 5.0f);
+            components.boat->rotate(torque);
 
-            physicsManager.applyGravityIfNeeded(gravityApplied, clock.getElapsedTime().asSeconds(), 0.5f);
-            physicsManager.step();
-            boat.update(currentState);
+            components.physicsManager->applyGravityIfNeeded(components.gravityApplied, components.clock.getElapsedTime().asSeconds(), 0.5f);
+            components.physicsManager->step();
+            components.boat->update(components.currentState);
 
-                if (boat.checkRespawnNeeded()) {
-                    boat.respawnBoat(physicsManager);
-                    gravityApplied = false;
-                    clock.restart();
-                    timeRemaining = 30.0f;
-                    timerClock.restart();
-                    score = 0;
-                }
+            if (components.boat->checkRespawnNeeded()) {
+                components.boat->respawnBoat(*components.physicsManager);
+                components.gravityApplied = false;
+                components.clock.restart();
+                components.timeRemaining = 30.0f;
+                components.timerClock.restart();
+                components.score = 0;
+            }
 
             // Smoothly move the view to follow the boat
-            b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
+            b2Vec2 boatPos = components.boat->getBoatBody()->GetPosition();
             sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
-            sf::Vector2f currentCenter = gameView.getCenter();
-            gameView.setCenter(currentCenter + lerpFactor * (targetCenter - currentCenter));
+            sf::Vector2f currentCenter = components.gameView.getCenter();
+            components.gameView.setCenter(currentCenter + components.lerpFactor * (targetCenter - currentCenter));
 
-            score += physicsManager.checkCollectables();
+            components.score += components.physicsManager->checkCollectables();
 
-            physicsManager.renderGround(window);
-            physicsManager.renderCollectables(window);
-            boat.render(window);
+            components.physicsManager->renderGround(window);
+            components.physicsManager->renderCollectables(window);
+            components.boat->render(window);
 
             window.setView(window.getDefaultView());
-            window.draw(timerText);
-            window.draw(scoreText);
-            pauseButton.draw(window);
+            window.draw(components.timerText);
+            window.draw(components.scoreText);
+            components.pauseButton->draw(window);
 
-        } else if (currentState == GameState::Paused) {
-            window.setView(gameView);
-            physicsManager.renderGround(window);
-            physicsManager.renderCollectables(window);
-            boat.render(window);
+        } else if (components.currentState == GameState::Paused) {
+            window.setView(components.gameView);
+            components.physicsManager->renderGround(window);
+            components.physicsManager->renderCollectables(window);
+            components.boat->render(window);
             window.setView(window.getDefaultView());
-            pauseMenu.draw();
-        } else if (currentState == GameState::Controls) {
+            components.pauseMenu->draw();
+        } else if (components.currentState == GameState::Controls) {
             float yOffset = 100.0f;
-            for (const auto& line : controlsText) {
-                sf::Text text(line, font, 20);
+            for (const auto& line : components.controlsText) {
+                sf::Text text(line, components.font, 20);
                 text.setFillColor(sf::Color::White);
                 text.setPosition(50, yOffset);
                 yOffset += 50;
                 window.draw(text);
             }
-            backButton.draw(window);
-        } else if (currentState == GameState::LevelComplete) {
+            components.backButton->draw(window);
+        } else if (components.currentState == GameState::LevelComplete) {
             window.clear(sf::Color::Black);
-            menu.drawLevelCompleteScreen(menu.getLevelResult());
+            components.menu->drawLevelCompleteScreen(components.menu->getLevelResult());
         }
 
         window.display();
