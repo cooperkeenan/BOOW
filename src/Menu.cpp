@@ -107,22 +107,20 @@ void Menu::draw(GameState currentState) {
 }
 
 void Menu::drawLevelCompleteScreen(LevelResult result) {
-    std::cout << "Current Level: " << currentLevelInMenu << std::endl;
-    if (currentLevel == 1) {
-        std::string displayText = (result == LevelResult::Complete && currentLevel) ? "Level Complete!" : "Level Failed!";
-        sf::Text text(displayText, font, 50);
-        text.setFillColor(sf::Color::White);
-        text.setStyle(sf::Text::Bold);
-        sf::FloatRect textRect = text.getLocalBounds();
-        text.setOrigin(textRect.width / 2, textRect.height / 2);
-        text.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3));
-        window.draw(text);
+    std::string displayText = (result == LevelResult::Complete && currentLevel) ? "Level Complete!" : "Level Failed!";
+    sf::Text text(displayText, font, 50);
+    text.setFillColor(sf::Color::White);
+    text.setStyle(sf::Text::Bold);
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin(textRect.width / 2, textRect.height / 2);
+    text.setPosition(sf::Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3));
+    window.draw(text);
 
-        levelsButton.setPosition({300, 300});
-        quitButton.setPosition({300, 400});
-        levelsButton.draw(window);
-        quitButton.draw(window);
-    }
+    levelsButton.setPosition({300, 300});
+    quitButton.setPosition({300, 400});
+    levelsButton.draw(window);
+    quitButton.draw(window);
+    
 }
 
 void Menu::setLevelResult(LevelResult result) {
