@@ -85,4 +85,5 @@ void Boat::respawnBoat() {
     boatBody->SetLinearVelocity(b2Vec2(0, 0));
     boatBody->SetAngularVelocity(0.0f);
     setPosition(150, 100.0f);
+    boatBody->SetAwake(true); 
 }

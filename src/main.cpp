@@ -169,6 +169,15 @@ int main() {
             physicsManager.step();
             boat.update(currentState);
 
+                if (boat.checkRespawnNeeded()) {
+                    boat.respawnBoat();
+                    gravityApplied = false;
+                    clock.restart();
+                    timeRemaining = 30.0f;
+                    timerClock.restart();
+                    score = 0;
+                }
+
             // Smoothly move the view to follow the boat
             b2Vec2 boatPos = boat.getBoatBody()->GetPosition();
             sf::Vector2f targetCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
