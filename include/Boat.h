@@ -13,9 +13,10 @@ public:
     void move(float directionX, float directionY, float magnitude);
     b2Body* getBoatBody() const;
     bool checkRespawnNeeded() const;
-    void respawnBoat();
+    void respawnBoat(PhysicsManager& physicsManager);
     void setPosition(float x, float y); // Declare the setPosition method
     void rotate(float torque);
+    
 
 private:
     sf::RectangleShape boatSprite;

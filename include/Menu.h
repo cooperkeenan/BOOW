@@ -11,7 +11,10 @@ public:
     void handleEvent(sf::Event& event, GameState& currentState);
     void handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score);
     void draw(GameState currentState);
-    void drawLevelCompleteScreen();
+    void drawLevelCompleteScreen(LevelResult result);
+    void setLevelResult(LevelResult result);
+    LevelResult getLevelResult() const;  // Getter for levelResult
+
 
 private:
     sf::RenderWindow& window;
@@ -22,4 +25,5 @@ private:
     Button level1Button;
     Button level2Button;
     Button level3Button;
+    LevelResult levelResult;  // Add a member to track the result of the level
 };

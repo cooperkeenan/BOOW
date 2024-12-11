@@ -142,7 +142,12 @@ void PhysicsManager::reset() {
         collectable.markCollected(); // Ensure they are marked as not collected
     }
 
-    // Reset obstacles and world
+    collectables.clear();
+
     world.ClearForces(); // Clear any forces applied
     initializeObstacles(level_1()); // Reinitialize the level
+    collectables.emplace_back(world, sf::Vector2f(500, 280), 10.0f);
+    collectables.emplace_back(world, sf::Vector2f(800, 280), 10.0f);
+    collectables.emplace_back(world, sf::Vector2f(1050, 280), 10.0f);
+
 }

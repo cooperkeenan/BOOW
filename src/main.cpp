@@ -7,6 +7,7 @@
 #include "Constants.h"
 #include <iostream>
 
+
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Boat Out of Water");
 
@@ -92,7 +93,7 @@ int main() {
             } else if (currentState == GameState::Paused) {
                 pauseMenu.handleEvent(event, currentState);
                 if (currentState == GameState::MainMenu) {
-                    boat.respawnBoat();
+                    boat.respawnBoat(physicsManager);
                     timeRemaining = 30.0f;
                     timerPaused = true;
                 }
@@ -100,7 +101,7 @@ int main() {
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (backButton.isMouseOver(window)) {
                         currentState = GameState::MainMenu;
-                        boat.respawnBoat();
+                        boat.respawnBoat(physicsManager);
                         timeRemaining = 30.0f;
                         timerPaused = true;
                     }
@@ -147,8 +148,13 @@ int main() {
         } else if (currentState == GameState::Playing) {
             if (!timerPaused) {
                 timeRemaining -= timerClock.restart().asSeconds();
-                if (timeRemaining < 0.0f) timeRemaining = 0.0f;
+                if (timeRemaining < 0.0f) {
+                    timeRemaining = 0.0f;
+                    currentState = GameState::LevelComplete;
+                    menu.setLevelResult(LevelResult::Failed);
+                }
             }
+
 
             timerText.setString("Time: " + std::to_string(static_cast<int>(timeRemaining)));
             scoreText.setString("Score: " + std::to_string(score));
@@ -171,7 +177,7 @@ int main() {
             boat.update(currentState);
 
                 if (boat.checkRespawnNeeded()) {
-                    boat.respawnBoat();
+                    boat.respawnBoat(physicsManager);
                     gravityApplied = false;
                     clock.restart();
                     timeRemaining = 30.0f;
@@ -215,7 +221,7 @@ int main() {
             backButton.draw(window);
         } else if (currentState == GameState::LevelComplete) {
             window.clear(sf::Color::Black);
-            menu.drawLevelCompleteScreen();
+            menu.drawLevelCompleteScreen(menu.getLevelResult());
         }
 
         window.display();

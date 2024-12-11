@@ -6,6 +6,7 @@
 #include "levels.h"
 #include "BuildObstacles.h"
 #include "GameState.h"
+#include "PhysicsManager.h"
 
 
 // Helper function to convert SFML to Box2D coordinates
@@ -81,10 +82,11 @@ bool Boat::checkRespawnNeeded() const {
     return (worldY > 1000);
 }
 
-void Boat::respawnBoat() {
+void Boat::respawnBoat(PhysicsManager& physicsManager) {
     boatBody->SetLinearVelocity(b2Vec2(0, 0));
     boatBody->SetAngularVelocity(0.0f);
     setPosition(150, 100.0f);
     boatBody->SetAwake(true); 
     hasCrossedFinishLine = false;  
+    physicsManager.reset();
 }

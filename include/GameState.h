@@ -9,3 +9,8 @@ enum class GameState {
     LevelComplete,
     Controls
 };
+
+enum class LevelResult {
+    Complete,
+    Failed
+};
