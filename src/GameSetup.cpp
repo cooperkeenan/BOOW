@@ -14,6 +14,9 @@
 GameComponents initializeGame(sf::RenderWindow& window) {
     GameComponents components;
 
+    bool isReloaded = false; // New flag to track game reload
+
+
     // Load Font
     if (!components.font.loadFromFile("../../img/RobotoMono-Regular.ttf")) {
         std::cerr << "Failed to load font\n";

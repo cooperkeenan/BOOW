@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-      Build started 11/12/2024 18:49:40.
+      Build started 11/12/2024 20:11:34.
       
       Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\3.31.1\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -53,7 +53,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.39
+      Time Elapsed 00:00:00.41
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -79,7 +79,7 @@ events:
       The output was:
       0
       MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-      Build started 11/12/2024 18:49:41.
+      Build started 11/12/2024 20:11:35.
       
       Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\3.31.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -127,8 +127,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-yvlklv"
-      binary: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-yvlklv"
+      source: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-m34ccl"
+      binary: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-m34ccl"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -141,40 +141,40 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-yvlklv'
+        Change Dir: 'C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-m34ccl'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_30484.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_8a4c9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-        Build started 11/12/2024 18:49:42.
+        Build started 11/12/2024 20:11:36.
         
-        Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yvlklv\\cmTC_30484.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m34ccl\\cmTC_8a4c9.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_30484.dir\\Debug\\".
+          Creating directory "cmTC_8a4c9.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yvlklv\\Debug\\".
-          Creating directory "cmTC_30484.dir\\Debug\\cmTC_30484.tlog\\".
+          Creating directory "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m34ccl\\Debug\\".
+          Creating directory "cmTC_8a4c9.dir\\Debug\\cmTC_8a4c9.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_30484.dir\\Debug\\cmTC_30484.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_30484.dir\\Debug\\cmTC_30484.tlog\\unsuccessfulbuild".
+          Creating "cmTC_8a4c9.dir\\Debug\\cmTC_8a4c9.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_8a4c9.dir\\Debug\\cmTC_8a4c9.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_30484.dir\\Debug\\\\" /Fd"cmTC_30484.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_8a4c9.dir\\Debug\\\\" /Fd"cmTC_8a4c9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_30484.dir\\Debug\\\\" /Fd"cmTC_30484.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_8a4c9.dir\\Debug\\\\" /Fd"cmTC_8a4c9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
           CMakeCCompilerABI.c
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yvlklv\\Debug\\cmTC_30484.exe" /INCREMENTAL /ILK:"cmTC_30484.dir\\Debug\\cmTC_30484.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-yvlklv/Debug/cmTC_30484.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-yvlklv/Debug/cmTC_30484.lib" /MACHINE:X64  /machine:x64 cmTC_30484.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_30484.vcxproj -> C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yvlklv\\Debug\\cmTC_30484.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m34ccl\\Debug\\cmTC_8a4c9.exe" /INCREMENTAL /ILK:"cmTC_8a4c9.dir\\Debug\\cmTC_8a4c9.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-m34ccl/Debug/cmTC_8a4c9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-m34ccl/Debug/cmTC_8a4c9.lib" /MACHINE:X64  /machine:x64 cmTC_8a4c9.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_8a4c9.vcxproj -> C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m34ccl\\Debug\\cmTC_8a4c9.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_30484.dir\\Debug\\cmTC_30484.tlog\\unsuccessfulbuild".
-          Touching "cmTC_30484.dir\\Debug\\cmTC_30484.tlog\\cmTC_30484.lastbuildstate".
-        Done Building Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-yvlklv\\cmTC_30484.vcxproj" (default targets).
+          Deleting file "cmTC_8a4c9.dir\\Debug\\cmTC_8a4c9.tlog\\unsuccessfulbuild".
+          Touching "cmTC_8a4c9.dir\\Debug\\cmTC_8a4c9.tlog\\cmTC_8a4c9.lastbuildstate".
+        Done Building Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-m34ccl\\cmTC_8a4c9.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.39
+        Time Elapsed 00:00:00.40
         
       exitCode: 0
   -
@@ -214,8 +214,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-wrki9h"
-      binary: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-wrki9h"
+      source: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-lnbag3"
+      binary: "C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-lnbag3"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -229,40 +229,40 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-wrki9h'
+        Change Dir: 'C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-lnbag3'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_804c5.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_e344d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.10.4+10fbfbf2e for .NET Framework
-        Build started 11/12/2024 18:49:43.
+        Build started 11/12/2024 20:11:37.
         
-        Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wrki9h\\cmTC_804c5.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-lnbag3\\cmTC_e344d.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_804c5.dir\\Debug\\".
+          Creating directory "cmTC_e344d.dir\\Debug\\".
           Structured output is enabled. The formatting of compiler diagnostics will reflect the error hierarchy. See https://aka.ms/cpp/structured-output for more details.
-          Creating directory "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wrki9h\\Debug\\".
-          Creating directory "cmTC_804c5.dir\\Debug\\cmTC_804c5.tlog\\".
+          Creating directory "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-lnbag3\\Debug\\".
+          Creating directory "cmTC_e344d.dir\\Debug\\cmTC_e344d.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_804c5.dir\\Debug\\cmTC_804c5.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_804c5.dir\\Debug\\cmTC_804c5.tlog\\unsuccessfulbuild".
+          Creating "cmTC_e344d.dir\\Debug\\cmTC_e344d.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_e344d.dir\\Debug\\cmTC_e344d.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_804c5.dir\\Debug\\\\" /Fd"cmTC_804c5.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e344d.dir\\Debug\\\\" /Fd"cmTC_e344d.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.40.33812 for x64
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_804c5.dir\\Debug\\\\" /Fd"cmTC_804c5.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e344d.dir\\Debug\\\\" /Fd"cmTC_e344d.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\Kai\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\cmake\\data\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wrki9h\\Debug\\cmTC_804c5.exe" /INCREMENTAL /ILK:"cmTC_804c5.dir\\Debug\\cmTC_804c5.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-wrki9h/Debug/cmTC_804c5.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-wrki9h/Debug/cmTC_804c5.lib" /MACHINE:X64  /machine:x64 cmTC_804c5.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_804c5.vcxproj -> C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wrki9h\\Debug\\cmTC_804c5.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.40.33807\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-lnbag3\\Debug\\cmTC_e344d.exe" /INCREMENTAL /ILK:"cmTC_e344d.dir\\Debug\\cmTC_e344d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-lnbag3/Debug/cmTC_e344d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/Kai/Documents/Group_Games/BOOW/build/CMakeFiles/CMakeScratch/TryCompile-lnbag3/Debug/cmTC_e344d.lib" /MACHINE:X64  /machine:x64 cmTC_e344d.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_e344d.vcxproj -> C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-lnbag3\\Debug\\cmTC_e344d.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_804c5.dir\\Debug\\cmTC_804c5.tlog\\unsuccessfulbuild".
-          Touching "cmTC_804c5.dir\\Debug\\cmTC_804c5.tlog\\cmTC_804c5.lastbuildstate".
-        Done Building Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-wrki9h\\cmTC_804c5.vcxproj" (default targets).
+          Deleting file "cmTC_e344d.dir\\Debug\\cmTC_e344d.tlog\\unsuccessfulbuild".
+          Touching "cmTC_e344d.dir\\Debug\\cmTC_e344d.tlog\\cmTC_e344d.lastbuildstate".
+        Done Building Project "C:\\Users\\Kai\\Documents\\Group_Games\\BOOW\\build\\CMakeFiles\\CMakeScratch\\TryCompile-lnbag3\\cmTC_e344d.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.39
+        Time Elapsed 00:00:00.41
         
       exitCode: 0
   -

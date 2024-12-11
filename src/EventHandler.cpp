@@ -1,4 +1,5 @@
 #include "EventHandler.h"
+#include "GameSetup.h"
 
 // Helper function declarations
 void handleLevelCompleteEvent(sf::Event& event, GameComponents& components);
@@ -18,14 +19,38 @@ void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents
 
     switch (components.currentState) {
         case GameState::Playing:
+            // Ensure proper timer setup on state transition
+            if (components.previousState != components.currentState) {
+                // If coming from other states, reset timer and apply delay
+                if (components.previousState == GameState::MainMenu || 
+                    components.previousState == GameState::LevelSelection || 
+                    components.isReloaded) {
+                    components.timeRemaining = 30.0f; // Reset the timer
+                    components.timerPaused = true;   // Temporarily pause the timer
+                    components.startDelayClock.restart(); // Restart the delay clock
+                    components.isReloaded = false;  // Reset reload flag
+                }
+
+                components.previousState = components.currentState;
+            }
+
+            // Check for the 1-second delay before starting the timer
+            if (components.timerPaused && components.startDelayClock.getElapsedTime().asSeconds() > 0.5f) {
+                components.timerPaused = false;  // Start the timer after delay
+                components.timerClock.restart(); // Restart the timer clock
+            }
+
             handlePlayingStateEvent(window, event, components);
             break;
+
         case GameState::Paused:
             handlePausedStateEvent(event, components);
             break;
+
         case GameState::Controls:
             handleControlsStateEvent(window, event, components);
             break;
+
         default:
             break;
     }
@@ -38,14 +63,6 @@ void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
     components.menu->handleLevelCompleteEvent(event, components.currentState, *components.physicsManager, *components.boat, components.timeRemaining, components.score);
 }
 
-
-// Handle menu-related events
-void handleMenuEvent(sf::Event& event, GameComponents& components) {
-    components.menu->handleEvent(event, components.currentState);
-}
-
-
-// Handle events in the Playing state
 void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (components.pauseButton->isMouseOver(window)) {
@@ -53,6 +70,25 @@ void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameCom
             components.timerPaused = true;
         }
     }
+
+    // Update the timer if not paused
+    if (!components.timerPaused) {
+        float elapsed = components.timerClock.restart().asSeconds();
+        components.timeRemaining -= elapsed;
+        if (components.timeRemaining <= 0.0f) {
+            components.timeRemaining = 0.0f;
+            components.currentState = GameState::LevelComplete; // Transition to LevelComplete
+            components.menu->setLevelResult(LevelResult::Failed);
+        }
+
+        // Update the timer text
+        components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
+    }
+}
+
+// Handle menu-related events
+void handleMenuEvent(sf::Event& event, GameComponents& components) {
+    components.menu->handleEvent(event, components.currentState);
 }
 
 // Handle events in the Paused state
@@ -63,10 +99,10 @@ void handlePausedStateEvent(sf::Event& event, GameComponents& components) {
         components.secondBoat->respawnBoat(*components.physicsManager);
         components.timeRemaining = 30.0f;
         components.timerPaused = true;
+        components.isReloaded = true; // Mark game as reloaded
     }
 }
 
-// Handle events in the Controls state
 void handleControlsStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (components.backButton->isMouseOver(window)) {
@@ -75,6 +111,7 @@ void handleControlsStateEvent(sf::RenderWindow& window, sf::Event& event, GameCo
             components.secondBoat->respawnBoat(*components.physicsManager);
             components.timeRemaining = 30.0f;
             components.timerPaused = true;
+            components.isReloaded = true; // Mark game as reloaded
         }
     }
 }
@@ -87,7 +124,13 @@ void handleEscapeKeyEvent(sf::Event& event, GameComponents& components) {
             components.timerPaused = true;
         } else if (components.currentState == GameState::Paused) {
             components.currentState = GameState::Playing;
+
+            // Unpause timer and restart the clock
             components.timerPaused = false;
+            components.timerClock.restart();
+
+            // Update timer text immediately
+            components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
         }
     }
 }

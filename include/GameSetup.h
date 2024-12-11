@@ -25,6 +25,7 @@ struct GameComponents {
     float lerpFactor;                   // Camera lerp factor
     GameState currentState;             // Current game state
     GameState previousState;            // Previous game state
+    bool isReloaded = false; // Add this flag to track game reloads
     sf::Clock timerClock;               // Clock for timer
     float timeRemaining;                // Remaining time
     bool timerPaused;                   // Flag for timer pause
@@ -38,6 +39,8 @@ struct GameComponents {
     Button* backButton;                 // Back button
     std::vector<AIInput> aiInputs;      //Ai inputs
     AIController* aiController;         // AI controller for the second boat
+    sf::Clock startDelayClock; // New clock for delay logic
+
 };
 
 // Function to initialize all game components
