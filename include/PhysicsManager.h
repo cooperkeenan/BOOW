@@ -17,7 +17,7 @@ public:
     void renderGround(sf::RenderWindow& window);
     void renderCollectables(sf::RenderWindow& window);
     int checkCollectables();
-    void reset();
+    void reset(const std::vector<Obstacle>& selected_level);
     bool gravityApplied;
     sf::Clock clock;
 

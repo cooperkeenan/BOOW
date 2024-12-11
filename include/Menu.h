@@ -8,7 +8,7 @@
 class Menu {
 public:
     Menu(sf::RenderWindow& window, sf::Font& font);
-    void handleEvent(sf::Event& event, GameState& currentState);
+    void handleEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int& currentLevel);
     void handleLevelCompleteEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, float& timeRemaining, int& score);
     void draw(GameState currentState);
     void drawLevelCompleteScreen(LevelResult result);

@@ -63,6 +63,25 @@ void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
     components.menu->handleLevelCompleteEvent(event, components.currentState, *components.physicsManager, *components.boat, components.timeRemaining, components.score);
 }
 
+
+// Handle menu-related events
+void handleMenuEvent(sf::Event& event, GameComponents& components) {
+    // Call the menu's handleEvent with all required arguments
+    components.menu->handleEvent(
+        event, 
+        components.currentState,
+        *components.physicsManager,
+        *components.boat,
+        *components.secondBoat,
+        components.timeRemaining,
+        components.score,
+        components.currentLevel
+    );
+}
+
+
+
+// Handle events in the Playing state
 void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (components.pauseButton->isMouseOver(window)) {
@@ -95,8 +114,8 @@ void handleMenuEvent(sf::Event& event, GameComponents& components) {
 void handlePausedStateEvent(sf::Event& event, GameComponents& components) {
     components.pauseMenu->handleEvent(event, components.currentState);
     if (components.currentState == GameState::MainMenu) {
-        components.boat->respawnBoat(*components.physicsManager);
-        components.secondBoat->respawnBoat(*components.physicsManager);
+        components.boat->respawnBoat(*components.physicsManager, components.currentLevel);
+        components.secondBoat->respawnBoat(*components.physicsManager, components.currentLevel);
         components.timeRemaining = 30.0f;
         components.timerPaused = true;
         components.isReloaded = true; // Mark game as reloaded
@@ -107,8 +126,8 @@ void handleControlsStateEvent(sf::RenderWindow& window, sf::Event& event, GameCo
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
         if (components.backButton->isMouseOver(window)) {
             components.currentState = GameState::MainMenu;
-            components.boat->respawnBoat(*components.physicsManager);
-            components.secondBoat->respawnBoat(*components.physicsManager);
+            components.boat->respawnBoat(*components.physicsManager, components.currentLevel);
+            components.secondBoat->respawnBoat(*components.physicsManager, components.currentLevel);
             components.timeRemaining = 30.0f;
             components.timerPaused = true;
             components.isReloaded = true; // Mark game as reloaded

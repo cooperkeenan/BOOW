@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "GameState.h"
 #include "levels.h"
-#include "buildObstacles.h"
+#include "BuildObstacles.h"
 #include <iostream>
 #include <cmath> // For std::abs()
 
@@ -119,11 +119,22 @@ bool Boat::checkRespawnNeeded() const {
 }
 
 // Respawn the boat
-void Boat::respawnBoat(PhysicsManager& physicsManager) {
+void Boat::respawnBoat(PhysicsManager& physicsManager, int currentLevel) {
     boatBody->SetLinearVelocity(b2Vec2(0, 0));
     boatBody->SetAngularVelocity(0.0f);
     setPosition(150, 100.0f);
     boatBody->SetAwake(true);
     hasCrossedFinishLine = false;
-    physicsManager.reset();
+
+    if (currentLevel == 1) {
+        physicsManager.reset(level_1());
+    } else if (currentLevel == 2) {
+        physicsManager.reset(level_2());
+    }
+    /*
+    else if (currentLevel == 3) {
+        physicsManager.reset(level_3());
+    }
+    */
 }
+
