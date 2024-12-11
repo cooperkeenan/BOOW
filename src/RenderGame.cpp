@@ -11,14 +11,7 @@
 #include <iostream>
 #include <string>
 
-// Helper function declarations
-void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window);
-void handlePlayingState(GameComponents& components, sf::RenderWindow& window);
-void handlePausedState(GameComponents& components, sf::RenderWindow& window);
-void handleControlsState(GameComponents& components, sf::RenderWindow& window);
-void handleLevelCompleteState(GameComponents& components, sf::RenderWindow& window);
-void clearWindow(sf::RenderWindow& window);
-
+// Function to render the game state based on the current state of the game
 void renderGameState(GameComponents& components, sf::RenderWindow& window) {
     clearWindow(window);
 
@@ -45,20 +38,19 @@ void renderGameState(GameComponents& components, sf::RenderWindow& window) {
 }
 
 
-
-// Function implementations
+// Function to clear the game window
 void clearWindow(sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
 }
 
 
-
+// Handle Main Menu or Level Selection states
 void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window) {
     components.menu->draw(components.currentState);
 }
 
 
-
+// Rendering and logic updates for the Playing state
 void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     if (!components.timerPaused) {
         components.timeRemaining -= components.timerClock.restart().asSeconds();
@@ -118,7 +110,7 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
 }
 
 
-
+// Paused state
 void handlePausedState(GameComponents& components, sf::RenderWindow& window) {
     window.setView(components.gameView);
     components.physicsManager->renderGround(window);
@@ -129,7 +121,7 @@ void handlePausedState(GameComponents& components, sf::RenderWindow& window) {
 }
 
 
-
+// Controls state
 void handleControlsState(GameComponents& components, sf::RenderWindow& window) {
     float yOffset = 100.0f;
     for (const auto& line : components.controlsText) {
@@ -143,7 +135,7 @@ void handleControlsState(GameComponents& components, sf::RenderWindow& window) {
 }
 
 
-
+// Complete state
 void handleLevelCompleteState(GameComponents& components, sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
     components.menu->drawLevelCompleteScreen(components.menu->getLevelResult());
