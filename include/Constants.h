@@ -3,6 +3,8 @@
 // Global position tracking
 extern float currentX;
 extern float currentY;
+extern int currentLevel;
+
 
 // Constants for game dimensions and physics
 constexpr float WINDOW_WIDTH = 800.0f;

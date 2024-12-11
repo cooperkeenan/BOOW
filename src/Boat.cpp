@@ -4,7 +4,8 @@
 #include "levels.h"
 #include "BuildObstacles.h"
 #include <iostream>
-#include <cmath> // For std::abs()
+#include <cmath> 
+
 
 // Constants for speed and rotation caps
 constexpr float MAX_SPEED = 0.3f; // Maximum linear velocity
@@ -74,14 +75,24 @@ void Boat::update(GameState& currentState) {
     boatSprite.setPosition(position.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT - (position.y * SCALE));
     boatSprite.setRotation(-angle * 180.0f / b2_pi);
 
-    // Check if boat crossed the finish line
+    // Check if the boat crossed the finish line
     float finishLinePosition = getFinishLineX();
     if (!hasCrossedFinishLine && position.x >= finishLinePosition) {
-        std::cout << "Boat has crossed the finish line!" << std::endl;
         hasCrossedFinishLine = true;
-        currentState = GameState::LevelComplete;
+
+        if (currentLevel == 2) {
+            // For level 2, handle custom behavior (e.g., just print a message)
+            std::cout << "Boat has crossed the finish line on level 2!" << std::endl;
+        } else {
+            // For other levels, transition to LevelComplete
+            std::cout << "Boat has crossed the finish line!" << std::endl;
+            currentState = GameState::LevelComplete;
+        }
     }
 }
+
+
+
 
 // Render the boat
 void Boat::render(sf::RenderWindow& window) {

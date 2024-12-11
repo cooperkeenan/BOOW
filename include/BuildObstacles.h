@@ -22,5 +22,7 @@ Obstacle ramp(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float 
 Obstacle gap(float horizontalOffset = 0.0f, float lengthAdjustment = 0.0f);
 Obstacle triangle(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f);
 Obstacle finishLine(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f);
+Obstacle triangle(float horizontalOffset, float verticalOffset, float lengthAdjustment, float rotationDegrees);
+Obstacle curve(float horizontalOffset = 0.0f, float verticalOffset = 0.0f, float lengthAdjustment = 0.0f, float heightAdjustment = 0.0f); 
 
 float getFinishLineX();

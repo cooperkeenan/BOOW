@@ -6,10 +6,13 @@
 #include "Pause.h"
 #include "Button.h"
 #include "Constants.h"
-#include "AIController.h" // Include for AIController
+#include "AIController.h" 
 #include <vector>
 #include <iostream>
 #include <string>
+
+
+int currentLevel = 1;
 
 GameComponents initializeGame(sf::RenderWindow& window) {
     GameComponents components;

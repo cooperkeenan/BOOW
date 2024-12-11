@@ -1,6 +1,7 @@
 #include "BuildObstacles.h"
 #include "Constants.h"
 #include <cmath>
+#include <algorithm> 
 
 
 // Global variables to track current position
@@ -24,6 +25,8 @@ Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustme
     return {vertices, startY, startY, false};  
 }
 
+
+
 // Ramp
 Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment) {
     currentX += horizontalOffset; 
@@ -41,23 +44,51 @@ Obstacle ramp(float horizontalOffset, float verticalOffset, float lengthAdjustme
 }
 
 
+
+
 // Triangle
-Obstacle triangle(float horizontalOffset, float verticalOffset, float lengthAdjustment) {
+Obstacle triangle(float horizontalOffset, float verticalOffset, float lengthAdjustment, float rotationDegrees) {
     currentX += horizontalOffset; 
     float side = TRIANGLE_SIDE + lengthAdjustment; // Side length of the equilateral triangle
     float height = (std::sqrt(3.0f) / 2.0f) * side; // Height of the equilateral triangle
     float startY = currentY + verticalOffset;
 
+    // Calculate triangle vertices relative to origin
     std::vector<b2Vec2> vertices;
-    vertices.push_back(b2Vec2(currentX, startY));               // Bottom-left corner
-    vertices.push_back(b2Vec2(currentX + side, startY));        // Bottom-right corner
-    vertices.push_back(b2Vec2(currentX + (side / 2), startY + height)); // Top vertex
+    vertices.push_back(b2Vec2(0.0f, 0.0f));             // Bottom-left corner
+    vertices.push_back(b2Vec2(side, 0.0f));             // Bottom-right corner
+    vertices.push_back(b2Vec2(side / 2, height));       // Top vertex
 
-    currentX += side; // Update currentX to the end of the triangle base
-    currentY = startY; // Maintain the currentY for continuity
+    // Convert rotation from degrees to radians
+    float rotationRadians = rotationDegrees * (b2_pi / 180.0f);
+
+    // Apply rotation to each vertex
+    for (auto& vertex : vertices) {
+        float x = vertex.x;
+        float y = vertex.y;
+
+        vertex.x = x * std::cos(rotationRadians) - y * std::sin(rotationRadians);
+        vertex.y = x * std::sin(rotationRadians) + y * std::cos(rotationRadians);
+
+        // Translate to world position (currentX, startY)
+        vertex.x += currentX;
+        vertex.y += startY;
+    }
+
+    // Close the triangle by adding the first vertex again (optional)
+    vertices.push_back(vertices[0]);
+
+    // Update `currentX` to the farthest x-coordinate
+    currentX = std::max_element(vertices.begin(), vertices.end(), [](const b2Vec2& a, const b2Vec2& b) {
+        return a.x < b.x;
+    })->x;
+
+    // Maintain `currentY` for continuity
+    currentY = startY;
 
     return {vertices, startY, startY + height, false};  
 }
+
 
 
 
@@ -98,4 +129,42 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
 // Getter function for the finish line X position
 float getFinishLineX() {
     return finishLineX;
+}
+
+
+// Add this to BuildObstacles.cpp or a similar file
+// We'll define a new curve function
+
+Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment) {
+    // Move the "pen" to the start position of the curve
+    currentX += horizontalOffset;
+    float startY = currentY + verticalOffset;
+
+    // Determine the final length and height of the curve
+    // For simplicity, reusing RAMP_LENGTH and RAMP_HEIGHT constants, but you could introduce new constants if desired.
+    float length = RAMP_LENGTH + lengthAdjustment; 
+    float height = RAMP_HEIGHT + heightAdjustment;
+
+    // We'll create a series of points along a quadratic curve from t=0 to t=1
+    // x(t) = currentX + t*length
+    // y(t) = startY + height*t^2
+    const int NUM_SEGMENTS = 20; // The curve resolution
+    std::vector<b2Vec2> vertices;
+    vertices.reserve(NUM_SEGMENTS + 1);
+
+    for (int i = 0; i <= NUM_SEGMENTS; ++i) {
+        float t = static_cast<float>(i) / NUM_SEGMENTS; 
+        float x = currentX + t * length;
+        float y = startY + height * (t * t); // Quadratic growth
+
+        vertices.push_back(b2Vec2(x, y));
+    }
+
+    // After creating the curve, update currentX, currentY to the end point of the curve
+    currentX += length; 
+    currentY = startY + height; // end height at t=1
+
+    // Return the Obstacle struct
+    // The lowest point is startY, the highest point is startY+height
+    return { vertices, startY, startY + height, false };
 }
