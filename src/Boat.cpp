@@ -40,7 +40,7 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
         fixtureDef.filter.maskBits = CATEGORY_OBSTACLE; // Collides only with obstacles
     } else {
         fixtureDef.filter.categoryBits = CATEGORY_PLAYER; // Player boat
-        fixtureDef.filter.maskBits = CATEGORY_OBSTACLE; // Collides only with obstacles
+        fixtureDef.filter.maskBits = CATEGORY_OBSTACLE | CATEGORY_COLLECTABLE; // Collides only with obstacles
     }
 
     boatBody->CreateFixture(&fixtureDef);
