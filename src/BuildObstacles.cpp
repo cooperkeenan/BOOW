@@ -60,8 +60,7 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
     float length = LINE_LENGTH + lengthAdjustment;
     float startY = currentY + verticalOffset;
 
-    // Set finishLineX at the beginning of the line, before adding length
-    finishLineX = currentX;
+    finishLineX = currentX; // Set finish line position
 
     std::vector<b2Vec2> vertices;
     vertices.push_back(b2Vec2(currentX, startY));
@@ -71,6 +70,7 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
 
     return {vertices, startY, startY, false};
 }
+
 
 
 

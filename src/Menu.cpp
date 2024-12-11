@@ -33,9 +33,8 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
                 window.close();
             } else if (levelsButton.isMouseOver(window)) {
                 currentState = GameState::LevelSelection;
-            } else if (controlsButton.isMouseOver(window)) {  // Handle Controls button click
-                std::cout << "Controls button clicked!" << std::endl;
-                // Add your logic here for what happens when the Controls button is clicked
+            } else if (controlsButton.isMouseOver(window)) { // Handle Controls Button
+                currentState = GameState::Controls;
             }
         } else if (currentState == GameState::LevelSelection) {
             if (level1Button.isMouseOver(window)) {
@@ -49,7 +48,6 @@ void Menu::handleEvent(sf::Event& event, GameState& currentState) {
         }
     }
 }
-
 void Menu::draw(GameState currentState) {
     // Draw only relevant buttons based on the current state
     if (currentState == GameState::MainMenu) {
