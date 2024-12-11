@@ -1,3 +1,4 @@
+// GameState.h
 #pragma once
 
 enum class GameState {
@@ -5,5 +6,11 @@ enum class GameState {
     LevelSelection,
     Playing,
     Paused,
-    Controls // New Game State
+    LevelComplete,
+    Controls
+};
+
+enum class LevelResult {
+    Complete,
+    Failed
 };

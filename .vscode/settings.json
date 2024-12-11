@@ -82,6 +82,42 @@
         "stop_token": "cpp",
         "text_encoding": "cpp",
         "thread": "cpp",
-        "cinttypes": "cpp"
-    }
+        "cinttypes": "cpp",
+        "xfacet": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocbuf": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "xmemory": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xtree": "cpp",
+        "xutility": "cpp",
+        "cmake": "json",
+        "CMakeLists.txt": "cmake",
+        "csignal": "cpp",
+        "fstream": "cpp",
+        "future": "cpp",
+        "set": "cpp",
+        "stack": "cpp",
+        "unordered_set": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/vcpkg/installed/x64-windows/include"
+    ],
+    "C_Cpp.default.defines": [
+        "_DEBUG",
+        "_CONSOLE",
+        "_CRT_SECURE_NO_WARNINGS"
+    ],
+    "C_Cpp.default.intelliSenseMode": "windows-msvc-x64",
+    "cmake.configureOnOpen": true,
+    "cmake.buildDirectory": "${workspaceFolder}/build"
 }

@@ -1,11 +1,13 @@
 #include "Boat.h"
 #include "Constants.h"
+#include "GameState.h"
+#include "levels.h"
 #include <iostream>
-#include <cmath> // For std::abs()
+#include "levels.h"
+#include "BuildObstacles.h"
+#include "GameState.h"
+#include "PhysicsManager.h"
 
-// Constants for speed and rotation caps
-constexpr float MAX_SPEED = 0.7f; // Maximum linear velocity
-constexpr float MAX_ROTATION_SPEED = 0.2f; // Maximum angular velocity (radians per second)
 
 // Helper function to convert SFML to Box2D coordinates
 b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
@@ -13,8 +15,7 @@ b2Vec2 sfmlToBox2D(const sf::Vector2f& position) {
 }
 
 Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& position, const sf::Vector2f& size)
-    : physicsMgr(physicsManager)
-{
+    : physicsMgr(physicsManager), hasCrossedFinishLine(false) {
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = sfmlToBox2D(position);
@@ -35,29 +36,20 @@ Boat::Boat(b2World& world, PhysicsManager& physicsManager, const sf::Vector2f& p
     boatSprite.setFillColor(sf::Color::Blue);
 }
 
-void Boat::update() {
-    // Cap linear speed
-    b2Vec2 velocity = boatBody->GetLinearVelocity();
-    float speed = velocity.Length();
-    if (speed > MAX_SPEED) {
-        b2Vec2 cappedVelocity = velocity;
-        cappedVelocity *= MAX_SPEED / speed; // Scale down to max speed
-        boatBody->SetLinearVelocity(cappedVelocity);
-    }
-
-    // Cap angular speed
-    float angularVelocity = boatBody->GetAngularVelocity();
-    if (std::abs(angularVelocity) > MAX_ROTATION_SPEED) {
-        float cappedAngularVelocity = (angularVelocity > 0 ? 1 : -1) * MAX_ROTATION_SPEED;
-        boatBody->SetAngularVelocity(cappedAngularVelocity);
-    }
-
-    // Update the sprite position and rotation
+void Boat::update(GameState &currentState) {
     b2Vec2 position = boatBody->GetPosition();
     float angle = boatBody->GetAngle();
+    float finishLinePosition = getFinishLineX();
 
     boatSprite.setPosition(position.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT - (position.y * SCALE));
     boatSprite.setRotation(-angle * 180.0f / b2_pi);
+
+
+    if (!hasCrossedFinishLine && position.x >= finishLinePosition) {
+        std::cout << "Boat has crossed the finish line!" << std::endl;
+        hasCrossedFinishLine = true;
+        currentState = GameState::LevelComplete;
+    }
 }
 
 void Boat::render(sf::RenderWindow& window) {
@@ -90,8 +82,11 @@ bool Boat::checkRespawnNeeded() const {
     return (worldY > 1000);
 }
 
-void Boat::respawnBoat() {
+void Boat::respawnBoat(PhysicsManager& physicsManager) {
     boatBody->SetLinearVelocity(b2Vec2(0, 0));
     boatBody->SetAngularVelocity(0.0f);
     setPosition(150, 100.0f);
+    boatBody->SetAwake(true); 
+    hasCrossedFinishLine = false;  
+    physicsManager.reset();
 }
