@@ -36,11 +36,8 @@ GameComponents initializeGame(sf::RenderWindow& window) {
 
     // Define AI input sequence
     components.aiInputs = {
-        {sf::Keyboard::Enter, 2.0f}, 
-        {sf::Keyboard::Up, 2.0f},
-        {sf::Keyboard::Right, 1.5f},
-        {sf::Keyboard::Down, 2.0f},
-        {sf::Keyboard::Left, 1.0f}
+        {sf::Keyboard::Enter, 3.0f}, 
+        {sf::Keyboard::Up, 20.0f}
     };
 
     components.aiController = new AIController(*components.secondBoat, components.aiInputs);
