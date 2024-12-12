@@ -43,6 +43,11 @@ void clearWindow(sf::RenderWindow& window) {
 }
 
 // Handle Main Menu or Level Selection states
+void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window) {
+    components.menu->draw(components.currentState);
+}
+
+// Handle Playing state
 void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     if (!components.timerPaused) {
         // Update timer
@@ -63,31 +68,27 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     // Calculate deltaTime for this frame
     float deltaTime = components.clock.restart().asSeconds();
 
-    // **Player Controls** (Re-added)
+    // **Player Controls**
     float directionX = 0.0f;
     float torque = 0.0f;
 
-    // Debugging: Verify input detection
+    // Get player input
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-
         directionX = 0.7f;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-
         directionX = -0.7f;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-
         torque = 2.0f;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-
         torque = -2.0f;
     }
 
-
+    // Apply player input to the boat
     components.boat->move(directionX, 0.0f, 5.0f); // Apply linear force
-    components.boat->rotate(torque);              // Apply torque
+    components.boat->rotate(torque);           // Apply torque
 
     // **Physics and AI Updates**
     components.aiController->update(deltaTime); // Update AI Controller
@@ -110,7 +111,7 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     sf::Vector2f currentCenter = components.gameView.getCenter();
 
     // Smooth camera movement using lerp
-    float lerpFactor = 0.1f; // Adjust this for smoother movement
+    float lerpFactor = 0.1f; // Adjust for smoother movement
     components.gameView.setCenter(currentCenter + lerpFactor * (targetCenter - currentCenter));
 
     // Check for respawn
@@ -141,14 +142,6 @@ void handlePlayingState(GameComponents& components, sf::RenderWindow& window) {
     components.pauseButton->draw(window);
 }
 
-
-
-// Remaining functions: Paused, Controls, and LevelComplete states
-
-
-
-
-
 // Paused state
 void handlePausedState(GameComponents& components, sf::RenderWindow& window) {
     window.setView(components.gameView);
@@ -158,7 +151,6 @@ void handlePausedState(GameComponents& components, sf::RenderWindow& window) {
     window.setView(window.getDefaultView());
     components.pauseMenu->draw();
 }
-
 
 // Controls state
 void handleControlsState(GameComponents& components, sf::RenderWindow& window) {
@@ -173,13 +165,8 @@ void handleControlsState(GameComponents& components, sf::RenderWindow& window) {
     components.backButton->draw(window);
 }
 
-
 // Complete state
 void handleLevelCompleteState(GameComponents& components, sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
     components.menu->drawLevelCompleteScreen(components.menu->getLevelResult());
-}
-
-void handleMainMenuOrLevelSelection(GameComponents& components, sf::RenderWindow& window) {
-    components.menu->draw(components.currentState);
 }

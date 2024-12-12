@@ -11,56 +11,59 @@
 #include <iostream>
 #include <string>
 
-
 int currentLevel = 1;
 
 GameComponents initializeGame(sf::RenderWindow& window) {
     GameComponents components;
 
-    bool isReloaded = false; // New flag to track game reload
+    // Create a new Menu object
+    components.menu = new Menu(window, components.font); 
 
+    // Create a new PhysicsManager object
+    components.physicsManager = new PhysicsManager(); 
 
-    // Load Font
-    if (!components.font.loadFromFile("../../img/RobotoMono-Regular.ttf")) {
-        std::cerr << "Failed to load font\n";
-        std::exit(-1); // Exit if font fails to load
-    }
-
-    // Initialize menu and game components
-    components.menu = new Menu(window, components.font);
-    components.physicsManager = new PhysicsManager();
+    // Create the player's boat
     components.boat = new Boat(components.physicsManager->getWorld(), *components.physicsManager, sf::Vector2f(150.0f, 100.0f), sf::Vector2f(40.0f, 20.0f));
 
-    // Initialize second boat for AI
+    // Create the AI-controlled boat
     components.secondBoat = new Boat(components.physicsManager->getWorld(), *components.physicsManager, sf::Vector2f(150.0f, 200.0f), sf::Vector2f(40.0f, 20.0f), true);
 
-    // Define AI input sequence
+    // Define the AI input sequence 
     components.aiInputs = {
         {sf::Keyboard::Enter, 3.0f}, 
         {sf::Keyboard::Up, 20.0f}
     };
 
+    // Create an AIController for the second boat
     components.aiController = new AIController(*components.secondBoat, components.aiInputs);
 
-
+    // Load the game font
+    if (!components.font.loadFromFile("../../img/RobotoMono-Regular.ttf")) {
+        std::cerr << "Failed to load font\n";
+        std::exit(-1); // Exit if font fails to load
+    }
 
     components.clock.restart();
     components.gravityApplied = false;
     components.secondBoatGravityApplied = false;
     components.lerpFactor = 2.0f; // Smoothness factor for camera movement
+
+    // Initialize game state variables
     components.currentState = GameState::MainMenu;
     components.previousState = components.currentState;
 
-    // Timer setup
+    // Initialize timer variables
     components.timeRemaining = 30.0f;
     components.timerPaused = false;
     components.timerClock.restart();
+
+    // Set up timer text display
     components.timerText.setFont(components.font);
     components.timerText.setCharacterSize(20);
     components.timerText.setFillColor(sf::Color::White);
     components.timerText.setPosition(10.0f, 10.0f);
 
-    // Score setup
+    // Initialize score variables
     components.score = 0;
     components.scoreText.setFont(components.font);
     components.scoreText.setCharacterSize(24);
@@ -70,12 +73,12 @@ GameComponents initializeGame(sf::RenderWindow& window) {
     // Define a separate view for the game
     components.gameView = sf::View(sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-    // Initialize Pause and Resume Buttons
+    // Initialize Pause button
     components.pauseButton = new Button("Pause", {100, 40}, 20, sf::Color::Yellow, sf::Color::Black);
     components.pauseButton->setFont(components.font);
     components.pauseButton->setPosition({WINDOW_WIDTH - 120, 20});
 
-    // Initialize the Pause class
+    // Initialize the Pause menu
     components.pauseMenu = new Pause(window, components.font);
 
     // Controls screen setup
@@ -84,6 +87,8 @@ GameComponents initializeGame(sf::RenderWindow& window) {
         "Use up and down arrow keys to control speed",
         "Use escape to pause"
     };
+
+    // Initialize Back button for Controls screen
     components.backButton = new Button("Back", {200, 50}, 20, sf::Color::Blue, sf::Color::Black);
     components.backButton->setFont(components.font);
     components.backButton->setPosition({300, 400});
@@ -95,16 +100,17 @@ void handlePlayingState(GameComponents& components) {
     if (components.previousState != components.currentState && components.currentState == GameState::Playing) {
         b2Vec2 boatPos = components.boat->getBoatBody()->GetPosition();
         sf::Vector2f initialCenter(boatPos.x * SCALE + WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
-        components.gameView.setCenter(initialCenter);
+        components.gameView.setCenter(initialCenter); 
 
+        // Reset game state variables
         components.gravityApplied = false;
         components.secondBoatGravityApplied = false;
-        components.clock.restart();
+        components.clock.restart(); 
 
-        if (components.previousState != GameState::Paused) {
-            components.timeRemaining = 30.0f;
-            components.timerClock.restart();
-            components.timerPaused = false;
+        if (components.previousState != GameState::Paused) { 
+            components.timeRemaining = 30.0f; 
+            components.timerClock.restart(); 
+            components.timerPaused = false; 
         }
 
         components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
@@ -112,5 +118,3 @@ void handlePlayingState(GameComponents& components) {
 
     components.previousState = components.currentState;
 }
-
-

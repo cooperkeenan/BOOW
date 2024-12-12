@@ -5,118 +5,117 @@
 #include <cmath>
 #include <iostream>
 
-// Collision categories
-
+// Constructor: Initializes the Box2D world, time step, iterations, ground body, and other physics parameters.
 PhysicsManager::PhysicsManager()
-    : world(b2Vec2(0.0f, 0.0f)),
-      timeStep(1.0f / 60.0f),
-      velocityIterations(8),
-      positionIterations(3),
-      groundBody(nullptr),
-      gravityApplied(false)
+    : world(b2Vec2(0.0f, 0.0f)), // Initialize the Box2D world with no gravity initially.
+      timeStep(1.0f / 60.0f),   // Set the time step for the physics simulation.
+      velocityIterations(8),     // Set the number of velocity iterations per step.
+      positionIterations(3),     // Set the number of position iterations per step.
+      groundBody(nullptr),       // Initialize the ground body pointer to null.
+      gravityApplied(false)      // Initialize gravityApplied to false.
 {
-    // Define the ground body as static
+    // Define the ground body as static.
     b2BodyDef groundBodyDef;
-    groundBodyDef.type = b2_staticBody;
-    groundBodyDef.position.Set(0.0f, 0.0f);
-    groundBody = world.CreateBody(&groundBodyDef);
+    groundBodyDef.type = b2_staticBody; // Static body does not move.
+    groundBodyDef.position.Set(0.0f, 0.0f); // Set the ground body's initial position.
+    groundBody = world.CreateBody(&groundBodyDef); // Create the ground body in the Box2D world.
 
     // Select Level
-    initializeObstacles(level_1());
+    initializeObstacles(level_1()); // Initialize obstacles for level 1.
 
     // Initialize collectables
-    collectables.emplace_back(world, sf::Vector2f(500, 280), 10.0f);
-    collectables.emplace_back(world, sf::Vector2f(800, 280), 10.0f);
-    collectables.emplace_back(world, sf::Vector2f(1050, 280), 10.0f);
+    collectables.emplace_back(world, sf::Vector2f(500, 280), 10.0f); // create collectable
+    collectables.emplace_back(world, sf::Vector2f(800, 280), 10.0f); // create collectable
+    collectables.emplace_back(world, sf::Vector2f(1050, 280), 10.0f); // create collectable
 
 }
 
-//Add each obstacle to the manager  
+// Adds each obstacle from the selected level to the obstacle manager and creates corresponding Box2D fixtures.
 void PhysicsManager::initializeObstacles(const std::vector<Obstacle>& selected_level) {
     for (const auto& obs : selected_level) {
-        obstacleManager.addObstacle(obs);
-        createFixturesFromObstacle(obs);
+        obstacleManager.addObstacle(obs); // Add the obstacle to the manager.
+        createFixturesFromObstacle(obs);   // Create Box2D fixtures for the obstacle.
     }
 }
 
-// Create Fixtures with Collision Filtering
+// Creates Box2D edge fixtures for a given obstacle, including collision filtering.
 void PhysicsManager::createFixturesFromObstacle(const Obstacle& obs) {
-    if (obs.vertices.size() < 2) return;
+    if (obs.vertices.size() < 2) return; // If obstacle has less than 2 vertices, it cant be an edge
 
     for (size_t i = 0; i < obs.vertices.size() - 1; ++i) {
         b2EdgeShape edge;
-        b2Vec2 v1(obs.vertices[i].x, obs.vertices[i].y);
-        b2Vec2 v2(obs.vertices[i + 1].x, obs.vertices[i + 1].y);
+        b2Vec2 v1(obs.vertices[i].x, obs.vertices[i].y);     // Get the start vertex of the edge.
+        b2Vec2 v2(obs.vertices[i + 1].x, obs.vertices[i + 1].y); // Get the end vertex of the edge.
 
-        edge.SetTwoSided(v1, v2);
+        edge.SetTwoSided(v1, v2); // Set the edge shape using the two vertices.
 
         b2FixtureDef edgeFixtureDef;
-        edgeFixtureDef.shape = &edge;
-        edgeFixtureDef.density = 0.0f;
-        edgeFixtureDef.friction = 0.3f;
-        edgeFixtureDef.restitution = 0.3f;
-        edgeFixtureDef.isSensor = obs.isGap;
+        edgeFixtureDef.shape = &edge;         // Set the shape of the fixture.
+        edgeFixtureDef.density = 0.0f;       // Set the density of the fixture (0 for static objects).
+        edgeFixtureDef.friction = 0.3f;      // Set the friction of the fixture.
+        edgeFixtureDef.restitution = 0.3f;   // Set the restitution (bounciness) of the fixture.
+        edgeFixtureDef.isSensor = obs.isGap; //check if it is a gap
 
         // Collision filtering for obstacles
-        edgeFixtureDef.filter.categoryBits = CATEGORY_OBSTACLE; // Set as obstacle
-        edgeFixtureDef.filter.maskBits = CATEGORY_PLAYER | CATEGORY_AI; // Collides with both player and AI boats
+        edgeFixtureDef.filter.categoryBits = CATEGORY_OBSTACLE; // Set the category bits for obstacles.
+        edgeFixtureDef.filter.maskBits = CATEGORY_PLAYER | CATEGORY_AI; // Set the mask bits to collide with player and AI boats.
 
-        groundBody->CreateFixture(&edgeFixtureDef);
+        groundBody->CreateFixture(&edgeFixtureDef); // Create the fixture on the ground body.
     }
 }
 
-// Update Physics
+// Returns a reference to the Box2D world.
 b2World& PhysicsManager::getWorld() {
-    return world;
+    return world; // Return a reference to the Box2D world.
 }
 
-// Apply gravity
+// Applies gravity to the Box2D world and wakes up all bodies.
 void PhysicsManager::applyGravity(const b2Vec2& gravity) {
-    world.SetGravity(gravity);
+    world.SetGravity(gravity); // Set the gravity vector for the world.
     for (b2Body* body = world.GetBodyList(); body; body = body->GetNext()) {
-        body->SetAwake(true);
+        body->SetAwake(true); // Wake up all bodies in the world to apply the new gravity.
     }
 }
 
-// Apply gravity after set time
+// Applies gravity only if it hasn't been applied yet and a certain time has passed.
 void PhysicsManager::applyGravityIfNeeded(bool& gravityApplied, float elapsedTime, float triggerTime) {
     if (!gravityApplied && elapsedTime > triggerTime) {
-        applyGravity(b2Vec2(0.0f, -0.02f));
-        gravityApplied = true;
+        applyGravity(b2Vec2(0.0f, -0.02f)); // Apply downwards gravity.
+        gravityApplied = true;            // Set the gravityApplied flag to true.
     }
 }
 
-// Move world forward one timestep
+// Steps the Box2D physics simulation forward by one time step.
 void PhysicsManager::step() {
-    world.Step(timeStep, velocityIterations, positionIterations);
+    world.Step(timeStep, velocityIterations, positionIterations); // Perform a physics step.
 }
 
-// Render Track
+// Renders the ground (obstacles) to the SFML window.
 void PhysicsManager::renderGround(sf::RenderWindow& window) {
-    const auto& obsList = obstacleManager.getObstacles();
+    const auto& obsList = obstacleManager.getObstacles(); // Get the list of obstacles.
 
-    float offsetX = WINDOW_WIDTH / 2.0f;
-    float offsetY = WINDOW_HEIGHT;
+    float offsetX = WINDOW_WIDTH / 2.0f;  // Offset to center the ground horizontally.
+    float offsetY = WINDOW_HEIGHT; // Offset from the bottom of the window.
 
     for (const auto& obs : obsList) {
         if (obs.isGap) {
-            continue;
+            continue; // Skip drawing gaps.
         }
 
-        sf::VertexArray groundShape(sf::LineStrip, static_cast<unsigned int>(obs.vertices.size()));
+        sf::VertexArray groundShape(sf::LineStrip, static_cast<unsigned int>(obs.vertices.size())); // Create a vertex array for the ground shape.
 
         for (size_t i = 0; i < obs.vertices.size(); ++i) {
-            float worldX = obs.vertices[i].x;
-            float worldY = obs.vertices[i].y;
+            float worldX = obs.vertices[i].x; // Get the x-coordinate in world units.
+            float worldY = obs.vertices[i].y; // Get the y-coordinate in world units.
 
             groundShape[static_cast<unsigned int>(i)].position = sf::Vector2f(
-                worldX * SCALE + offsetX,
-                offsetY - (worldY * SCALE)
+                worldX * SCALE + offsetX,    // Convert world x to screen x and apply offset.
+                offsetY - (worldY * SCALE) // Convert world y to screen y and apply offset.
             );
-            groundShape[static_cast<unsigned int>(i)].color = sf::Color::Green;
+            groundShape[static_cast<unsigned int>(i)].color = sf::Color::Green; // Set the color of the ground.
         }
 
-        window.draw(groundShape);
+        window.draw(groundShape); // Draw the ground shape.
     }
 }
 
@@ -149,28 +148,15 @@ int PhysicsManager::checkCollectables() {
     return collectedCount;
 }
 
-
-
-
-
-
+// Resets the physics world by destroying existing fixtures and recreating them with new level data.
 void PhysicsManager::reset(const std::vector<Obstacle>& selected_level) {
-    // Destroy all existing fixtures
+    // Destroy all existing fixtures attached to the ground body.
     b2Fixture* f = groundBody->GetFixtureList();
     while (f) {
-        b2Fixture* next = f->GetNext();
-        groundBody->DestroyFixture(f);
-        f = next;
+        b2Fixture* next = f->GetNext(); // Get the next fixture before destroying the current one.
+        groundBody->DestroyFixture(f);   // Destroy the current fixture.
+        f = next;                       // Move to the next fixture.
     }
 
-    obstacleManager.clearObstacles();
-    collectables.clear();
-
-    initializeObstacles(selected_level);
-
-    // Re-add collectables
-    collectables.emplace_back(world, sf::Vector2f(500, 280), 10.0f);
-    collectables.emplace_back(world, sf::Vector2f(800, 280), 10.0f);
-    collectables.emplace_back(world, sf::Vector2f(1050, 280), 10.0f);
-}
-
+    obstacleManager.clearObstacles(); // Clear the obstacle manager.
+    collectables.clear(); // Clear collect

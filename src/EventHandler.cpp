@@ -2,10 +2,9 @@
 #include "GameSetup.h"
 #include "levels.h"
 
-
 // Helper function declarations
 void handleLevelCompleteEvent(sf::Event& event, GameComponents& components);
-void handleMenuEvent(sf::Event& event, GameComponents& components);
+void handleMenuEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components);
 void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components);
 void handlePausedStateEvent(sf::Event& event, GameComponents& components);
 void handleControlsStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components);
@@ -16,7 +15,7 @@ void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents
     if (components.currentState == GameState::LevelComplete) {
         handleLevelCompleteEvent(event, components);
     } else if (components.currentState == GameState::MainMenu || components.currentState == GameState::LevelSelection) {
-        handleMenuEvent(window, event, components); // Correct: Passes window
+        handleMenuEvent(window, event, components); 
     }
 
     switch (components.currentState) {
@@ -30,7 +29,7 @@ void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents
                     components.timeRemaining = 30.0f; // Reset the timer
                     components.timerPaused = true;   // Temporarily pause the timer
                     components.startDelayClock.restart(); // Restart the delay clock
-                    components.isReloaded = false;  // Reset reload flag
+                    components.isReloaded = false;    // Reset reload flag
                 }
 
                 components.previousState = components.currentState;
@@ -38,7 +37,7 @@ void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents
 
             // Check for the 1-second delay before starting the timer
             if (components.timerPaused && components.startDelayClock.getElapsedTime().asSeconds() > 0.5f) {
-                components.timerPaused = false;  // Start the timer after delay
+                components.timerPaused = false;   // Start the timer after delay
                 components.timerClock.restart(); // Restart the timer clock
             }
 
@@ -70,8 +69,6 @@ void handleLevelCompleteEvent(sf::Event& event, GameComponents& components) {
     components.timerClock.restart();
 }
 
-
-
 // Handle events in the Playing state
 void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
@@ -95,8 +92,6 @@ void handlePlayingStateEvent(sf::RenderWindow& window, sf::Event& event, GameCom
         components.timerText.setString("Time: " + std::to_string(static_cast<int>(components.timeRemaining)));
     }
 }
-
-
 
 // Handle events in the Paused state
 void handlePausedStateEvent(sf::Event& event, GameComponents& components) {
@@ -141,13 +136,14 @@ void handleEscapeKeyEvent(sf::Event& event, GameComponents& components) {
         }
     }
 }
+
 // Modify the function signature to accept the window
 void handleMenuEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) { // Correct: Takes window
     if (components.menu != nullptr) {
         components.menu->handleEvent(event, components.currentState, 
-                                     *components.physicsManager, *components.boat, 
-                                     *components.secondBoat, components.timeRemaining, 
-                                     components.score, components.currentLevel);
+                                      *components.physicsManager, *components.boat, 
+                                      *components.secondBoat, components.timeRemaining, 
+                                      components.score, components.currentLevel);
 
         if (components.menu->hasLevelChanged()) {
             components.menu->resetLevelChangedFlag();
@@ -155,12 +151,12 @@ void handleMenuEvent(sf::RenderWindow& window, sf::Event& event, GameComponents&
             if (components.currentLevel == 1) {
                 components.physicsManager->reset(level_1());
                 components.boat->setCurrentLevelData(level_1());
-                components.boat->setFinishLineX(1000.0f);
+                components.boat->setFinishLineX(1000.0f); // Example finish line for level 1
                 components.physicsManager->renderGround(window); // Correct: Uses window
             } else if (components.currentLevel == 2) {
                 components.physicsManager->reset(level_2());
                 components.boat->setCurrentLevelData(level_2());
-                components.boat->setFinishLineX(10000.0f);
+                components.boat->setFinishLineX(10000.0f); // Example finish line for level 2
                 components.physicsManager->renderGround(window); // Correct: Uses window
             }
 
@@ -170,4 +166,3 @@ void handleMenuEvent(sf::RenderWindow& window, sf::Event& event, GameComponents&
         }
     }
 }
-

@@ -1,23 +1,12 @@
-
 #include <vector>
 #include "Obstacle.h"
-
-// Level 1 declarations
-std::vector<Obstacle> level1_obstacle_1();
-std::vector<Obstacle> level1_obstacle_2();
-std::vector<Obstacle> level1_obstacle_3();
-std::vector<Obstacle> level1_obstacle_4();
-std::vector<Obstacle> level1_obstacle_5();
-std::vector<Obstacle> level_1();
-
 #include "levels.h"
 #include "BuildObstacles.h"
 
-
+// Static variable to store the x-coordinate of the finish line for level 1.
 static float finishLineX = 0;
 
-
-// Obstacle 1
+// Creates the first set of obstacles for Level 1.
 std::vector<Obstacle> level1_obstacle_1() {
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
@@ -28,7 +17,7 @@ std::vector<Obstacle> level1_obstacle_1() {
     return obstacleSet;
 }
 
-// Obstacle 2
+// Creates the second set of obstacles for Level 1.
 std::vector<Obstacle> level1_obstacle_2() {
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
@@ -38,7 +27,7 @@ std::vector<Obstacle> level1_obstacle_2() {
     return obstacleSet;
 }
 
-// Obstacle 3
+// Creates the third set of obstacles for Level 1.
 std::vector<Obstacle> level1_obstacle_3() {
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
@@ -48,7 +37,7 @@ std::vector<Obstacle> level1_obstacle_3() {
     return obstacleSet;
 }
 
-// Obstacle 4
+// Creates the fourth set of obstacles for Level 1.
 std::vector<Obstacle> level1_obstacle_4() {
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
@@ -58,7 +47,7 @@ std::vector<Obstacle> level1_obstacle_4() {
     return obstacleSet;
 }
 
-// Obstacle 5
+// Creates the fifth set of obstacles for Level 1.
 std::vector<Obstacle> level1_obstacle_5() {
     std::vector<Obstacle> obstacleSet;
     obstacleSet.push_back(line());
@@ -68,19 +57,20 @@ std::vector<Obstacle> level1_obstacle_5() {
     return obstacleSet;
 }
 
-//finish line
+// Creates the finish line for Level 1.
 std::vector<Obstacle> level1_finish_line() {
     std::vector<Obstacle> obstacleSet;
-    obstacleSet.push_back(finishLine(0,0,10));
+    obstacleSet.push_back(finishLine(0, 0, 10));
     return obstacleSet;
 }
 
+// Creates the complete Level 1 by combining all obstacle parts.
 std::vector<Obstacle> level_1() {
-    // Reset Variables
+    // Reset the global drawing position variables.
     currentX = INITIAL_START_X;
     currentY = INITIAL_START_Y;
 
-    // Assemble Obstacles
+    // Assemble the level by combining obstacle sets.
     std::vector<Obstacle> level;
     auto part1 = level1_obstacle_1();
     auto part2 = level1_obstacle_2();
@@ -89,7 +79,7 @@ std::vector<Obstacle> level_1() {
     auto part5 = level1_obstacle_5();
     auto part6 = level1_finish_line();
 
-    // Concatenate Obstacles
+    // Concatenate the obstacle sets into the final level vector.
     level.insert(level.end(), part1.begin(), part1.end());
     level.insert(level.end(), part2.begin(), part2.end());
     level.insert(level.end(), part3.begin(), part3.end());

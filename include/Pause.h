@@ -4,20 +4,16 @@
 #include "Button.h"
 #include "GameState.h"
 
+// Represents the pause menu overlay.
 class Pause {
 public:
-    // Constructor: Initializes the pause menu with the window and font
-    Pause(sf::RenderWindow& window, sf::Font& font);
-
-    // Handles events specific to the pause menu
-    void handleEvent(const sf::Event& event, GameState& currentState);
-
-    // Draws the pause overlay and buttons
-    void draw();
+    Pause(sf::RenderWindow& window, sf::Font& font); // Constructor: Initializes the pause menu.
+    void handleEvent(const sf::Event& event, GameState& currentState); // Handles events within the pause menu.
+    void draw();                                                      // Draws the pause menu overlay and buttons.
 
 private:
-    sf::RenderWindow& window;            // Reference to the main window
-    sf::RectangleShape overlay;          // Semi-transparent overlay
-    Button resumeButton;                 // Resume button
-    Button mainMenuButton;               // Main Menu button
+    sf::RenderWindow& window;    // Reference to the game window.
+    sf::RectangleShape overlay; // Semi-transparent overlay displayed during pause.
+    Button resumeButton;      // Button to resume the game.
+    Button mainMenuButton;    // Button to return to the main menu.
 };
