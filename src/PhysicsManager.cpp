@@ -160,3 +160,4 @@ void PhysicsManager::reset(const std::vector<Obstacle>& selected_level) {
 
     obstacleManager.clearObstacles(); // Clear the obstacle manager.
     collectables.clear(); // Clear collect
+}

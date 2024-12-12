@@ -7,6 +7,8 @@
 // Global variables to track current drawing position.
 float currentX = INITIAL_START_X; // Current x-coordinate for obstacle placement
 float currentY = INITIAL_START_Y; // Current y-coordinate for obstacle placement
+float finishLineX = 0.0f; // Declare global finishLineX variable
+
 
 // Creates a line obstacle.
 Obstacle line(float horizontalOffset, float verticalOffset, float lengthAdjustment) {
