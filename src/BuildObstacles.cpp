@@ -91,7 +91,6 @@ Obstacle triangle(float horizontalOffset, float verticalOffset, float lengthAdju
 
 
 
-
 // Gap
 Obstacle gap(float horizontalOffset, float lengthAdjustment) {
     currentX += horizontalOffset;
@@ -112,7 +111,7 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
     float length = LINE_LENGTH + lengthAdjustment;
     float startY = currentY + verticalOffset;
 
-    finishLineX = currentX; // Set finish line position
+    finishLineX = currentX; 
 
     std::vector<b2Vec2> vertices;
     vertices.push_back(b2Vec2(currentX, startY));
@@ -125,8 +124,7 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
 
 
 
-
-
+// Curve 
 Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment, bool inward) {
     currentX += horizontalOffset;
     float startY = currentY + verticalOffset;
