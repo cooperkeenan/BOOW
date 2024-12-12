@@ -11,10 +11,10 @@ Button::Button(const std::string& text, sf::Vector2f size, int charSize, sf::Col
     buttonText.setString(text);
     buttonText.setCharacterSize(charSize);
     buttonText.setFillColor(textColor);
-    // The font will be set later via setFont
+
 
     // Center the text within the button (temporary position; will be updated after setting the font)
-    buttonText.setOrigin(0, 0);  // Reset origin before setting font
+    buttonText.setOrigin(0, 0);  
     buttonText.setPosition(size.x / 2.0f, size.y / 2.0f);
 }
 
