@@ -92,7 +92,6 @@ Obstacle triangle(float horizontalOffset, float verticalOffset, float lengthAdju
 
 
 
-
 // Gap
 Obstacle gap(float horizontalOffset, float lengthAdjustment) {
     currentX += horizontalOffset;
@@ -127,8 +126,7 @@ Obstacle finishLine(float horizontalOffset, float verticalOffset, float lengthAd
 
 
 
-
-
+// Curve 
 Obstacle curve(float horizontalOffset, float verticalOffset, float lengthAdjustment, float heightAdjustment, bool inward) {
     currentX += horizontalOffset;
     float startY = currentY + verticalOffset;
