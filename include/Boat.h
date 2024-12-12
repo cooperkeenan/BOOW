@@ -1,5 +1,4 @@
 #pragma once
-
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include "PhysicsManager.h"
@@ -16,10 +15,17 @@ public:
     void setPosition(float x, float y);
     bool checkRespawnNeeded() const;
     void respawnBoat(PhysicsManager& physicsManager, int currentLevel);
+    void setCurrentLevelData(const std::vector<Obstacle>& levelData);
+    void setFinishLineX(float x);
+    float getFinishLineX();
+
 
 private:
     sf::RectangleShape boatSprite;
     b2Body* boatBody;
     PhysicsManager& physicsMgr;
     bool hasCrossedFinishLine;
+    float finishLineX;
+    std::vector<Obstacle> currentLevelData; // Now in the private section
+
 };

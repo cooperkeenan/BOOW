@@ -18,7 +18,8 @@ public:
     void drawLevelCompleteScreen(LevelResult result);
     void setLevelResult(LevelResult result);
     LevelResult getLevelResult() const;
-
+    bool hasLevelChanged() const;
+    void resetLevelChangedFlag(); 
     void handleEvent(sf::Event& event, GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int& currentLevel, AIController* aiController);
     void loadLevel(GameState& currentState, PhysicsManager& physicsManager, Boat& boat, Boat& secondBoat, float& timeRemaining, int& score, int currentLevel, const std::vector<Obstacle>& levelData);
 private:
@@ -31,4 +32,5 @@ private:
     Button level2Button;
     Button level3Button;
     LevelResult levelResult;
+    bool levelChanged;
 };

@@ -1,5 +1,7 @@
 #include "EventHandler.h"
 #include "GameSetup.h"
+#include "levels.h"
+
 
 // Helper function declarations
 void handleLevelCompleteEvent(sf::Event& event, GameComponents& components);
@@ -13,8 +15,8 @@ void handleEscapeKeyEvent(sf::Event& event, GameComponents& components);
 void handleGameEvents(sf::RenderWindow& window, sf::Event& event, GameComponents& components) {
     if (components.currentState == GameState::LevelComplete) {
         handleLevelCompleteEvent(event, components);
-    } else {
-        handleMenuEvent(event, components);
+    } else if (components.currentState == GameState::MainMenu || components.currentState == GameState::LevelSelection) {
+        handleMenuEvent(window, event, components); // Correct: Passes window
     }
 
     switch (components.currentState) {
@@ -139,12 +141,33 @@ void handleEscapeKeyEvent(sf::Event& event, GameComponents& components) {
         }
     }
 }
-// Function to handle menu events
-void handleMenuEvent(sf::Event& event, GameComponents& components) {
+// Modify the function signature to accept the window
+void handleMenuEvent(sf::RenderWindow& window, sf::Event& event, GameComponents& components) { // Correct: Takes window
     if (components.menu != nullptr) {
         components.menu->handleEvent(event, components.currentState, 
                                      *components.physicsManager, *components.boat, 
                                      *components.secondBoat, components.timeRemaining, 
                                      components.score, components.currentLevel);
+
+        if (components.menu->hasLevelChanged()) {
+            components.menu->resetLevelChangedFlag();
+
+            if (components.currentLevel == 1) {
+                components.physicsManager->reset(level_1());
+                components.boat->setCurrentLevelData(level_1());
+                components.boat->setFinishLineX(1000.0f);
+                components.physicsManager->renderGround(window); // Correct: Uses window
+            } else if (components.currentLevel == 2) {
+                components.physicsManager->reset(level_2());
+                components.boat->setCurrentLevelData(level_2());
+                components.boat->setFinishLineX(10000.0f);
+                components.physicsManager->renderGround(window); // Correct: Uses window
+            }
+
+            components.timeRemaining = 30.0f;
+            components.timerPaused = true;
+            components.timerClock.restart();
+        }
     }
 }
+

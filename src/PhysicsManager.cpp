@@ -153,8 +153,9 @@ int PhysicsManager::checkCollectables() {
 
 
 
+
 void PhysicsManager::reset(const std::vector<Obstacle>& selected_level) {
-    // Destroy all existing fixtures on the ground body
+    // Destroy all existing fixtures
     b2Fixture* f = groundBody->GetFixtureList();
     while (f) {
         b2Fixture* next = f->GetNext();
@@ -162,11 +163,9 @@ void PhysicsManager::reset(const std::vector<Obstacle>& selected_level) {
         f = next;
     }
 
-    // Clear old obstacles and collectables
-    obstacleManager.clearObstacles(); // Clear the old obstacles here
+    obstacleManager.clearObstacles();
     collectables.clear();
 
-    // Re-initialize obstacles for the chosen level
     initializeObstacles(selected_level);
 
     // Re-add collectables
@@ -174,5 +173,4 @@ void PhysicsManager::reset(const std::vector<Obstacle>& selected_level) {
     collectables.emplace_back(world, sf::Vector2f(800, 280), 10.0f);
     collectables.emplace_back(world, sf::Vector2f(1050, 280), 10.0f);
 }
-
 

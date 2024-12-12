@@ -89,6 +89,15 @@ void Menu::handleLevelCompleteEvent(sf::Event& event, GameState& currentState, P
     }
 }
 
+bool Menu::hasLevelChanged() const {
+    return levelChanged;
+}
+
+void Menu::resetLevelChangedFlag() {
+    levelChanged = false;
+}
+
+
 void Menu::draw(GameState currentState) {
     if (currentState == GameState::MainMenu) {
         levelsButton.draw(window);
